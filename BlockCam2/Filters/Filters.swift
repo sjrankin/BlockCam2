@@ -21,6 +21,11 @@ import CoreImage.CIFilterBuiltins
 
 class Filters
 {
+    public static func InitializeFilters()
+    {
+        InitializeBuiltInFilters()
+    }
+    
     public static func Initialize(From: CMFormatDescription, Caller: String)
     {
         let InputSubType = CMFormatDescriptionGetMediaSubType(From)
@@ -119,14 +124,274 @@ class Filters
         PixelBuffers.removeAll()
     }
     
-    private static var BufferPool: CVPixelBufferPool? = nil
+    static var BufferPool: CVPixelBufferPool? = nil
+    
+    /// Run a built-in filter on the passed buffer.
+    /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
+    ///                     prior to this call, `.Passthrough` is used.
+    /// - Parameter With: The buffer to filter.
+    /// - Returns: Filtered data according to `Filter`. Nil on error.
+    public static func RunFilter(_ Filter: BuiltInFilters? = nil,
+                                 With Buffer: CVPixelBuffer) -> CVPixelBuffer?
+    {
+        if Filter == nil && LastBuiltInFilterUsed == nil
+        {
+            LastBuiltInFilterUsed = .Passthrough
+            return Passthrough(Buffer)
+        }
+        var FilterToUse: BuiltInFilters = .Passthrough
+        if Filter == nil
+        {
+            FilterToUse = LastBuiltInFilterUsed!
+        }
+        else
+        {
+            LastBuiltInFilterUsed = Filter
+            FilterToUse = Filter!
+        }
+        if let SomeFilter = BuiltInFilterMap[FilterToUse]
+        {
+            let Fred = BufferPool!
+            return SomeFilter.RunFilter(Buffer, Fred, ColorSpace!)
+        }
+        return nil
+    }
+    
+    public static func SetFilter(_ NewFilter: BuiltInFilters)
+    {
+        LastBuiltInFilterUsed = NewFilter
+    }
+    
+    static var LastBuiltInFilterUsed: BuiltInFilters? = nil
+    
+    // MARK: - Built-in filters.
     
     public static func Passthrough(_ Buffer: CVPixelBuffer) -> CVPixelBuffer?
     {
         return Buffer
     }
     
-    public static func Test(_ Buffer: CVPixelBuffer, FromCapture: Bool = false) -> CVPixelBuffer
+    public static func CMYKHalftone(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.cmykHalftone()
+        Adjust.width = 6.0
+        Adjust.sharpness = 0.7
+        Adjust.angle = 90.0
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func CircularScreen(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.circularScreen()
+        Adjust.width = 6.0
+        Adjust.sharpness = 0.7
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func LineScreen(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.lineScreen()
+        Adjust.angle = 90.0
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func Sepia(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.sepiaTone()
+        Adjust.intensity = 0.75
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func Chrome(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.photoEffectChrome()
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func LinearTosRGB(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.linearToSRGBToneCurve()
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func HueAdjust(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.hueAdjust()
+        Adjust.inputImage = SourceImage
+        Adjust.angle = 90.0
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func ExposureAdjust(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.exposureAdjust()
+        Adjust.inputImage = SourceImage
+        Adjust.ev = 0.5
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func Posterize(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.colorPosterize()
+        Adjust.inputImage = SourceImage
+        Adjust.levels = 12
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func DotScreen(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
         let Adjust = CIFilter.dotScreen()
@@ -138,7 +403,7 @@ class Filters
             CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
-                fatalError("Allocation failure in test.")
+                fatalError("Allocation failure in \(#function)")
             }
             CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
                             colorSpace: ColorSpace!)
@@ -149,4 +414,161 @@ class Filters
             return Buffer
         }
     }
+    
+    public static func HatchedScreen(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.hatchedScreen()
+        Adjust.inputImage = SourceImage
+        Adjust.angle = 90.0
+        Adjust.width = 6.0
+        Adjust.sharpness = 0.7
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func LineOverlay(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.lineOverlay()
+        Adjust.inputImage = SourceImage
+        Adjust.edgeIntensity = 1.0
+        Adjust.contrast = 50.0
+        Adjust.threshold = 0.1
+        Adjust.nrNoiseLevel = 0.07
+        Adjust.nrSharpness = 0.71
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func Pixellate(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.pixellate()
+        Adjust.scale = 16.0
+        Adjust.inputImage = SourceImage
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func FalseColor(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.falseColor()
+        Adjust.color0 = CIColor.red
+        Adjust.color1 = CIColor.yellow
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+    
+    public static func Noir(_ Buffer: CVPixelBuffer) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.photoEffectNoir()
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace!)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
+}
+
+enum BuiltInFilters: String, CaseIterable
+{
+    case Passthrough = "Passthrough"
+    case LineOverlay = "Line Overlay"
+    case Pixellate = "Pixellate"
+    case FalseColor = "False Color"
+    case HueAdjust = "Hue Adjust"
+    case ExposureAdjust = "Exposure Adjust"
+    case Posterize = "Posterize"
+    case Noir = "Noir"
+    case LinearTosRGB = "Linear to sRGB"
+    case Chrome = "Chrome"
+    case Sepia = "Sepia"
+    case DotScreen = "Dot Screen"
+    case LineScreen = "Line Screen"
+    case CircularScreen = "Circular Screen"
+    case HatchedScreen = "Hatched Screen"
+    case CMYKHalftone = "CMYK Halftone"
+    case Instant = "Instant Effect"
+    case Fade = "Fade Effect"
+    case Mono = "Mono Effect"
+    case Process = "Process Effect"
+    case Tonal = "Tonal Effect"
+    case Transfer = "Transfer Effect"
+    case Vibrance = "Vibrance Effect"
+    case XRay = "X-Ray"
+    case Comic = "Comic Effect"
 }
