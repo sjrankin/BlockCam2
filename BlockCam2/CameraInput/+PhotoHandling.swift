@@ -37,14 +37,17 @@ extension LiveViewController
                                                      imageBuffer: PhotoPixelBuffer,
                                                      formatDescriptionOut: &PhotoFormat)
         
+        var ImageToSave: UIImage = UIImage()
         ProcessingQueue.async
         {
             Filters.Initialize(From: PhotoFormat!, Caller: "photoOutput")
-            let ImageBuffer = Filters.Test(PhotoPixelBuffer, FromCapture: true)
+            if let ImageBuffer = Filters.RunFilter(With: PhotoPixelBuffer)
+            {
             let CImg = CIImage(cvImageBuffer: ImageBuffer)
             let Context = CIContext(options: nil)
             let CGImg = Context.createCGImage(CImg, from: CImg.extent)!
-            let ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
+             ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
+            }
             
             PHPhotoLibrary.requestAuthorization
             {
