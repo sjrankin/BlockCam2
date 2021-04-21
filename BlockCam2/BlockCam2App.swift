@@ -7,10 +7,12 @@
 
 import SwiftUI
 
-@main
-struct BlockCam2App: App {
-    var body: some Scene {
-        WindowGroup {
+@main struct BlockCam2App: App
+{
+    var body: some Scene
+    {
+        WindowGroup
+        {
             ContentView()
         }
     }
