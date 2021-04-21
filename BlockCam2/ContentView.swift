@@ -112,6 +112,9 @@ struct ImageSaved: View
 
 struct ContentView: View
 {
+    @EnvironmentObject var BuiltInFilterList: ObservableArray
+    @State var SelectedFilter: String = ""
+    @State var ShowFilterList: Bool = false
     @State var FilterButtonPressed: String = ""
     @State var IsSelfieCamera: Bool = false
     @State var ShowImageSaved: Bool = false
@@ -148,96 +151,179 @@ struct ContentView: View
                             Spacer()
                             Button(action:
                                     {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Filters"
-                                    }
-                            )
-                            {
-                                FiltersIcon()
-                            }.buttonStyle(BorderlessButtonStyle())
-                        }
-                        
-                        Group
-                        {
-                            Spacer()
-                            Button(action:
-                                    {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Album"
-                                    }
-                            )
-                            {
-                                PhotoLibraryIcon()
-                            }.buttonStyle(BorderlessButtonStyle())
-                        }
-                        
-                        Group
-                        {
-                            Spacer()
-                            Button(action:
-                                    {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Camera"
-                                    }
-                            )
-                            {
-                                CameraIcon()
-                            }.buttonStyle(BorderlessButtonStyle())
-                        }
-                        
-                        Group
-                        {
-                            Spacer()
-                            Button(action:
-                                    {
-                                        let CommandString = "Selfie"
-                                        self.IsSelfieCamera = !self.IsSelfieCamera
-                                        if self.IsSelfieCamera
-                                        {
-                                            self.WhichCamera = "arrow.triangle.2.circlepath.camera.fill"
-                                        }
-                                        else
-                                        {
-                                            self.WhichCamera = "arrow.triangle.2.circlepath.camera"
-                                        }
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = CommandString
+                                        self.ShowFilterList.toggle()
                                     })
                             {
-                                Image(systemName: WhichCamera)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 32, height: 32, alignment: .center)
-                                    .foregroundColor(.yellow)
-                            }.buttonStyle(BorderlessButtonStyle())
-                        }
-                        
-                        Group
-                        {
-                            Spacer()
-                            Button(action:
-                                    {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Settings"
-                                    }
-                            )
-                            {
-                                GearIcon()
-                            }.buttonStyle(BorderlessButtonStyle())
-                            Spacer()
-                        }
+                                FiltersIcon()
+                                    .popover(isPresented: $ShowFilterList, content:
+                                                {
+                                                    LazyVStack
+                                                    {
+                                                            Button("Passthrough")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.Passthrough"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("Dot Screen")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.DotScreen"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("Line Overlay")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.LineOverlay"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("Pixellate")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.Pixellate"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("False Color")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.FalseColor"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("HueAdjust")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.HueAdjust"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("Posterize")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.Posterize"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("Noir")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                                self.FilterButtonPressed = "Filters.Noir"
+                                                            }
+                                                            .font(.headline)
+                                                            .padding()
+
+                                                            Button("Cancel")
+                                                            {
+                                                                self.ShowFilterList = false
+                                                                self.FilterButtonPressed = ""
+                                                            }
+                                                            .font(.headline)
+                                                            .foregroundColor(.red)
+                                                        }
+                                    })
+                        }.buttonStyle(BorderlessButtonStyle())
                     }
-                    .padding(.bottom, 0.0)
-                    .frame(height: BottomHeight, alignment: .center)
+                    
+                    Group
+                    {
+                        Spacer()
+                        Button(action:
+                                {
+                                    self.FilterButtonPressed = ""
+                                    self.FilterButtonPressed = "Album"
+                                }
+                        )
+                        {
+                            PhotoLibraryIcon()
+                        }.buttonStyle(BorderlessButtonStyle())
+                    }
+                    
+                    Group
+                    {
+                        Spacer()
+                        Button(action:
+                                {
+                                    self.FilterButtonPressed = ""
+                                    self.FilterButtonPressed = "Camera"
+                                }
+                        )
+                        {
+                            CameraIcon()
+                        }.buttonStyle(BorderlessButtonStyle())
+                    }
+                    
+                    Group
+                    {
+                        Spacer()
+                        Button(action:
+                                {
+                                    let CommandString = "Selfie"
+                                    self.IsSelfieCamera = !self.IsSelfieCamera
+                                    if self.IsSelfieCamera
+                                    {
+                                        self.WhichCamera = "arrow.triangle.2.circlepath.camera.fill"
+                                    }
+                                    else
+                                    {
+                                        self.WhichCamera = "arrow.triangle.2.circlepath.camera"
+                                    }
+                                    self.FilterButtonPressed = ""
+                                    self.FilterButtonPressed = CommandString
+                                })
+                        {
+                            Image(systemName: WhichCamera)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 32, height: 32, alignment: .center)
+                                .foregroundColor(.yellow)
+                        }.buttonStyle(BorderlessButtonStyle())
+                    }
+                    
+                    Group
+                    {
+                        Spacer()
+                        Button(action:
+                                {
+                                    self.FilterButtonPressed = ""
+                                    self.FilterButtonPressed = "Settings"
+                                }
+                        )
+                        {
+                            GearIcon()
+                        }.buttonStyle(BorderlessButtonStyle())
+                        Spacer()
+                    }
                 }
-                .frame(width: Geometry.size.width,
-                       height: BottomHeight)
-                .background(Color.red)
-                .position(x: Geometry.size.width / 2.0,
-                          y: Geometry.size.height - (BottomHeight / 2.0))
+                .padding(.bottom, 0.0)
+                .frame(height: BottomHeight, alignment: .center)
             }
+            .frame(width: Geometry.size.width,
+                   height: BottomHeight)
+            .background(Color.red)
+            .position(x: Geometry.size.width / 2.0,
+                      y: Geometry.size.height - (BottomHeight / 2.0))
         }
     }
+}
 }
 
 struct ContentView_Previews: PreviewProvider
