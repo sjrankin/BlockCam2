@@ -14,6 +14,7 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
 {
     @Binding var FilterButtonPressed: String
     @Binding var IsSelfieCamera: Bool
+    @EnvironmentObject var BuiltInFilterList: ObservableArray
     
     /// Returns the LiveViewController instance.
     func makeUIViewController(context: Context) -> LiveViewController
@@ -27,4 +28,29 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     {
         uiViewController.ButtonPressed(FilterButtonPressed)
     }
+    
+    func makeCoordinator() -> Coordinator
+    {
+        return Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, ViewControllerDelegate
+    {
+        var Parent: LiveViewControllerUI
+        
+        init(_ Parent: LiveViewControllerUI)
+        {
+            self.Parent = Parent
+        }
+        
+        func FilterNamesPassed(_ viewController: LiveViewController, Names: [String])
+        {
+            Parent.BuiltInFilterList.Items = Names 
+        }
+    }
+}
+
+protocol ViewControllerDelegate: AnyObject
+{
+    func FilterNamesPassed(_ viewController: LiveViewController, Names: [String])
 }
