@@ -24,11 +24,16 @@ class LiveViewController: UIViewController,
                           AVCaptureDataOutputSynchronizerDelegate,
                           AudioProtocol
 {
+    /// Delegate to the SwiftUI coordinator for the user interface.
+    weak var UIDelegate: ViewControllerDelegate? = nil
+    
     /// Initialize the view controller.
     override func viewDidLoad()
     {
         super.viewDidLoad()
         InitializeFileStructure()
+        Filters.InitializeFilters()
+        UIDelegate?.FilterNamesPassed(self, Names: Filters.AlphabetizedFilterNames())
         definesPresentationContext = true
         MetalView = LiveMetalView()
         MetalView?.Initialize(self.view.frame)
@@ -91,13 +96,27 @@ class LiveViewController: UIViewController,
 
     // MARK: - UI actions
     
+    var PreviousButtonCommand: String = ""
+    
     /// Handle button presses from the user interface.
     /// - Parameter Name: The name of the button.
     public func ButtonPressed(_ Name: String)
     {
         if !Name.isEmpty
         {
-            switch Name
+            if PreviousButtonCommand == Name
+            {
+                return
+            }
+            PreviousButtonCommand = Name
+            let Parts = Name.split(separator: ".", omittingEmptySubsequences: true)
+            let FirstName = String(Parts[0])
+            var SecondName = ""
+            if Parts.count > 1
+            {
+                SecondName = String(Parts[1])
+            }
+            switch FirstName
             {
                 case "Camera":
                     TakePicture() 
@@ -109,7 +128,36 @@ class LiveViewController: UIViewController,
                     DoSwitchCameras()
                     
                 case "Filters":
-                    break
+                    print("Filter: \(SecondName)")
+                    switch SecondName
+                    {
+                        case "Passthrough":
+                            Filters.SetFilter(.Passthrough)
+                            
+                        case "DotScreen":
+                            Filters.SetFilter(.DotScreen)
+                            
+                        case "LineView":
+                            Filters.SetFilter(.LineOverlay)
+                            
+                        case "Pixellate":
+                            Filters.SetFilter(.Pixellate)
+                            
+                        case "FalseColor":
+                            Filters.SetFilter(.FalseColor)
+                            
+                        case "HueAdjust":
+                            Filters.SetFilter(.HueAdjust)
+                            
+                        case "Posterize":
+                            Filters.SetFilter(.Posterize)
+                            
+                        case "Noir":
+                            Filters.SetFilter(.Noir)
+                            
+                        default:
+                            Filters.SetFilter(.Passthrough)
+                    }
                     
                 case "Settings":
                     break
@@ -120,7 +168,12 @@ class LiveViewController: UIViewController,
         }
     }
     
-    // Class-global variables.
+    func GetBuiltInFilterList() -> [String]
+    {
+        return Filters.AlphabetizedFilterNames()
+    }
+    
+    //MARK: - Class-global variables.
     
     let VideoDataOutput = AVCaptureVideoDataOutput()
     let PhotoOutput = AVCapturePhotoOutput()
