@@ -11,6 +11,31 @@
 		170EFC2E26255754001227D0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EFC2D26255754001227D0 /* ContentView.swift */; };
 		170EFC3026255755001227D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 170EFC2F26255755001227D0 /* Assets.xcassets */; };
 		170EFC3326255755001227D0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 170EFC3226255755001227D0 /* Preview Assets.xcassets */; };
+		173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */; };
+		173B2251262835480075EB71 /* Viewer3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B2250262835480075EB71 /* Viewer3D.swift */; };
+		17688E76262BE72600D1523A /* LiveViewMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E75262BE72600D1523A /* LiveViewMetal.swift */; };
+		17688E78262BE84500D1523A /* Passthrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17688E77262BE84500D1523A /* Passthrough.metal */; };
+		17688E7D262BEB7700D1523A /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E7C262BEB7700D1523A /* Filters.swift */; };
+		17688E80262BF36E00D1523A /* AudioProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E7F262BF36E00D1523A /* AudioProcessor.swift */; };
+		17688E82262C08C200D1523A /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E81262C08C200D1523A /* LiveViewController.swift */; };
+		17688E84262C0D8600D1523A /* VideoMixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E83262C0D8600D1523A /* VideoMixer.swift */; };
+		17688E86262C0DB300D1523A /* DepthToGrayscaleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E85262C0DB300D1523A /* DepthToGrayscaleConverter.swift */; };
+		17688E8D262C100800D1523A /* MinMaxFromBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 17688E8C262C100800D1523A /* MinMaxFromBuffer.m */; };
+		1786D23626266B1700B34501 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1786D23526266B1700B34501 /* CIImage.swift */; };
+		179721F7262E8EEB004B7134 /* +PhotoHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721F6262E8EEB004B7134 /* +PhotoHandling.swift */; };
+		179721F9262E8FBD004B7134 /* +JpegDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721F8262E8FBD004B7134 /* +JpegDataClass.swift */; };
+		179721FC262E93E5004B7134 /* FileIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721FB262E93E5004B7134 /* FileIO.swift */; };
+		179721FE262EC09F004B7134 /* +LiveViewInitialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721FD262EC09F004B7134 /* +LiveViewInitialization.swift */; };
+		17972200262EC1F3004B7134 /* +Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721FF262EC1F3004B7134 /* +Camera.swift */; };
+		17972202262EC2A2004B7134 /* +Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17972201262EC2A2004B7134 /* +Audio.swift */; };
+		17DE342D26291F900029D3DA /* MicrophoneInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE342C26291F900029D3DA /* MicrophoneInput.swift */; };
+		17E18D43262D235900C77B2E /* LiveViewMetalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E18D42262D235900C77B2E /* LiveViewMetalExtensions.swift */; };
+		17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EC997A262FA8F7007FCF00 /* UIImage.swift */; };
+		17F8C780262C23F400DB7D51 /* +Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F8C77F262C23F400DB7D51 /* +Observer.swift */; };
+		17F8C782262C301F00DB7D51 /* DepthToGrayscale.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17F8C781262C301F00DB7D51 /* DepthToGrayscale.metal */; };
+		17F8C784262C307C00DB7D51 /* Mixer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17F8C783262C307C00DB7D51 /* Mixer.metal */; };
+		17FB3803262A99BD00315764 /* AudioSpectrum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FB3802262A99BD00315764 /* AudioSpectrum.swift */; };
+		17FB3805262AB49C00315764 /* AudioProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FB3804262AB49C00315764 /* AudioProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +45,34 @@
 		170EFC2F26255755001227D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		170EFC3226255755001227D0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		170EFC3426255755001227D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewControllerUI.swift; sourceTree = "<group>"; };
+		173B2250262835480075EB71 /* Viewer3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewer3D.swift; sourceTree = "<group>"; };
+		17688E75262BE72600D1523A /* LiveViewMetal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewMetal.swift; sourceTree = "<group>"; };
+		17688E77262BE84500D1523A /* Passthrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Passthrough.metal; sourceTree = "<group>"; };
+		17688E7C262BEB7700D1523A /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		17688E7F262BF36E00D1523A /* AudioProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessor.swift; sourceTree = "<group>"; };
+		17688E81262C08C200D1523A /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
+		17688E83262C0D8600D1523A /* VideoMixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMixer.swift; sourceTree = "<group>"; };
+		17688E85262C0DB300D1523A /* DepthToGrayscaleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthToGrayscaleConverter.swift; sourceTree = "<group>"; };
+		17688E8C262C100800D1523A /* MinMaxFromBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MinMaxFromBuffer.m; sourceTree = "<group>"; };
+		17688E8E262C102800D1523A /* MinMaxFromBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinMaxFromBuffer.h; sourceTree = "<group>"; };
+		1786D234262665DA00B34501 /* BlockCam2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlockCam2.entitlements; sourceTree = "<group>"; };
+		1786D23526266B1700B34501 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
+		179721F6262E8EEB004B7134 /* +PhotoHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+PhotoHandling.swift"; sourceTree = "<group>"; };
+		179721F8262E8FBD004B7134 /* +JpegDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+JpegDataClass.swift"; sourceTree = "<group>"; };
+		179721FB262E93E5004B7134 /* FileIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIO.swift; sourceTree = "<group>"; };
+		179721FD262EC09F004B7134 /* +LiveViewInitialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+LiveViewInitialization.swift"; sourceTree = "<group>"; };
+		179721FF262EC1F3004B7134 /* +Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+Camera.swift"; sourceTree = "<group>"; };
+		17972201262EC2A2004B7134 /* +Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+Audio.swift"; sourceTree = "<group>"; };
+		17DE342C26291F900029D3DA /* MicrophoneInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneInput.swift; sourceTree = "<group>"; };
+		17E18D42262D235900C77B2E /* LiveViewMetalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewMetalExtensions.swift; sourceTree = "<group>"; };
+		17EC997A262FA8F7007FCF00 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		17F8C77E262C10BB00DB7D51 /* BlockCam2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlockCam2-Bridging-Header.h"; sourceTree = "<group>"; };
+		17F8C77F262C23F400DB7D51 /* +Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+Observer.swift"; sourceTree = "<group>"; };
+		17F8C781262C301F00DB7D51 /* DepthToGrayscale.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DepthToGrayscale.metal; sourceTree = "<group>"; };
+		17F8C783262C307C00DB7D51 /* Mixer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Mixer.metal; sourceTree = "<group>"; };
+		17FB3802262A99BD00315764 /* AudioSpectrum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSpectrum.swift; sourceTree = "<group>"; };
+		17FB3804262AB49C00315764 /* AudioProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,10 +105,19 @@
 		170EFC2A26255754001227D0 /* BlockCam2 */ = {
 			isa = PBXGroup;
 			children = (
+				1786D234262665DA00B34501 /* BlockCam2.entitlements */,
+				170EFC3A26256138001227D0 /* SCNNode3 */,
 				170EFC2B26255754001227D0 /* BlockCam2App.swift */,
 				170EFC2D26255754001227D0 /* ContentView.swift */,
+				17688E7B262BEB6900D1523A /* Filters */,
+				173B224F262834C40075EB71 /* CameraInput */,
+				17688E74262BE70B00D1523A /* CameraOutput */,
+				17DE342E26291FA40029D3DA /* SoundInput */,
+				17EC9979262FA8E9007FCF00 /* Extensions */,
+				179721FA262E93CC004B7134 /* Utility */,
 				170EFC2F26255755001227D0 /* Assets.xcassets */,
 				170EFC3426255755001227D0 /* Info.plist */,
+				17F8C77E262C10BB00DB7D51 /* BlockCam2-Bridging-Header.h */,
 				170EFC3126255755001227D0 /* Preview Content */,
 			);
 			path = BlockCam2;
@@ -67,6 +129,81 @@
 				170EFC3226255755001227D0 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		170EFC3A26256138001227D0 /* SCNNode3 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SCNNode3;
+			sourceTree = "<group>";
+		};
+		173B224F262834C40075EB71 /* CameraInput */ = {
+			isa = PBXGroup;
+			children = (
+				173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */,
+				17688E81262C08C200D1523A /* LiveViewController.swift */,
+				179721FD262EC09F004B7134 /* +LiveViewInitialization.swift */,
+				179721FF262EC1F3004B7134 /* +Camera.swift */,
+				17972201262EC2A2004B7134 /* +Audio.swift */,
+				179721F6262E8EEB004B7134 /* +PhotoHandling.swift */,
+				179721F8262E8FBD004B7134 /* +JpegDataClass.swift */,
+				17F8C77F262C23F400DB7D51 /* +Observer.swift */,
+				173B2250262835480075EB71 /* Viewer3D.swift */,
+			);
+			path = CameraInput;
+			sourceTree = "<group>";
+		};
+		17688E74262BE70B00D1523A /* CameraOutput */ = {
+			isa = PBXGroup;
+			children = (
+				17688E75262BE72600D1523A /* LiveViewMetal.swift */,
+				17E18D42262D235900C77B2E /* LiveViewMetalExtensions.swift */,
+				17688E77262BE84500D1523A /* Passthrough.metal */,
+				17F8C783262C307C00DB7D51 /* Mixer.metal */,
+				17688E83262C0D8600D1523A /* VideoMixer.swift */,
+				17688E85262C0DB300D1523A /* DepthToGrayscaleConverter.swift */,
+				17F8C781262C301F00DB7D51 /* DepthToGrayscale.metal */,
+				17688E8C262C100800D1523A /* MinMaxFromBuffer.m */,
+				17688E8E262C102800D1523A /* MinMaxFromBuffer.h */,
+			);
+			path = CameraOutput;
+			sourceTree = "<group>";
+		};
+		17688E7B262BEB6900D1523A /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				17688E7C262BEB7700D1523A /* Filters.swift */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		179721FA262E93CC004B7134 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				179721FB262E93E5004B7134 /* FileIO.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		17DE342E26291FA40029D3DA /* SoundInput */ = {
+			isa = PBXGroup;
+			children = (
+				17688E7F262BF36E00D1523A /* AudioProcessor.swift */,
+				17DE342C26291F900029D3DA /* MicrophoneInput.swift */,
+				17FB3802262A99BD00315764 /* AudioSpectrum.swift */,
+				17FB3804262AB49C00315764 /* AudioProtocol.swift */,
+			);
+			path = SoundInput;
+			sourceTree = "<group>";
+		};
+		17EC9979262FA8E9007FCF00 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1786D23526266B1700B34501 /* CIImage.swift */,
+				17EC997A262FA8F7007FCF00 /* UIImage.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -100,6 +237,7 @@
 				TargetAttributes = {
 					170EFC2726255754001227D0 = {
 						CreatedOnToolsVersion = 12.5;
+						LastSwiftMigration = 1250;
 					};
 				};
 			};
@@ -138,8 +276,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17FB3805262AB49C00315764 /* AudioProtocol.swift in Sources */,
+				17FB3803262A99BD00315764 /* AudioSpectrum.swift in Sources */,
+				17688E78262BE84500D1523A /* Passthrough.metal in Sources */,
+				179721F7262E8EEB004B7134 /* +PhotoHandling.swift in Sources */,
+				17688E8D262C100800D1523A /* MinMaxFromBuffer.m in Sources */,
+				17688E76262BE72600D1523A /* LiveViewMetal.swift in Sources */,
+				17972202262EC2A2004B7134 /* +Audio.swift in Sources */,
+				17688E82262C08C200D1523A /* LiveViewController.swift in Sources */,
 				170EFC2E26255754001227D0 /* ContentView.swift in Sources */,
 				170EFC2C26255754001227D0 /* BlockCam2App.swift in Sources */,
+				179721FC262E93E5004B7134 /* FileIO.swift in Sources */,
+				17688E84262C0D8600D1523A /* VideoMixer.swift in Sources */,
+				179721F9262E8FBD004B7134 /* +JpegDataClass.swift in Sources */,
+				17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */,
+				17F8C784262C307C00DB7D51 /* Mixer.metal in Sources */,
+				173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */,
+				179721FE262EC09F004B7134 /* +LiveViewInitialization.swift in Sources */,
+				17688E86262C0DB300D1523A /* DepthToGrayscaleConverter.swift in Sources */,
+				17E18D43262D235900C77B2E /* LiveViewMetalExtensions.swift in Sources */,
+				17972200262EC1F3004B7134 /* +Camera.swift in Sources */,
+				1786D23626266B1700B34501 /* CIImage.swift in Sources */,
+				17F8C782262C301F00DB7D51 /* DepthToGrayscale.metal in Sources */,
+				17688E7D262BEB7700D1523A /* Filters.swift in Sources */,
+				17688E80262BF36E00D1523A /* AudioProcessor.swift in Sources */,
+				17DE342D26291F900029D3DA /* MicrophoneInput.swift in Sources */,
+				17F8C780262C23F400DB7D51 /* +Observer.swift in Sources */,
+				173B2251262835480075EB71 /* Viewer3D.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,9 +430,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BlockCam2/BlockCam2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"BlockCam2/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BB235M4GL;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BlockCam2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -279,6 +445,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Irorio.BlockCam2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "BlockCam2/BlockCam2-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -289,9 +458,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BlockCam2/BlockCam2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"BlockCam2/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BB235M4GL;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BlockCam2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -301,6 +473,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Irorio.BlockCam2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "BlockCam2/BlockCam2-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
