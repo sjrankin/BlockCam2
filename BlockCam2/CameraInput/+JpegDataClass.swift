@@ -13,9 +13,10 @@ import AVFoundation
 import Photos
 import MobileCoreServices
 
-/// Contains a jpg data class as an extension to the MainUIViewer.
 extension LiveViewController
 {
+    // MARK: - Jpg data generators.
+    
     class func JpegData(WithPixelBuffer PixelBuffer: CVPixelBuffer, Attachments: [String: Any]?) -> Data?//CFDictionary?) -> Data?
     {
         let Context = CIContext()
