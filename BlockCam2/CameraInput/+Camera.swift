@@ -200,8 +200,7 @@ extension LiveViewController
         }
         Filters.Initialize(From: FormatDescription, Caller: "ProcessLiveViewFrame")
         let FinalPixelBuffer = VideoPixelBuffer
-        MetalView!.pixelBuffer = Filters.Test(FinalPixelBuffer)
-        //MetalView!.pixelBuffer = Filters.Passthrough(FinalPixelBuffer)
+        MetalView!.pixelBuffer = Filters.RunFilter(With: FinalPixelBuffer)
         OperationQueue.main.addOperation
         {
             self.MetalView?.setNeedsDisplay()
