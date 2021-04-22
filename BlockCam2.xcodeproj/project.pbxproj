@@ -11,6 +11,12 @@
 		170EFC2E26255754001227D0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EFC2D26255754001227D0 /* ContentView.swift */; };
 		170EFC3026255755001227D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 170EFC2F26255755001227D0 /* Assets.xcassets */; };
 		170EFC3326255755001227D0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 170EFC3226255755001227D0 /* Preview Assets.xcassets */; };
+		170FAB39263126DD003DDA35 /* Kaleidoscope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170FAB38263126DD003DDA35 /* Kaleidoscope.swift */; };
+		170FAB3B263127B0003DDA35 /* TriangleKaleidoscope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170FAB3A263127B0003DDA35 /* TriangleKaleidoscope.swift */; };
+		170FAB3D26312864003DDA35 /* ColorMonochrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170FAB3C26312864003DDA35 /* ColorMonochrome.swift */; };
+		170FAB3F263128EA003DDA35 /* MaximumComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170FAB3E263128EA003DDA35 /* MaximumComponent.swift */; };
+		170FAB4126312934003DDA35 /* MinimumComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170FAB4026312934003DDA35 /* MinimumComponent.swift */; };
+		170FAB43263129BE003DDA35 /* HistogramDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170FAB42263129BE003DDA35 /* HistogramDisplay.swift */; };
 		173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */; };
 		173B2251262835480075EB71 /* Viewer3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B2250262835480075EB71 /* Viewer3D.swift */; };
 		17688E76262BE72600D1523A /* LiveViewMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17688E75262BE72600D1523A /* LiveViewMetal.swift */; };
@@ -73,6 +79,12 @@
 		170EFC2F26255755001227D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		170EFC3226255755001227D0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		170EFC3426255755001227D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		170FAB38263126DD003DDA35 /* Kaleidoscope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kaleidoscope.swift; sourceTree = "<group>"; };
+		170FAB3A263127B0003DDA35 /* TriangleKaleidoscope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleKaleidoscope.swift; sourceTree = "<group>"; };
+		170FAB3C26312864003DDA35 /* ColorMonochrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMonochrome.swift; sourceTree = "<group>"; };
+		170FAB3E263128EA003DDA35 /* MaximumComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaximumComponent.swift; sourceTree = "<group>"; };
+		170FAB4026312934003DDA35 /* MinimumComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimumComponent.swift; sourceTree = "<group>"; };
+		170FAB42263129BE003DDA35 /* HistogramDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramDisplay.swift; sourceTree = "<group>"; };
 		173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewControllerUI.swift; sourceTree = "<group>"; };
 		173B2250262835480075EB71 /* Viewer3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewer3D.swift; sourceTree = "<group>"; };
 		17688E75262BE72600D1523A /* LiveViewMetal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewMetal.swift; sourceTree = "<group>"; };
@@ -279,6 +291,7 @@
 			children = (
 				17EC998A262FE339007FCF00 /* Chrome.swift */,
 				17EC9984262FE244007FCF00 /* CircularScreen.swift */,
+				170FAB3C26312864003DDA35 /* ColorMonochrome.swift */,
 				17EC9982262FE12D007FCF00 /* CMYKHalftone.swift */,
 				17EC99B3262FF178007FCF00 /* Comic.swift */,
 				17EC9994262FE43D007FCF00 /* DotScreen.swift */,
@@ -288,9 +301,13 @@
 				17EC9996262FE46B007FCF00 /* HatchedScreen.swift */,
 				17EC998E262FE39C007FCF00 /* HueAdjust.swift */,
 				17EC99A0262FE5BC007FCF00 /* Instant.swift */,
+				170FAB38263126DD003DDA35 /* Kaleidoscope.swift */,
 				17EC998C262FE369007FCF00 /* LinearTosRGB.swift */,
 				17EC9998262FE4AE007FCF00 /* LineOverlay.swift */,
 				17EC9986262FE2B1007FCF00 /* LineScreen.swift */,
+				170FAB3E263128EA003DDA35 /* MaximumComponent.swift */,
+				170FAB42263129BE003DDA35 /* HistogramDisplay.swift */,
+				170FAB4026312934003DDA35 /* MinimumComponent.swift */,
 				17EC99A4262FE62C007FCF00 /* Mono.swift */,
 				17EC999E262FE563007FCF00 /* Noir.swift */,
 				17EC99AD262FE945007FCF00 /* Passthrough.swift */,
@@ -300,6 +317,7 @@
 				17EC9988262FE2F5007FCF00 /* Sepia.swift */,
 				17EC99A8262FE6A0007FCF00 /* Tonal.swift */,
 				17EC99AB262FE6D5007FCF00 /* Transfer.swift */,
+				170FAB3A263127B0003DDA35 /* TriangleKaleidoscope.swift */,
 				17EC99AF262FF0FE007FCF00 /* Vibrance.swift */,
 				17EC99B1262FF148007FCF00 /* XRay.swift */,
 			);
@@ -380,6 +398,7 @@
 				17EC99A5262FE62C007FCF00 /* Mono.swift in Sources */,
 				17EC998D262FE369007FCF00 /* LinearTosRGB.swift in Sources */,
 				17FB3805262AB49C00315764 /* AudioProtocol.swift in Sources */,
+				170FAB4126312934003DDA35 /* MinimumComponent.swift in Sources */,
 				17EC999D262FE52D007FCF00 /* FalseColor.swift in Sources */,
 				17EC9985262FE244007FCF00 /* CircularScreen.swift in Sources */,
 				17EC99AC262FE6D5007FCF00 /* Transfer.swift in Sources */,
@@ -398,8 +417,10 @@
 				17972202262EC2A2004B7134 /* +Audio.swift in Sources */,
 				17EC9991262FE3D1007FCF00 /* ExposureAdjust.swift in Sources */,
 				17EC9995262FE43D007FCF00 /* DotScreen.swift in Sources */,
+				170FAB3D26312864003DDA35 /* ColorMonochrome.swift in Sources */,
 				17688E82262C08C200D1523A /* LiveViewController.swift in Sources */,
 				170EFC2E26255754001227D0 /* ContentView.swift in Sources */,
+				170FAB39263126DD003DDA35 /* Kaleidoscope.swift in Sources */,
 				170EFC2C26255754001227D0 /* BlockCam2App.swift in Sources */,
 				17EC99B2262FF148007FCF00 /* XRay.swift in Sources */,
 				179721FC262E93E5004B7134 /* FileIO.swift in Sources */,
@@ -410,6 +431,7 @@
 				17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */,
 				17F8C784262C307C00DB7D51 /* Mixer.metal in Sources */,
 				173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */,
+				170FAB43263129BE003DDA35 /* HistogramDisplay.swift in Sources */,
 				17EC9997262FE46B007FCF00 /* HatchedScreen.swift in Sources */,
 				17EC9987262FE2B1007FCF00 /* LineScreen.swift in Sources */,
 				17EC9989262FE2F5007FCF00 /* Sepia.swift in Sources */,
@@ -424,9 +446,11 @@
 				17688E7D262BEB7700D1523A /* Filters.swift in Sources */,
 				17EC9993262FE3FF007FCF00 /* Posterize.swift in Sources */,
 				17688E80262BF36E00D1523A /* AudioProcessor.swift in Sources */,
+				170FAB3B263127B0003DDA35 /* TriangleKaleidoscope.swift in Sources */,
 				17DE342D26291F900029D3DA /* MicrophoneInput.swift in Sources */,
 				17F8C780262C23F400DB7D51 /* +Observer.swift in Sources */,
 				17EC99B0262FF0FE007FCF00 /* Vibrance.swift in Sources */,
+				170FAB3F263128EA003DDA35 /* MaximumComponent.swift in Sources */,
 				17EC9999262FE4AE007FCF00 /* LineOverlay.swift in Sources */,
 				173B2251262835480075EB71 /* Viewer3D.swift in Sources */,
 				17EC997D262FDFF5007FCF00 /* BuiltIn.swift in Sources */,
