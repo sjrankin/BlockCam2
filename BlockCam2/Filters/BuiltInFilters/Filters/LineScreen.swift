@@ -30,7 +30,7 @@ class LineScreen: BuiltInFilterProtocol
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
         let Adjust = CIFilter.lineScreen()
-        Adjust.angle = 90.0
+        Adjust.angle = 0.0
         Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
