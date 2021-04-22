@@ -33,7 +33,8 @@ class LiveViewController: UIViewController,
         super.viewDidLoad()
         InitializeFileStructure()
         Filters.InitializeFilters()
-        UIDelegate?.FilterNamesPassed(self, Names: Filters.AlphabetizedFilterNames())
+        let FilterList = Filters.AlphabetizedFilterNames()
+        UIDelegate?.FilterNamesPassed(self, Names: FilterList)
         definesPresentationContext = true
         MetalView = LiveMetalView()
         MetalView?.Initialize(self.view.frame)
@@ -104,11 +105,6 @@ class LiveViewController: UIViewController,
     {
         if !Name.isEmpty
         {
-            if PreviousButtonCommand == Name
-            {
-                return
-            }
-            PreviousButtonCommand = Name
             let Parts = Name.split(separator: ".", omittingEmptySubsequences: true)
             let FirstName = String(Parts[0])
             var SecondName = ""
@@ -128,7 +124,21 @@ class LiveViewController: UIViewController,
                     DoSwitchCameras()
                     
                 case "Filters":
+                    if SecondName == Name
+                    {
+                        return
+                    }
+                    PreviousButtonCommand = SecondName
                     print("Filter: \(SecondName)")
+                    if let Filter = BuiltInFilters(rawValue: SecondName)
+                    {
+                        Filters.SetFilter(Filter)
+                    }
+                    else
+                    {
+                        Filters.SetFilter(.Passthrough)
+                    }
+                    /*
                     switch SecondName
                     {
                         case "Passthrough":
@@ -158,6 +168,7 @@ class LiveViewController: UIViewController,
                         default:
                             Filters.SetFilter(.Passthrough)
                     }
+ */
                     
                 case "Settings":
                     break
