@@ -112,7 +112,6 @@ struct ImageSaved: View
 
 struct ContentView: View
 {
-    @EnvironmentObject var BuiltInFilterList: ObservableArray
     @State var SelectedFilter: String = ""
     @State var ShowFilterList: Bool = false
     @State var FilterButtonPressed: String = ""
@@ -131,12 +130,12 @@ struct ContentView: View
                 let BottomHeight: CGFloat = 64.0
                 let TopHeight: CGFloat = Geometry.size.height - BottomHeight
                 
-                LiveViewControllerUI(FilterButtonPressed: $FilterButtonPressed,
-                                     IsSelfieCamera: $IsSelfieCamera)
+                let LiveView = LiveViewControllerUI(FilterButtonPressed: $FilterButtonPressed,
+                                                    IsSelfieCamera: $IsSelfieCamera)
+                LiveView
                     .frame(width: Geometry.size.width, height: TopHeight, alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
                               y: TopHeight / 2.0)
-                
                 ImageSaved(Visible: ShowImageSaved)
                     .frame(width: Geometry.size.width * 0.75, height: 30, alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
@@ -146,91 +145,39 @@ struct ContentView: View
                 {
                     HStack(alignment: .bottom)
                     {
+                        var FilterData = FilterListData()
                         Group
                         {
                             Spacer()
                             Button(action:
                                     {
+                                        FilterData = LiveView.GetFilterData()
                                         self.ShowFilterList.toggle()
                                     })
                             {
                                 FiltersIcon()
                                     .popover(isPresented: $ShowFilterList, content:
                                                 {
-                                                    LazyVStack
+                                                    ScrollView
                                                     {
-                                                            Button("Passthrough")
+                                                        LazyVStack
+                                                        {
+                                                            ForEach(FilterData.FilterNames, id: \.id)
                                                             {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.Passthrough"
+                                                                Name in
+                                                                Button(action:
+                                                                        {
+                                                                            self.ShowFilterList = false
+                                                                            self.FilterButtonPressed = ""
+                                                                            self.FilterButtonPressed = "Filters.\(Name.Value)"
+                                                                        })
+                                                                {
+                                                                    Text(Name.Value)
+                                                                }
+                                                                .foregroundColor(Name.Value == "No Filter" ? .green : .black)
+                                                                .font(.headline)
+                                                                .padding()
                                                             }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("Dot Screen")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.DotScreen"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("Line Overlay")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.LineOverlay"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("Pixellate")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.Pixellate"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("False Color")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.FalseColor"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("HueAdjust")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.HueAdjust"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("Posterize")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.Posterize"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
-                                                            Button("Noir")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                                self.FilterButtonPressed = "Filters.Noir"
-                                                            }
-                                                            .font(.headline)
-                                                            .padding()
-
                                                             Button("Cancel")
                                                             {
                                                                 self.ShowFilterList = false
@@ -238,9 +185,11 @@ struct ContentView: View
                                                             }
                                                             .font(.headline)
                                                             .foregroundColor(.red)
+                                                            .padding()
                                                         }
-                                    })
-                        }.buttonStyle(BorderlessButtonStyle())
+                                                    }
+                                                })
+                            }.buttonStyle(BorderlessButtonStyle())
                     }
                     
                     Group
