@@ -14,6 +14,10 @@ class ObservableArray: ObservableObject
     /// The data being held.
     @Published var Items = [String]()
     
+    init()
+    {
+    }
+    
     /// Initializer.
     /// - Parameter Items: Array of strings to add.
     init(Items: [String])
