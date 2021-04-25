@@ -10,9 +10,10 @@ import SwiftUI
 struct FilterButton: View
 {
     @State var Name: String
-    @State var IsSelected: Bool
-    @State var SelectedFilter: String
-    @State var Block: ((String) -> ())?
+    @Binding var SelectedFilter: String
+    @Binding var Block: ((String) -> ())?
+    @State var SelectedGroup: String
+    var SelectedBorderColor: Color = Color(UIColor.link)
     
     var body: some View
     {
@@ -27,18 +28,20 @@ struct FilterButton: View
                 .foregroundColor(.black)
                 .padding(.horizontal, 3)
                 .padding(.vertical, 10)
+                .shadow(radius: 5)
         }
         .foregroundColor(.black)
         .background(
             ZStack
             {
                 RoundedRectangle(cornerRadius: 10.0)
-                    .stroke(Color.white,
-                            lineWidth: 5)
-                    .shadow(radius: 5)
+                    .stroke(SelectedFilter == Name ? SelectedBorderColor : Color.white,
+                            style: StrokeStyle(
+                                lineWidth: SelectedFilter == Name ? 10 : 5,
+                                dash: SelectedFilter == Name ? [5, 5] : []
+                            ))
                 RoundedRectangle(cornerRadius: 10.0)
-                    .fill(Color.gray)
-                    .shadow(radius: 5)
+                    .fill(Color(FilterData.GroupColor(With: SelectedGroup)))
             }
         )
         .padding(.leading, 5)
