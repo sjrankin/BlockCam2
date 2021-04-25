@@ -1,8 +1,8 @@
 //
-//  Chrome.swift
+//  GaussianBlur.swift
 //  BlockCam2
 //
-//  Created by Stuart Rankin on 4/21/21.
+//  Created by Stuart Rankin on 4/24/21.
 //
 
 import Foundation
@@ -19,18 +19,19 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Chrome: BuiltInFilterProtocol
+class GaussianBlur: BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Chrome
+    static var FilterType: BuiltInFilters = .GaussianBlur
     
-    static var Name: String = "Chrome"
+    static var Name: String = "Gaussian Blur"
     
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.gaussianBlur()
         Adjust.inputImage = SourceImage
+        Adjust.radius = 32.0
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
@@ -53,8 +54,9 @@ class Chrome: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.gaussianBlur()
         Adjust.inputImage = SourceImage
+        Adjust.radius = Options[.Radius] as? Float ?? 32.0
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil

@@ -48,4 +48,28 @@ class Mono: BuiltInFilterProtocol
             return Buffer
         }
     }
+    
+    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+                   _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.photoEffectMono()
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
 }

@@ -1,8 +1,8 @@
 //
-//  Chrome.swift
+//  Bloom.swift
 //  BlockCam2
 //
-//  Created by Stuart Rankin on 4/21/21.
+//  Created by Stuart Rankin on 4/22/21.
 //
 
 import Foundation
@@ -19,17 +19,17 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Chrome: BuiltInFilterProtocol
+class Bloom: BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Chrome
+    static var FilterType: BuiltInFilters = .Bloom
     
-    static var Name: String = "Chrome"
+    static var Name: String = "Bloom Effect"
     
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.bloom()
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
@@ -53,7 +53,7 @@ class Chrome: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.bloom()
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {

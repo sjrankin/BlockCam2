@@ -50,4 +50,30 @@ class FalseColor: BuiltInFilterProtocol
             return Buffer
         }
     }
+    
+    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+                   _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
+    {
+        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let Adjust = CIFilter.falseColor()
+        Adjust.color0 = Options[.Color0] as? CIColor ?? CIColor.red
+        Adjust.color1 = Options[.Color1] as? CIColor ?? CIColor.yellow
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer
+        }
+    }
 }

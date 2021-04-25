@@ -1,8 +1,8 @@
 //
-//  Chrome.swift
+//  HexagonalPixellate.swift
 //  BlockCam2
 //
-//  Created by Stuart Rankin on 4/21/21.
+//  Created by Stuart Rankin on 4/22/21.
 //
 
 import Foundation
@@ -19,18 +19,19 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Chrome: BuiltInFilterProtocol
+class HexagonalPixellate: BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Chrome
+    static var FilterType: BuiltInFilters = .HexagonalPixellate
     
-    static var Name: String = "Chrome"
+    static var Name: String = "Pixellate, Hexagonal"
     
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.hexagonalPixellate()
         Adjust.inputImage = SourceImage
+        Adjust.scale = 24.0
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
@@ -53,8 +54,9 @@ class Chrome: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.hexagonalPixellate()
         Adjust.inputImage = SourceImage
+        Adjust.scale = Options[.Scale] as? Float ?? 24.0
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil

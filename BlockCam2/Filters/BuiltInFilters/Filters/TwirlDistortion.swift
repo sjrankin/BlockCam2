@@ -1,8 +1,8 @@
 //
-//  Chrome.swift
+//  TwirlDistortion.swift
 //  BlockCam2
 //
-//  Created by Stuart Rankin on 4/21/21.
+//  Created by Stuart Rankin on 4/24/21.
 //
 
 import Foundation
@@ -19,17 +19,20 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Chrome: BuiltInFilterProtocol
+class TwirlDistortion: BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Chrome
+    static var FilterType: BuiltInFilters = .TwirlDistortion
     
-    static var Name: String = "Chrome"
+    static var Name: String = "Twirl Distortion"
     
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.twirlDistortion()
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.radius = Float((SourceImage.extent.width / 2.0) * 0.85)
+        Adjust.angle = Float(CGFloat.pi * 2)
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
@@ -53,7 +56,10 @@ class Chrome: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.twirlDistortion()
+        Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.radius = Options[.Radius] as? Float ?? Float((SourceImage.extent.width / 2.0) * 0.85)
+        Adjust.angle = Options[.Angle] as? Float ?? Float(CGFloat.pi * 2)
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {

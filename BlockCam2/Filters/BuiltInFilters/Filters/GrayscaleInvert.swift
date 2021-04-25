@@ -1,8 +1,8 @@
 //
-//  Chrome.swift
+//  GrayscaleInvert.swift
 //  BlockCam2
 //
-//  Created by Stuart Rankin on 4/21/21.
+//  Created by Stuart Rankin on 4/24/21.
 //
 
 import Foundation
@@ -19,17 +19,19 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Chrome: BuiltInFilterProtocol
+class GrayscaleInvert: BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Chrome
+    static var FilterType: BuiltInFilters = .GrayscaleInvert
     
-    static var Name: String = "Chrome"
+    static var Name: String = "Grayscale Invert"
     
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Gray = MinimumComponent()
+        let GrayBuffer = Gray.RunFilter(Buffer, BufferPool, ColorSpace)
+        let SourceImage = CIImage(cvImageBuffer: GrayBuffer)
+        let Adjust = CIFilter.colorInvert()
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
@@ -52,8 +54,47 @@ class Chrome: BuiltInFilterProtocol
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        var GrayFilter: BuiltInFilterProtocol? = nil
+        let WhichGray = Options[.GrayscaleFilter] as? BuiltInFilters ?? .Noir
+        switch WhichGray
+        {
+            case .Mono:
+                GrayFilter = Mono()
+                
+            case .MaximumComponent:
+                GrayFilter = MaximumComponent()
+                
+            case .MinimumComponent:
+                GrayFilter = MinimumComponent()
+                
+            case .CircularScreen:
+                GrayFilter = CircularScreen()
+                
+            case .LineScreen:
+                GrayFilter = LineScreen()
+                
+            case .DotScreen:
+                GrayFilter = DotScreen()
+                
+            case .HatchedScreen:
+                GrayFilter = HatchedScreen()
+                
+            case .EdgeWork:
+                GrayFilter = EdgeWork()
+                
+            case .Noir:
+                GrayFilter = Noir()
+                
+            default:
+                GrayFilter = Noir()
+        }
+        guard let GrayFilter = GrayFilter else
+        {
+            return Buffer
+        }
+        let GrayBuffer = GrayFilter.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
+        let SourceImage = CIImage(cvImageBuffer: GrayBuffer)
+        let Adjust = CIFilter.colorInvert()
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {

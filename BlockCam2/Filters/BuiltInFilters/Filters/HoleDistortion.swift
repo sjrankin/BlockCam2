@@ -1,8 +1,8 @@
 //
-//  Chrome.swift
+//  HoleDistortion.swift
 //  BlockCam2
 //
-//  Created by Stuart Rankin on 4/21/21.
+//  Created by Stuart Rankin on 4/24/21.
 //
 
 import Foundation
@@ -19,17 +19,19 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Chrome: BuiltInFilterProtocol
+class HoleDistortion: BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Chrome
+    static var FilterType: BuiltInFilters = .HoleDistortion
     
-    static var Name: String = "Chrome"
+    static var Name: String = "Hole Distortion"
     
     func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.holeDistortion()
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.radius = 300.0
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
@@ -53,7 +55,9 @@ class Chrome: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer)
-        let Adjust = CIFilter.photoEffectChrome()
+        let Adjust = CIFilter.holeDistortion()
+        Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.radius = Options[.Radius] as? Float ?? 300.0
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
