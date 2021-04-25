@@ -98,6 +98,7 @@ extension Filters
         FilterMap[.ColorMonochrome] = BlockCam2.ColorMonochrome()
         FilterMap[.LinearTosRGB] = BlockCam2.LinearTosRGB()
         FilterMap[.ColorInvert] = BlockCam2.ColorInvert()
+        FilterMap[.ColorMap] = BlockCam2.ColorMap()
         return FilterMap
     }
     
@@ -182,6 +183,9 @@ extension Filters
         FilterMap[.CircularScreen] = BlockCam2.CircularScreen()
         FilterMap[.HatchedScreen] = BlockCam2.HatchedScreen()
         FilterMap[.CMYKHalftone] = BlockCam2.CMYKHalftone()
+        FilterMap[.CircleAndLines] = BlockCam2.CircleAndLines()
+        FilterMap[.LineScreenBlend] = BlockCam2.LineScreenBlend()
+        FilterMap[.CircleScreenBlend] = BlockCam2.CircleScreenBlend()
         return FilterMap
     }
     
