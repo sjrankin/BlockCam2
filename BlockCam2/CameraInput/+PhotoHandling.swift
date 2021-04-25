@@ -43,10 +43,10 @@ extension LiveViewController
             Filters.Initialize(From: PhotoFormat!, Caller: "photoOutput")
             if let ImageBuffer = Filters.RunFilter(With: PhotoPixelBuffer)
             {
-            let CImg = CIImage(cvImageBuffer: ImageBuffer)
-            let Context = CIContext(options: nil)
-            let CGImg = Context.createCGImage(CImg, from: CImg.extent)!
-             ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
+                let CImg = CIImage(cvImageBuffer: ImageBuffer)
+                let Context = CIContext(options: nil)
+                let CGImg = Context.createCGImage(CImg, from: CImg.extent)!
+                ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
             }
             
             PHPhotoLibrary.requestAuthorization
@@ -57,7 +57,7 @@ extension LiveViewController
                     PHPhotoLibrary.shared().performChanges(
                         {
                             let CreationRequest = PHAssetCreationRequest.forAsset()
-                            let ImageData = ImageToSave.pngData()!
+                            let ImageData = ImageToSave.jpegData(compressionQuality: 1.0)!
                             CreationRequest.addResource(with: .photo, data: ImageData, options: nil)
                         },
                         completionHandler:
