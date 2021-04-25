@@ -33,6 +33,8 @@ class LiveViewController: UIViewController,
         super.viewDidLoad()
         InitializeFileStructure()
         Filters.InitializeFilters()
+        Filters.InitializeFilterTree()
+        FilterData.Initialize()
         let FilterList = Filters.AlphabetizedFilterNames()
         UIDelegate?.FilterNamesPassed(self, Names: FilterList)
         definesPresentationContext = true
@@ -44,8 +46,10 @@ class LiveViewController: UIViewController,
         MetalView?.addGestureRecognizer(Tap)
         
         GetPermissions()
+        #if !targetEnvironment(simulator)
         InitializeAudio()
         InitializeCamera()
+        #endif
     }
     
     /// Initialize the file structure.
@@ -129,7 +133,6 @@ class LiveViewController: UIViewController,
                         return
                     }
                     PreviousButtonCommand = SecondName
-                    print("Filter: \(SecondName)")
                     if let Filter = BuiltInFilters(rawValue: SecondName)
                     {
                         Filters.SetFilter(Filter)
@@ -138,37 +141,6 @@ class LiveViewController: UIViewController,
                     {
                         Filters.SetFilter(.Passthrough)
                     }
-                    /*
-                    switch SecondName
-                    {
-                        case "Passthrough":
-                            Filters.SetFilter(.Passthrough)
-                            
-                        case "DotScreen":
-                            Filters.SetFilter(.DotScreen)
-                            
-                        case "LineView":
-                            Filters.SetFilter(.LineOverlay)
-                            
-                        case "Pixellate":
-                            Filters.SetFilter(.Pixellate)
-                            
-                        case "FalseColor":
-                            Filters.SetFilter(.FalseColor)
-                            
-                        case "HueAdjust":
-                            Filters.SetFilter(.HueAdjust)
-                            
-                        case "Posterize":
-                            Filters.SetFilter(.Posterize)
-                            
-                        case "Noir":
-                            Filters.SetFilter(.Noir)
-                            
-                        default:
-                            Filters.SetFilter(.Passthrough)
-                    }
- */
                     
                 case "Settings":
                     break
