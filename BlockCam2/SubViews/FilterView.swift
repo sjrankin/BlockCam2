@@ -17,7 +17,6 @@ struct FilterView: View
     @Binding var SelectedFilter: String
     @Binding var SelectedGroup: String
     @State var Block: ((String) -> ())?
-    @State var ItemsForGroup: Int = 0
     @State var SelectedBorderColor: Color = Color(UIColor.link)
     
     var body: some View
@@ -34,30 +33,7 @@ struct FilterView: View
                         ForEach(FilterData.GroupListWithIDs(), id: \.id)
                         {
                             Name in
-                            Button(action:
-                                    {
-                                        SelectedGroup = Name.Value
-                                        ItemsForGroup = FilterData.IndexOf(Group: Name.Value)
-                                    })
-                            {
-                                Text(Name.Value)
-                                    .font(.custom("Avenir-Black", size: 24.0))
-                                    .padding(.horizontal, 5)
-                                    .padding(.vertical, 10)
-                            }
-                            .background(
-                                ZStack
-                                {
-                                    RoundedRectangle(cornerRadius: 10.0)
-                                        .stroke(SelectedGroup == Name.Value ? SelectedBorderColor : Color.white,
-                                                lineWidth: SelectedGroup == Name.Value ? 10 : 5)
-                                        .shadow(radius: 5)
-                                    RoundedRectangle(cornerRadius: 10.0)
-                                        .fill(Color(FilterData.GroupColor(With: Name.Value)))
-                                        .shadow(radius: 5)
-                                })
-                            .foregroundColor(.black)
-                            .padding(.leading, 5)
+                            GroupButton(Name: Name.Value, SelectedButton: $SelectedGroup)
                         }
                     }
                     .frame(height: Geometry.size.height / 2)
@@ -70,37 +46,13 @@ struct FilterView: View
                 {
                     HStack(alignment: .center)
                     {
-                        ForEach(FilterData.FilterListWithIDs(Index: ItemsForGroup), id: \.id)
+                        ForEach(FilterData.FilterListWithIDs(Group: SelectedGroup), id: \.id)
                         {
                             Name in
-                            Button(action:
-                                    {
-                                        SelectedFilter = Name.Value
-                                        Block?("Filters.\(Name.Value)")
-                                    })
-                            {
-                                Text(Name.Value)
-                                    .font(.custom("Avenir-Heavy", size: 20.0))
-                                    .foregroundColor(.black)
-                                    .padding(.horizontal, 3)
-                                    .padding(.vertical, 10)
-                            }
-                            .foregroundColor(.black)
-                            .background(
-                                ZStack
-                                {
-                                    RoundedRectangle(cornerRadius: 10.0)
-                                        .stroke(SelectedFilter == Name.Value ? SelectedBorderColor : Color.white,//Color.white,
-                                                lineWidth: SelectedFilter == Name.Value ? 10 : 5)
-                                        .shadow(radius: 5)
-                                    RoundedRectangle(cornerRadius: 10.0)
-                                        .fill(Color(FilterData.GroupColor(For: ItemsForGroup)))
-                                        .shadow(radius: 5)
-                                }
-                            )
-                            .padding(.leading, 5)
-                            .padding(.bottom, 40)
-                            .padding(.top, 12)
+                            FilterButton(Name: Name.Value,
+                                         SelectedFilter: $SelectedFilter,
+                                         Block: $Block,
+                                         SelectedGroup: SelectedGroup)
                         }
                     }
                 }
