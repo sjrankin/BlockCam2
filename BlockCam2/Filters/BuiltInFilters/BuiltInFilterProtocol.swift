@@ -74,6 +74,10 @@ enum FilterOptions: String
     case Strands = "Strands"
     case Intensity = "Intensity"
     case Size = "Size"
+    case GradientColor0 = "GradientColor0"
+    case GradientColor1 = "GradientColor1"
+    case GradientPoint0 = "GradientPoint0"
+    case GradientPoint1 = "GradientPoint1"
     case ChainedFilters = "ChainedFilters"
 }
 
