@@ -21,13 +21,19 @@ struct CameraIcon: View
 
 struct FiltersIcon: View
 {
+    @Binding var IsHighlighted: Bool
+    @Binding var DoRotate: Bool
+    
     var body: some View
     {
         Image(systemName: "camera.filters")
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
+            .foregroundColor(!IsHighlighted ? .black : .yellow)
+            .rotationEffect(.degrees(!DoRotate ? 360.0 : 0.0))
+            .animation(!DoRotate ? Animation.linear(duration: 10.0)
+                        .repeatForever(autoreverses: false) : Animation.default)
     }
 }
 
@@ -86,37 +92,17 @@ struct PhotoLibraryIcon: View
     }
 }
 
-struct ImageSaved: View
-{
-    @State var IsVisible: Bool
-    
-    init(Visible: Bool)
-    {
-        IsVisible = Visible
-    }
-    
-    var body: some View
-    {
-        Text("Image Saved")
-            .foregroundColor(.blue)
-            .font(.headline).bold()
-            .padding()
-            .opacity(IsVisible ? 1.0 : 0.0)
-            .background(RoundedRectangle(cornerRadius: 10.0)
-                            .fill(Color.white)
-                            .shadow(radius: 5)
-                            .frame(width: 400, height: 50)
-                            .opacity(IsVisible ? 1.0 : 0.0))
-    }
-}
-
 struct ContentView: View
 {
+    @State var DidTapCommand: Bool = false
     @State var SelectedFilter: String = ""
+    @State var SelectedGroup: String = ""
     @State var ShowFilterList: Bool = false
     @State var FilterButtonPressed: String = ""
+    @State var FilterButtonTapped: Bool = true
     @State var IsSelfieCamera: Bool = false
     @State var ShowImageSaved: Bool = false
+    @State var ToolHeight: CGFloat = 150
     @State var WhichCamera: String = "arrow.triangle.2.circlepath.camera"
     
     var body: some View
@@ -136,143 +122,139 @@ struct ContentView: View
                     .frame(width: Geometry.size.width, height: TopHeight, alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
                               y: TopHeight / 2.0)
-                ImageSaved(Visible: ShowImageSaved)
-                    .frame(width: Geometry.size.width * 0.75, height: 30, alignment: .top)
-                    .position(x: Geometry.size.width / 2.0,
-                              y: 75.0 / 2.0)
+                
+                ImageSaved(IsVisible: $ShowImageSaved,
+                           Width: Geometry.size.width,
+                           Height: Geometry.size.height)
+                
+                FilterView(Width: Geometry.size.width,
+                           Height: Geometry.size.height,
+                           ToolHeight: ToolHeight,
+                           BottomHeight: BottomHeight, 
+                           ToggleHidden: $FilterButtonTapped,
+                           SelectedFilter: $SelectedFilter,
+                           SelectedGroup: $SelectedGroup,
+                           Block: HandleFilterButtonPress)
                 
                 Group
                 {
                     HStack(alignment: .bottom)
                     {
-                        var FilterData = FilterListData()
+                        Group
+                        {
+                            Spacer()
+                            
+                            Button(action:
+                                    {
+                                        FilterButtonTapped.toggle()
+                                    })
+                            {
+                                FiltersIcon(IsHighlighted: $FilterButtonTapped,
+                                            DoRotate: $FilterButtonTapped)
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                        }
+                        
+                        Group
+                        {
+                            Spacer()
+                            
+                            Button(action:
+                                    {
+                                        self.FilterButtonPressed = ""
+                                        self.FilterButtonPressed = "Album"
+                                    }
+                            )
+                            {
+                                PhotoLibraryIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                        }
+                        
+                        Group
+                        {
+                            Spacer()
+                            
+                            Button(action:
+                                    {
+                                        self.FilterButtonPressed = ""
+                                        self.FilterButtonPressed = "Camera"
+                                    }
+                            )
+                            {
+                                CameraIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                        }
+                        
+                        Group
+                        {
+                            Spacer()
+                            
+                            Button(action:
+                                    {
+                                        let CommandString = "Selfie"
+                                        self.IsSelfieCamera = !self.IsSelfieCamera
+                                        if self.IsSelfieCamera
+                                        {
+                                            self.WhichCamera = "arrow.triangle.2.circlepath.camera.fill"
+                                        }
+                                        else
+                                        {
+                                            self.WhichCamera = "arrow.triangle.2.circlepath.camera"
+                                        }
+                                        self.FilterButtonPressed = ""
+                                        self.FilterButtonPressed = CommandString
+                                    })
+                            {
+                                Image(systemName: WhichCamera)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 32, height: 32, alignment: .center)
+                                    .foregroundColor(.yellow)
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                        }
+                        
                         Group
                         {
                             Spacer()
                             Button(action:
                                     {
-                                        FilterData = LiveView.GetFilterData()
-                                        self.ShowFilterList.toggle()
-                                    })
+                                        self.FilterButtonPressed = ""
+                                        self.FilterButtonPressed = "Settings"
+                                    }
+                            )
                             {
-                                FiltersIcon()
-                                    .popover(isPresented: $ShowFilterList, content:
-                                                {
-                                                    ScrollView
-                                                    {
-                                                        LazyVStack
-                                                        {
-                                                            ForEach(FilterData.FilterNames, id: \.id)
-                                                            {
-                                                                Name in
-                                                                Button(action:
-                                                                        {
-                                                                            self.ShowFilterList = false
-                                                                            self.FilterButtonPressed = ""
-                                                                            self.FilterButtonPressed = "Filters.\(Name.Value)"
-                                                                        })
-                                                                {
-                                                                    Text(Name.Value)
-                                                                }
-                                                                .foregroundColor(Name.Value == "No Filter" ? .green : .black)
-                                                                .font(.headline)
-                                                                .padding()
-                                                            }
-                                                            Button("Cancel")
-                                                            {
-                                                                self.ShowFilterList = false
-                                                                self.FilterButtonPressed = ""
-                                                            }
-                                                            .font(.headline)
-                                                            .foregroundColor(.red)
-                                                            .padding()
-                                                        }
-                                                    }
-                                                })
-                            }.buttonStyle(BorderlessButtonStyle())
+                                GearIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                            
+                            Spacer()
+                        }
                     }
-                    
-                    Group
-                    {
-                        Spacer()
-                        Button(action:
-                                {
-                                    self.FilterButtonPressed = ""
-                                    self.FilterButtonPressed = "Album"
-                                }
-                        )
-                        {
-                            PhotoLibraryIcon()
-                        }.buttonStyle(BorderlessButtonStyle())
-                    }
-                    
-                    Group
-                    {
-                        Spacer()
-                        Button(action:
-                                {
-                                    self.FilterButtonPressed = ""
-                                    self.FilterButtonPressed = "Camera"
-                                }
-                        )
-                        {
-                            CameraIcon()
-                        }.buttonStyle(BorderlessButtonStyle())
-                    }
-                    
-                    Group
-                    {
-                        Spacer()
-                        Button(action:
-                                {
-                                    let CommandString = "Selfie"
-                                    self.IsSelfieCamera = !self.IsSelfieCamera
-                                    if self.IsSelfieCamera
-                                    {
-                                        self.WhichCamera = "arrow.triangle.2.circlepath.camera.fill"
-                                    }
-                                    else
-                                    {
-                                        self.WhichCamera = "arrow.triangle.2.circlepath.camera"
-                                    }
-                                    self.FilterButtonPressed = ""
-                                    self.FilterButtonPressed = CommandString
-                                })
-                        {
-                            Image(systemName: WhichCamera)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 32, height: 32, alignment: .center)
-                                .foregroundColor(.yellow)
-                        }.buttonStyle(BorderlessButtonStyle())
-                    }
-                    
-                    Group
-                    {
-                        Spacer()
-                        Button(action:
-                                {
-                                    self.FilterButtonPressed = ""
-                                    self.FilterButtonPressed = "Settings"
-                                }
-                        )
-                        {
-                            GearIcon()
-                        }.buttonStyle(BorderlessButtonStyle())
-                        Spacer()
-                    }
+                    .padding(.bottom, 0.0)
+                    .frame(height: BottomHeight, alignment: .center)
                 }
-                .padding(.bottom, 0.0)
-                .frame(height: BottomHeight, alignment: .center)
+                .frame(width: Geometry.size.width,
+                       height: BottomHeight)
+                .background(Color.red)
+                .position(x: Geometry.size.width / 2.0,
+                          y: Geometry.size.height - (BottomHeight / 2.0))
             }
-            .frame(width: Geometry.size.width,
-                   height: BottomHeight)
-            .background(Color.red)
-            .position(x: Geometry.size.width / 2.0,
-                      y: Geometry.size.height - (BottomHeight / 2.0))
         }
     }
-}
+    
+    func HandleFilterButtonPress(_ Value: String)
+    {
+        self.FilterButtonPressed = ""
+        self.FilterButtonPressed = Value
+    }
 }
 
 struct ContentView_Previews: PreviewProvider
