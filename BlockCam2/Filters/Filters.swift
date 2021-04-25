@@ -23,7 +23,21 @@ class Filters
 {
     public static func InitializeFilters()
     {
+        if Initialized
+        {
+            return
+        }
         InitializeBuiltInFilters()
+        _Initialized = true
+    }
+    
+    private static var _Initialized: Bool = false
+    public static var Initialized: Bool
+    {
+        get
+        {
+            return _Initialized
+        }
     }
     
     public static func Initialize(From: CMFormatDescription, Caller: String)
@@ -148,9 +162,13 @@ class Filters
             LastBuiltInFilterUsed = Filter
             FilterToUse = Filter!
         }
-        if let SomeFilter = BuiltInFilterMap[FilterToUse]
+        if FilterToUse == .Passthrough
         {
-            return SomeFilter.RunFilter(Buffer, BufferPool!, ColorSpace!)
+            return Buffer
+        }
+        if let FilterInTree = Filters.FilterFromTree(FilterToUse)
+        {
+            return FilterInTree.RunFilter(Buffer, BufferPool!, ColorSpace!, Options: [:])
         }
         return nil
     }
@@ -161,16 +179,48 @@ class Filters
     }
     
     static var LastBuiltInFilterUsed: BuiltInFilters? = nil
+    
+    static var GroupData: [FilterGroups: Int] =
+        [
+            .Adjust: 0x98fb98,
+            .Blur: 0x89cff0,
+            .Color: 0xffef00,
+            .Combined: 0xff9966,
+            .Distortion: 0xf88379,
+            .Halftone: 0xbc8f8f,
+            .Sharpen: 0xddd06a,
+            .ThreeD: 0xccccff,
+            .Information: 0xfe4eda,
+            .Effect: 0xbfff00,
+            .Grayscale: 0xbcbcbc,
+            .Reset: 0xffffff
+        ]
+}
+
+enum FilterGroups: String, CaseIterable
+{
+    case Adjust = "Adjust"
+    case Blur = "Blur"
+    case Color = "Color"
+    case Combined = "Combined"
+    case Distortion = "Distortion"
+    case Halftone = "Halftone"
+    case Effect = "Effect"
+    case Sharpen = "Sharpen"
+    case ThreeD = "3D"
+    case Grayscale = "Grayscale"
+    case Information = "Information"
+    case Reset = " Reset "
 }
 
 enum BuiltInFilters: String, CaseIterable
 {
     case Passthrough = "No Filter"
-    case LineOverlay = "Line Overlay"
+    case LineOverlay = "Line Overlay" 
     case Pixellate = "Pixellate"
     case FalseColor = "False Color"
-    case HueAdjust = "Hue Adjust"
-    case ExposureAdjust = "Exposure Adjust"
+    case HueAdjust = "Hue"
+    case ExposureAdjust = "Exposure"
     case Posterize = "Posterize"
     case Noir = "Noir"
     case LinearTosRGB = "Linear to sRGB"
@@ -179,21 +229,48 @@ enum BuiltInFilters: String, CaseIterable
     case DotScreen = "Dot Screen"
     case LineScreen = "Line Screen"
     case CircularScreen = "Circular Screen"
-    case HatchedScreen = "Hatched Screen"
+    case HatchedScreen = "Hatch Screen"
     case CMYKHalftone = "CMYK Halftone"
-    case Instant = "Instant Effect"
-    case Fade = "Fade Effect"
-    case Mono = "Mono Effect"
-    case Process = "Process Effect"
-    case Tonal = "Tonal Effect"
-    case Transfer = "Transfer Effect"
-    case Vibrance = "Vibrance Effect"
+    case Instant = "Instant"
+    case Fade = "Fade"
+    case Mono = "Mono"
+    case Process = "Process"
+    case Tonal = "Tonal"
+    case Transfer = "Transfer"
+    case Vibrance = "Vibrance "
     case XRay = "X-Ray"
-    case Comic = "Comic Effect"
+    case Comic = "Comic"
     case TriangleKaleidoscope = "Triangle Kaleidoscope"
     case Kaleidoscope = "Kaleidoscope"
     case ColorMonochrome = "Color Monochrome"
-    case MaximumComponent = "Component, Maximum"
-    case MinimumComponent = "Component, Minimum"
-    case HistogramDisplay = "Histogram Display"
+    case MaximumComponent = "Maximum"
+    case MinimumComponent = "Minimum"
+    case HistogramDisplay = "Histogram"
+    case SharpenLuminance = "Sharpen Luminance"
+    case UnsharpMask = "Unsharp Mask"
+    case Bloom = "Bloom"
+    case Crystallize = "Crystallize"
+    case Edges = "Edges"
+    case EdgeWork = "Edge Work"
+    case Gloom = "Gloom"
+    case HexagonalPixellate = "Pixellate Hex"
+    case Pointillize = "Pointillize"
+    //3D Filters
+    case Blocks = "Blocks"
+    case Spheres = "Spheres"
+    
+    case ThermalEffect = "Thermal"
+    case TwirlDistortion = "Twirl"
+    case LightTunnel = "Spiral"
+    case HoleDistortion = "Hole"
+    case Droste = "Droste"
+    case CircleSplashDistortion = "Circle Splash"
+    case BumpDistortion = "Bump"
+    case AreaHistogram = "Area Histogram"
+    case ColorInvert = "Invert"
+    case GrayscaleInvert = "B/W Invert"
+    case GaussianBlur = "Gaussian"
+    case MedianFilter = "Median"
+    case MotionBlur = "Motion"
+    case ZoomBlur = "Zoom"
 }
