@@ -33,4 +33,28 @@ extension UIImage
         UIGraphicsEndImageContext()
         return NewImage!
     }
+    
+    /// Returns an image with a solid color and passed size.
+    /// - Parameters:
+    ///   - SolidColor: The color to fill the image with.
+    ///   - Size: The size of the image.
+    /// - Returns: UIImage filled with the specified color on success, nil on error.
+    public static func MakeColorImage(SolidColor: UIColor, Size: CGSize) -> UIImage?
+    {
+        let Rect = CGRect(x: 0, y: 0, width: Size.width, height: Size.height)
+        
+        let FinalColor = CIColor(red: SolidColor.r, green: SolidColor.g, blue: SolidColor.b, alpha: SolidColor.a)
+        var ciImage = CIImage(color: FinalColor)
+        ciImage = ciImage.cropped(to: Rect)
+        let ciContext = CIContext()
+        if let cgImg = ciContext.createCGImage(ciImage, from: ciImage.extent)
+        {
+            let uiImg = UIImage(cgImage: cgImg)
+            return uiImg
+        }
+        else
+        {
+            fatalError("Error backing image with CG.")
+        }
+    }
 }
