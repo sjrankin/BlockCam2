@@ -7,90 +7,6 @@
 
 import SwiftUI
 
-struct CameraIcon: View
-{
-    var body: some View
-    {
-        Image(systemName: "camera")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
-    }
-}
-
-struct FiltersIcon: View
-{
-    @Binding var IsHighlighted: Bool
-    @Binding var DoRotate: Bool
-    
-    var body: some View
-    {
-        Image(systemName: "camera.filters")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(!IsHighlighted ? .black : .yellow)
-            .rotationEffect(.degrees(!DoRotate ? 360.0 : 0.0))
-            .animation(!DoRotate ? Animation.linear(duration: 10.0)
-                        .repeatForever(autoreverses: false) : Animation.default)
-    }
-}
-
-struct GearIcon: View
-{
-    var body: some View
-    {
-        Image(systemName: "gearshape")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
-    }
-}
-
-struct SelfieIcon: View
-{
-    @State var IconName: String = ""
-    
-    init(_ IconName: String)
-    {
-        self.IconName = IconName
-    }
-    
-    var body: some View
-    {
-        Image(systemName: IconName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
-    }
-}
-
-struct BackCameraIcon: View
-{
-    var body: some View
-    {
-        Image(systemName: "arrow.triangle.2.circlepath.camera.fill")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
-    }
-}
-
-struct PhotoLibraryIcon: View
-{
-    var body: some View
-    {
-        Image(systemName: "photo.on.rectangle.angled")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
-    }
-}
 
 struct ContentView: View
 {
@@ -104,6 +20,8 @@ struct ContentView: View
     @State var ShowImageSaved: Bool = false
     @State var ToolHeight: CGFloat = 150
     @State var WhichCamera: String = "arrow.triangle.2.circlepath.camera"
+    @State var ShowSettings: Bool = false
+    @State var ShowFilterSettings: Bool = false
     
     var body: some View
     {
@@ -115,9 +33,12 @@ struct ContentView: View
                 Geometry in
                 let BottomHeight: CGFloat = 64.0
                 let TopHeight: CGFloat = Geometry.size.height - BottomHeight
+                let TopBarHeight: CGFloat = 64
                 
                 let LiveView = LiveViewControllerUI(FilterButtonPressed: $FilterButtonPressed,
-                                                    IsSelfieCamera: $IsSelfieCamera)
+                                                    IsSelfieCamera: $IsSelfieCamera,
+                                                    ShowFilterSettings: $ShowFilterSettings,
+                                                    ToggleSavedImageNotice: $ShowImageSaved)
                 LiveView
                     .frame(width: Geometry.size.width, height: TopHeight, alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
@@ -135,6 +56,56 @@ struct ContentView: View
                            SelectedFilter: $SelectedFilter,
                            SelectedGroup: $SelectedGroup,
                            Block: HandleFilterButtonPress)
+                
+                FilterSettingsView(IsVisible: ShowFilterSettings)
+                
+                Group
+                {
+                    HStack(alignment: .top)
+                    {
+                        Spacer()
+                        Group
+                        {
+                            Button(action:
+                                    {
+                                        self.FilterButtonPressed = ""
+                                        self.FilterButtonPressed = "EditFilter"
+                                    })
+                            {
+                                EditFilterIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(color: Color(UIColor.systemTeal), radius: 3)
+                            .padding()
+                        }
+                        Spacer()
+                        HStack(alignment: .top)
+                        {
+                            Group
+                            {
+                                Button(action:
+                                        {
+                                            self.FilterButtonPressed = ""
+                                            self.FilterButtonPressed = "ShareButton"
+                                        })
+                                {
+                                    SharingIcon()
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                                .shadow(color: Color(UIColor.systemTeal), radius: 3)
+                                .padding()
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+                .frame(width: Geometry.size.width,
+                       height: TopBarHeight)
+                .background(Color(UIColor(red: 0.15, green: 0.15, blue: 0.35, alpha: 1.0)))
+//                .background(Color.red)
+                .position(x: Geometry.size.width / 2.0,
+                          y: TopBarHeight / 2.0)
+                //y: Geometry.size.height - (BottomHeight / 2.0))
                 
                 Group
                 {
@@ -225,8 +196,7 @@ struct ContentView: View
                             Spacer()
                             Button(action:
                                     {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Settings"
+                                        ShowSettings.toggle()
                                     }
                             )
                             {
@@ -234,6 +204,11 @@ struct ContentView: View
                             }
                             .buttonStyle(BorderlessButtonStyle())
                             .shadow(radius: 3)
+                            .sheet(isPresented: $ShowSettings,
+                                   content:
+                                    {
+                                        ProgramSettingsUI(OptionList: SettingsData)
+                                    })
                             
                             Spacer()
                         }
