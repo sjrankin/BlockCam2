@@ -13,7 +13,8 @@ struct FilterButton: View
     @Binding var SelectedFilter: String
     @Binding var Block: ((String) -> ())?
     @State var SelectedGroup: String
-    var SelectedBorderColor: Color = Color(UIColor.link)
+    @State private var Phase: CGFloat = 0
+    var SelectedBorderColor: Color = Color(UIColor.cyan)
     
     var body: some View
     {
@@ -35,10 +36,11 @@ struct FilterButton: View
             ZStack
             {
                 RoundedRectangle(cornerRadius: 10.0)
-                    .stroke(SelectedFilter == Name ? SelectedBorderColor : Color.white,
+                    .stroke(SelectedFilter == Name ? SelectedBorderColor : Color.black,
                             style: StrokeStyle(
                                 lineWidth: SelectedFilter == Name ? 10 : 5,
-                                dash: SelectedFilter == Name ? [5, 5] : []
+                                dash: SelectedFilter == Name ? [5, 5] : [],
+                                dashPhase: Phase
                             ))
                 RoundedRectangle(cornerRadius: 10.0)
                     .fill(Color(FilterData.GroupColor(With: SelectedGroup)))
