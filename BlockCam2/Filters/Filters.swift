@@ -19,19 +19,23 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
+/// Class that manages filters for live view and photo output.
 class Filters
 {
+    /// Initialize filter.
+    /// - Notes: If already initialized, control is returned immediately.
     public static func InitializeFilters()
     {
         if Initialized
         {
             return
         }
-        InitializeBuiltInFilters()
         _Initialized = true
     }
     
+    /// Holds the initialized flag.
     private static var _Initialized: Bool = false
+    /// Get the initialized flag.
     public static var Initialized: Bool
     {
         get
@@ -40,6 +44,9 @@ class Filters
         }
     }
     
+    /// Initialize the filter manager.
+    /// - Parameter From: The format description for filtering images.
+    /// - Parameter Caller: Used for debugging.
     public static func Initialize(From: CMFormatDescription, Caller: String)
     {
         let InputSubType = CMFormatDescriptionGetMediaSubType(From)
@@ -101,22 +108,24 @@ class Filters
         PreAllocateBuffers(Pool: WorkingBufferPool, AllocationThreshold: 3)
         
         var PixelBuffer: CVPixelBuffer?
-        var OutFormatDesc: CMFormatDescription?
         let AuxAttrs = [kCVPixelBufferPoolAllocationThresholdKey as String: 3] as NSDictionary
         CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(kCFAllocatorDefault, WorkingBufferPool, AuxAttrs, &PixelBuffer)
         if let PixelBuffer = PixelBuffer
         {
-            CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: PixelBuffer, formatDescriptionOut: &OutFormatDesc)
+            CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: PixelBuffer,
+                                                         formatDescriptionOut: &OutFormatDesc)
         }
         PixelBuffer = nil
         BufferPool = WorkingBufferPool
     }
     
+    /// Holds the color space.
     private static var ColorSpace: CGColorSpace? = nil
-    private static var Context: CIContext? = nil
+    /// Holds the context.
+    public static var Context: CIContext? = nil
+    public static var OutFormatDesc: CMFormatDescription?
     
     /// Allocate buffers before use.
-    ///
     /// - Parameters:
     ///   - Pool: The pool of pixel buffers.
     ///   - AllocationThreshold: Threshold value for allocation.
@@ -168,18 +177,23 @@ class Filters
         }
         if let FilterInTree = Filters.FilterFromTree(FilterToUse)
         {
+            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
             return FilterInTree.RunFilter(Buffer, BufferPool!, ColorSpace!, Options: [:])
         }
         return nil
     }
     
+    /// Sets the default filter.
+    /// - Parameter NewFilter: Filter to use as the default filter.
     public static func SetFilter(_ NewFilter: BuiltInFilters)
     {
         LastBuiltInFilterUsed = NewFilter
     }
     
+    /// Holds the last filter used.
     static var LastBuiltInFilterUsed: BuiltInFilters? = nil
     
+    /// Group color data.
     static var GroupData: [FilterGroups: Int] =
         [
             .Adjust: 0x98fb98,
@@ -193,10 +207,13 @@ class Filters
             .Information: 0xfe4eda,
             .Effect: 0xbfff00,
             .Grayscale: 0xbcbcbc,
-            .Reset: 0xffffff
+            .Reset: 0xffffff,
+            .Edges: 0xfae6fa,
+            .MultiFrame: 0xea71c6
         ]
 }
 
+/// High-level filter groups.
 enum FilterGroups: String, CaseIterable
 {
     case Adjust = "Adjust"
@@ -211,8 +228,11 @@ enum FilterGroups: String, CaseIterable
     case Grayscale = "Grayscale"
     case Information = "Information"
     case Reset = " Reset "
+    case Edges = "Edges"
+    case MultiFrame = "Frames"
 }
 
+/// Individual filters.
 enum BuiltInFilters: String, CaseIterable
 {
     case Passthrough = "No Filter"
@@ -255,10 +275,6 @@ enum BuiltInFilters: String, CaseIterable
     case Gloom = "Gloom"
     case HexagonalPixellate = "Pixellate Hex"
     case Pointillize = "Pointillize"
-    //3D Filters
-    case Blocks = "Blocks"
-    case Spheres = "Spheres"
-    
     case LinearGradient = "Linear Gradient"
     case SmoothLinearGradient = "Smooth Linear Gradient"
     case ColorMap = "Color Map"
@@ -278,7 +294,33 @@ enum BuiltInFilters: String, CaseIterable
     case ColorInvert = "Invert"
     case GrayscaleInvert = "B/W Invert"
     case GaussianBlur = "Gaussian"
-    case MedianFilter = "Median"
+    case MedianFilter = "Median Old"
     case MotionBlur = "Motion"
     case ZoomBlur = "Zoom"
+    case Masking1 = "Masking1"
+    case GradientToAlpha = "Gradient->Alpha"
+    case AlphaBlend = "AlphaBlend"
+    case Mirroring = "Mirroring"
+    case Threshold = "Threshold"
+    case Lapacian = "Lapacian"
+    case Dilate = "Dilate"
+    case Emboss = "Emboss"
+    case Erode = "Erode"
+    case Sobel = "Sobel"
+    case SobelBlend = "Sobel+BG"
+    case Median = "Median"
+    case Otsu = "Otsu"
+    case Dither = "Dither"
+    case GaborGradients = "Gabor"
+    case GammaAdjust = "Gamma"
+    case HeightField = "Height Field"
+    case SaliencyMap = "Saliency Map"
+    case MorphologyGradient = "Morphology"
+    case ColorControls = "Control"
+    case ConditionalTransparency = "Conditional Transparency"
+    case ImageDelta = "Image Delta"
+    
+    //3D Filters
+    case Blocks = "Blocks"
+    case Spheres = "Spheres"
 }
