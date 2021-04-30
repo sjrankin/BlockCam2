@@ -178,7 +178,7 @@ class Filters
         if let FilterInTree = Filters.FilterFromTree(FilterToUse)
         {
             FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
-            return FilterInTree.RunFilter(Buffer, BufferPool!, ColorSpace!, Options: [:])
+            return FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: [:])
         }
         return nil
     }
