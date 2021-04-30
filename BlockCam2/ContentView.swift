@@ -22,12 +22,13 @@ struct ContentView: View
     @State var WhichCamera: String = "arrow.triangle.2.circlepath.camera"
     @State var ShowSettings: Bool = false
     @State var ShowFilterSettings: Bool = false
+    @State var FilterSettingsVisible: Bool = false
     
     var body: some View
     {
         ZStack
         {
-            Color.blue.edgesIgnoringSafeArea(.bottom)
+            Color.black.edgesIgnoringSafeArea(.bottom)
             GeometryReader
             {
                 Geometry in
@@ -57,7 +58,7 @@ struct ContentView: View
                            SelectedGroup: $SelectedGroup,
                            Block: HandleFilterButtonPress)
                 
-                FilterSettingsView(IsVisible: ShowFilterSettings)
+
                 
                 Group
                 {
@@ -68,44 +69,66 @@ struct ContentView: View
                         {
                             Button(action:
                                     {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "EditFilter"
-                                    })
+                                  self.FilterSettingsVisible.toggle()
+                                        //self.ShowFilterSettings.toggle()
+                                    }
+                                        )
                             {
                                 EditFilterIcon()
                             }
                             .buttonStyle(BorderlessButtonStyle())
-                            .shadow(color: Color(UIColor.systemTeal), radius: 3)
+                            .shadow(radius: 3)
+                            .padding()
+                        }
+                        .sheet(isPresented: $FilterSettingsVisible)
+                        {
+                            FilterViewServer(IsVisible: $FilterSettingsVisible)
+                        }
+                        Spacer()
+                        Group
+                        {
+                            
+                            Button(action:
+                                    {
+                                        self.FilterButtonPressed = ""
+                                        self.FilterButtonPressed = "ShareButton"
+                                    })
+                            {
+                                SharingIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
                             .padding()
                         }
                         Spacer()
-                        HStack(alignment: .top)
+                        Group
                         {
-                            Group
+                            Button(action:
+                                    {
+                                        ShowSettings.toggle()
+                                    }
+                            )
                             {
-                                Button(action:
-                                        {
-                                            self.FilterButtonPressed = ""
-                                            self.FilterButtonPressed = "ShareButton"
-                                        })
-                                {
-                                    SharingIcon()
-                                }
-                                .buttonStyle(BorderlessButtonStyle())
-                                .shadow(color: Color(UIColor.systemTeal), radius: 3)
-                                .padding()
+                                GearIcon()
                             }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                            .padding()
+                            .sheet(isPresented: $ShowSettings,
+                                   content:
+                                    {
+                                        ProgramSettingsUI(OptionList: SettingsData)
+                                    })
+                            
+                            Spacer()
                         }
-                        Spacer()
                     }
                 }
                 .frame(width: Geometry.size.width,
                        height: TopBarHeight)
-                .background(Color(UIColor(red: 0.15, green: 0.15, blue: 0.35, alpha: 1.0)))
-//                .background(Color.red)
+                .background(Color.red)
                 .position(x: Geometry.size.width / 2.0,
                           y: TopBarHeight / 2.0)
-                //y: Geometry.size.height - (BottomHeight / 2.0))
                 
                 Group
                 {
@@ -189,26 +212,6 @@ struct ContentView: View
                             }
                             .buttonStyle(BorderlessButtonStyle())
                             .shadow(radius: 3)
-                        }
-                        
-                        Group
-                        {
-                            Spacer()
-                            Button(action:
-                                    {
-                                        ShowSettings.toggle()
-                                    }
-                            )
-                            {
-                                GearIcon()
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                            .shadow(radius: 3)
-                            .sheet(isPresented: $ShowSettings,
-                                   content:
-                                    {
-                                        ProgramSettingsUI(OptionList: SettingsData)
-                                    })
                             
                             Spacer()
                         }
@@ -222,6 +225,8 @@ struct ContentView: View
                 .position(x: Geometry.size.width / 2.0,
                           y: Geometry.size.height - (BottomHeight / 2.0))
             }
+            
+            //FilterViewServer(IsVisible: $FilterSettingsVisible)
         }
     }
     
