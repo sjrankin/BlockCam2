@@ -355,5 +355,6 @@ enum FilterOptions: String
     case MirrorQuadrant = "MirrorQuadrant"
     case SourceIsAV = "SourceIsAV"
     case Invert = "Invert"
+    case Decay = "Decay"
 }
 
