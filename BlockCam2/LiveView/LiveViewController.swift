@@ -45,11 +45,6 @@ class LiveViewController: UIViewController,
         let Tap = UITapGestureRecognizer(target: self, action: #selector(HandleMetalViewTap))
         Tap.numberOfTapsRequired = 1
         MetalView?.addGestureRecognizer(Tap)
-        /*
-        let LongTap = UILongPressGestureRecognizer(target: self, action: #selector(HandleLongMetalViewTap))
-        LongTap.minimumPressDuration = 0.75
-        MetalView?.addGestureRecognizer(LongTap)
- */
         
         GetPermissions()
         #if !targetEnvironment(simulator)
