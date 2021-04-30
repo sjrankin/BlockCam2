@@ -28,7 +28,7 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     func makeUIViewController(context: Context) -> LiveViewController
     {
         let ActualController = LiveViewController()
-        ActualController.UIDelegate = context.coordinator //as! ViewControllerDelegate
+        ActualController.UIDelegate = context.coordinator
         return ActualController
     }
     
@@ -38,26 +38,26 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
         uiViewController.ButtonPressed(FilterButtonPressed)
     }
    
+    /// Create a coordinator for the class to talk with the main live view.
     func makeCoordinator() -> Coordinator
     {
         Coordinator(self)
     }
     
-    class Coordinator: NSObject, ViewControllerDelegate//UIPageViewControllerDelegate
+    /// Coordinator class to talk with the live view UIViewController.
+    class Coordinator: NSObject, ViewControllerDelegate
     {
+        /// Parent content view.
         var Parent: LiveViewControllerUI
-        
+
+        /// Initializer.
+        /// - Parameter Parent: Parent of the coordinator.
         init(_ Parent: LiveViewControllerUI)
         {
             self.Parent = Parent
         }
         
-        func ShowFilterSettings(For: String)
-        {
-            print("ShowFilterSettings<-\(For)")
-            Parent.ShowFilterSettings = true
-        }
-        
+        /// Called when the live view wants to show the "image saved" message.
         func ToggleImageSavedNotice()
         {
             Parent.ToggleSavedImageNotice = true
@@ -65,8 +65,9 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     }
 }
 
+/// Protocol for the view controller.
 protocol ViewControllerDelegate: AnyObject
 {
-    func ShowFilterSettings(For: String)
+    /// Toggle the image saved message.
     func ToggleImageSavedNotice()
 }
