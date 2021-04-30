@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View
 {
     @ObservedObject var Storage = SettingsUI()
+    @State var TestValue: Bool = false
     
     var body: some View
     {
@@ -18,39 +19,53 @@ struct SettingsView: View
             Geometry in
             NavigationView
             {
-                VStack()
+                LazyHStack(alignment: .top)
                 {
-                    Toggle(isOn: self.$Storage.ShowAudioWaveform)
+                    LazyVStack
                     {
-                        VStack(alignment: .leading)
+                        Toggle(isOn: self.$Storage.SaveOriginalImage)
                         {
-                            Text("Show waveform")
-                            Text("Show the audio waveform")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                            VStack(alignment: .leading)
+                            {
+                                Text("Save original")
+                                Text("Save original image with filtered image")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
                         }
-                    }
-                    .padding([.leading, .trailing])
-                    
-                    Toggle(isOn: self.$Storage.SaveOriginalImage)
-                    {
-                        VStack(alignment: .leading)
+                        .frame(width: Geometry.size.width * 0.85)
+                        
+                        Toggle(isOn: self.$Storage.ShowAudioWaveform)
                         {
-                            Text("Save original")
-                            Text("Save original image with filtered image")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                            VStack(alignment: .leading)
+                            {
+                                Text("Show waveform")
+                                Text("Show the audio waveform")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
                         }
+                        .frame(width: Geometry.size.width * 0.85)
+                        
+                        Spacer()
                     }
-                    .padding([.leading, .trailing])
-                    
-                    Spacer()
                 }
-                .position(x: Geometry.size.width / 2,
-                          y: 150.0)
+                .padding([.leading, .trailing], -130)
             }
-            .frame(width: Geometry.size.width, height: Geometry.size.height)
+            .frame(width: Geometry.size.width,
+                   height: Geometry.size.height,
+                   alignment: .top)
             .navigationBarTitle(Text("Program Settings"))
         }
     }
 }
+
+#if DEBUG
+struct SettingsView_Previews: PreviewProvider
+{
+    static var previews: some View
+    {
+        SettingsView()
+    }
+}
+#endif
