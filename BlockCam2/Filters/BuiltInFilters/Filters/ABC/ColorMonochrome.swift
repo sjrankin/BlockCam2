@@ -29,10 +29,10 @@ class ColorMonochrome: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.colorMonochrome()
         Adjust.color = Options[.Color] as? CIColor ?? CIColor.blue
         Adjust.inputImage = SourceImage
@@ -50,7 +50,7 @@ class ColorMonochrome: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

@@ -159,10 +159,10 @@ class AlphaBlend: MetalFilterParent, BuiltInFilterProtocol
         return OutputBuffer
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        return Buffer
+        return Buffer.first!
     }
 }
 

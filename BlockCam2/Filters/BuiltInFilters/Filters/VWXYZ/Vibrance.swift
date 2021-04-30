@@ -29,10 +29,10 @@ class Vibrance: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.vibrance()
         Adjust.amount = Options[.Amount] as? Float ?? 1.0
         Adjust.inputImage = SourceImage
@@ -50,7 +50,7 @@ class Vibrance: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

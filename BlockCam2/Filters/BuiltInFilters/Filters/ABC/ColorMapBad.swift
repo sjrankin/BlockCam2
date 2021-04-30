@@ -29,10 +29,10 @@ class ColorMapBad: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         #if true
         let GradientImage = FilterHelper.GradientImage(SourceImage.extent,
                                                        Stops: [(UIColor.cyan, 0.0), (UIColor.blue, 1.0)])
@@ -63,7 +63,7 @@ class ColorMapBad: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

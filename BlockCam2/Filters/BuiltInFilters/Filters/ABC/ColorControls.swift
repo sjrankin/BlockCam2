@@ -29,10 +29,10 @@ class ColorControls: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.colorControls()
         Adjust.inputImage = SourceImage
         Adjust.brightness = Options[.Brightness] as? Float ?? 0.0
@@ -52,7 +52,7 @@ class ColorControls: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

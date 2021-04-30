@@ -72,7 +72,7 @@ class SobelBlend: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RunFilter(_ PixelBuffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ PixelBuffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions : Any]) -> CVPixelBuffer
     {
         objc_sync_enter(AccessLock)
@@ -88,18 +88,18 @@ class SobelBlend: MetalFilterParent, BuiltInFilterProtocol
         guard let OutputBuffer = NewPixelBuffer else
         {
             print("Allocation failure for new pixel buffer pool in Sobel.")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm) else
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm) else
         {
             print("Error creating input texture in Sobel.")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
             print("Error creating output texture in Sobel.")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
         guard let CommandQ = CommandQueue,
@@ -107,7 +107,7 @@ class SobelBlend: MetalFilterParent, BuiltInFilterProtocol
         {
             print("Error creating Metal command queue in Sobel.")
             CVMetalTextureCacheFlush(TextureCache!, 0)
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
         let Shader = MPSImageSobel(device: MetalDevice!)
@@ -115,7 +115,7 @@ class SobelBlend: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
         
-        let SourceImage = CIImage(cvPixelBuffer: PixelBuffer)
+        let SourceImage = CIImage(cvPixelBuffer: PixelBuffer.first!)
         if let Merged = FilterHelper.Merge(CIImage(cvPixelBuffer: OutputBuffer), SourceImage)
         {
             return FilterHelper.CIImageToCVPixelBuffer(Merged, BufferPool, ColorSpace)

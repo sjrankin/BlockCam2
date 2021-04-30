@@ -29,10 +29,10 @@ class LineScreen: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.lineScreen()
         Adjust.angle = Options[.Angle] as? Float ?? 0.0
         Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
@@ -51,7 +51,7 @@ class LineScreen: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

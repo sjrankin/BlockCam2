@@ -73,7 +73,7 @@ class Median: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RunFilter(_ PixelBuffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ PixelBuffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions : Any]) -> CVPixelBuffer
     {
         objc_sync_enter(AccessLock)
@@ -90,18 +90,20 @@ class Median: MetalFilterParent, BuiltInFilterProtocol
         guard let OutputBuffer = NewPixelBuffer else
         {
             print("Allocation failure for new pixel buffer pool in MPSLaplacian.")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm) else
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!,
+                                                              TextureFormat: .bgra8Unorm) else
         {
             print("Error creating input texture in MPSLaplacian.")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
-        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer,
+                                                               TextureFormat: .bgra8Unorm) else
         {
             print("Error creating output texture in MPSLaplacian.")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
         guard let CommandQ = CommandQueue,
@@ -109,12 +111,13 @@ class Median: MetalFilterParent, BuiltInFilterProtocol
         {
             print("Error creating Metal command queue in MPSLaplacian.")
             CVMetalTextureCacheFlush(TextureCache!, 0)
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
         let Diameter = Options[.MedianDiameter] as? Int ?? 5
         let Shader = MPSImageMedian(device: MetalDevice!, kernelDiameter: Diameter)
-        Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture, destinationTexture: OutputTexture)
+        Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture,
+                      destinationTexture: OutputTexture)
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
         

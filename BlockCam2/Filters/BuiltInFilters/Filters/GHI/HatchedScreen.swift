@@ -29,10 +29,10 @@ class HatchedScreen: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.hatchedScreen()
         Adjust.angle = Options[.Angle] as? Float ?? Float(90.0 * CGFloat.pi / 180.0)
         Adjust.width = Options[.Width] as? Float ?? 6.0
@@ -53,7 +53,7 @@ class HatchedScreen: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

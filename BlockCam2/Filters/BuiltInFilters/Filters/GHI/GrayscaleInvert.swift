@@ -29,7 +29,7 @@ class GrayscaleInvert: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         var GrayFilter: BuiltInFilterProtocol? = nil
@@ -68,7 +68,7 @@ class GrayscaleInvert: BuiltInFilterProtocol
         }
         guard let GrayFilter = GrayFilter else
         {
-            return Buffer
+            return Buffer.first!
         }
         let GrayBuffer = GrayFilter.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
         let SourceImage = CIImage(cvImageBuffer: GrayBuffer)
@@ -88,7 +88,7 @@ class GrayscaleInvert: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

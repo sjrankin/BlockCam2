@@ -84,7 +84,7 @@ class GradientToAlpha: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
  
-    func Render(PixelBuffer: CVPixelBuffer, FirstColor: UIColor, SecondColor: UIColor) -> CVPixelBuffer?
+    func Render(PixelBuffer: [CVPixelBuffer], FirstColor: UIColor, SecondColor: UIColor) -> CVPixelBuffer?
     {
         objc_sync_enter(AccessLock)
         defer{objc_sync_exit(AccessLock)}
@@ -112,7 +112,8 @@ class GradientToAlpha: MetalFilterParent, BuiltInFilterProtocol
         
         let GradientDescription = GradientManager.AssembleGradient([(FirstColor, 0.0), (SecondColor, 1.0)])
         let GradientImage = GradientManager.CreateGradientImage(From: GradientDescription,
-                                                                WithFrame: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(PixelBuffer), height: CVPixelBufferGetHeight(PixelBuffer)),
+                                                                WithFrame: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(PixelBuffer.first!),
+                                                                                  height: CVPixelBufferGetHeight(PixelBuffer.first!)),
                                                                 IsVertical: true,
                                                                 ReverseColors: false)
         let GradientPixelBuffer = GetPixelBufferFrom(GradientImage)
@@ -122,7 +123,7 @@ class GradientToAlpha: MetalFilterParent, BuiltInFilterProtocol
         let Results = UnsafeBufferPointer<ReturnBufferType>(start: UnsafePointer(ResultsBuffer!.contents().assumingMemoryBound(to: ReturnBufferType.self)),
                                                             count: ResultsCount)
         
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm),
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm),
               let GradientTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: GradientPixelBuffer!, TextureFormat: .bgra8Unorm) else
         {
@@ -159,10 +160,10 @@ class GradientToAlpha: MetalFilterParent, BuiltInFilterProtocol
         return OutputBuffer
     }
   
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        return Buffer
+        return Buffer.first!
     }
 }
 

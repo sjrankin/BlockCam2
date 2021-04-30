@@ -79,7 +79,7 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RunFilter(_ PixelBuffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ PixelBuffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions : Any]) -> CVPixelBuffer
     {
         objc_sync_enter(AccessLock)
@@ -91,7 +91,7 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         
         guard LocalBufferPool != nil else
         {
-            return PixelBuffer
+            return PixelBuffer.first!
         }
 
         let TValue = Options[.Threshold] as? Double ?? 0.5
@@ -113,14 +113,14 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         guard let OutputBuffer = NewPixelBuffer else
         {
             print("Allocation failure for new pixel buffer pool in type(of: self).")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm),
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
             print("Error creating textures in type(of: self).")
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
         guard let CommandQ = CommandQueue,
@@ -129,7 +129,7 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         {
             print("Error creating Metal command queue.")
             CVMetalTextureCacheFlush(TextureCache!, 0)
-            return PixelBuffer
+            return PixelBuffer.first!
         }
         
         CommandEncoder.label = "Threshold Kernel"

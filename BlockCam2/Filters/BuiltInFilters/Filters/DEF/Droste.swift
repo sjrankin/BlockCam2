@@ -29,10 +29,10 @@ class Droste: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.droste()
         Adjust.insetPoint0 = Options[.Point1] as? CGPoint ?? CGPoint(x: SourceImage.extent.width * 0.3,
                                      y: SourceImage.extent.height * 0.3)
@@ -57,7 +57,7 @@ class Droste: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }

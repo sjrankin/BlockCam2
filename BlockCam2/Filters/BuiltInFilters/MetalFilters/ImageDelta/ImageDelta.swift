@@ -34,16 +34,16 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
     
     override required init()
     {
-        print("Metal kernel function ColorMap initialized")
+        print("Metal kernel function ImageDelta initialized")
         let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
-        let KernelFunction = DefaultLibrary?.makeFunction(name: "ColorMap")
+        let KernelFunction = DefaultLibrary?.makeFunction(name: "ImageDelta")
         do
         {
             ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
         }
         catch
         {
-            print("Unable to create pipeline state in ColorMap: \(error.localizedDescription)")
+            print("Unable to create pipeline state in ImageDelta: \(error.localizedDescription)")
         }
     }
     
@@ -59,7 +59,7 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
                                                                          BufferCountHint: BufferCountHint)
         guard LocalBufferPool != nil else
         {
-            print("LocalBufferPool is nil in ColorMap.Initialize.")
+            print("LocalBufferPool is nil in ImageDelta.Initialize.")
             return
         }
         InputFormatDescription = FormatDescription
@@ -67,7 +67,7 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
         var MetalTextureCache: CVMetalTextureCache? = nil
         guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, MetalDevice!, nil, &MetalTextureCache) == kCVReturnSuccess else
         {
-            fatalError("Unable to allocate texture cache in ColorMap.")
+            fatalError("Unable to allocate texture cache in ImageDelta.")
         }
         TextureCache = MetalTextureCache
     }
@@ -85,12 +85,12 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         if !Initialized
         {
-            fatalError("ColorMap not initialized.")
+            fatalError("ImageDelta not initialized.")
         }
         objc_sync_enter(AccessLock)
         defer{objc_sync_exit(AccessLock)}
@@ -105,12 +105,12 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard var OutputBuffer = NewPixelBuffer else
         {
-            fatalError("Error creating textures for ColorMap.")
+            fatalError("Error creating textures for ImageDelta.")
         }
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer, TextureFormat: .bgra8Unorm),
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
-            fatalError("Error creating textures in ColorMap.")
+            fatalError("Error creating textures in ImageDelta.")
         }
         
         guard let CommandQ = CommandQueue,
@@ -120,32 +120,17 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
             fatalError("Error creating Metal command queue.")
         }
         
-        let First = Options[.Color0] as? UIColor ?? UIColor.red
-        let Second = Options[.Color1] as? UIColor ?? UIColor.blue
-        let GradientDescription = GradientManager.AssembleGradient([(First, 0.0),(Second, 1.0)])
-        let ActualGradient = GradientManager.ResolveGradient(GradientDescription)
-        var GradientData = [simd_float4](repeating: simd_float4(0.0, 0.0, 0.0, 0.0), count: 256)
-        for Index in 0 ... 255
-        {
-            let Color = ActualGradient[Index]
-            GradientData[Index] = simd_float4(Float(Color.r), Float(Color.g), Float(Color.b), 1.0)
-        }
-        let IGPtr = UnsafePointer(GradientData)
-        let GradientBufferSize = MemoryLayout<simd_float4>.stride * 256
-        let GradientBuffer = MetalDevice!.makeBuffer(bytes: IGPtr, length: GradientBufferSize, options: [])
-        
         let ResultsCount = 10
         let ResultsBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ReturnBufferType>.stride * ResultsCount, options: [])
         let Results = UnsafeBufferPointer<ReturnBufferType>(start: UnsafePointer(ResultsBuffer!.contents().assumingMemoryBound(to: ReturnBufferType.self)),
                                                             count: ResultsCount)
         
-        CommandEncoder.label = "Color Map Kernel"
+        CommandEncoder.label = "ImageDelta Map Kernel"
         CommandEncoder.setComputePipelineState(ComputePipelineState!)
         CommandEncoder.setTexture(InputTexture, index: 0)
         CommandEncoder.setTexture(OutputTexture, index: 1)
         CommandEncoder.setBuffer(ParameterBuffer, offset: 0, index: 0)
-        CommandEncoder.setBuffer(ResultsBuffer, offset: 0, index: 2)
-        CommandEncoder.setBuffer(GradientBuffer, offset: 0, index: 1)
+        CommandEncoder.setBuffer(ResultsBuffer, offset: 0, index: 1)
         
         let w = ComputePipelineState!.threadExecutionWidth
         let h = ComputePipelineState!.maxTotalThreadsPerThreadgroup / w
@@ -157,14 +142,6 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
         CommandEncoder.endEncoding()
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
-        
-        if Options[.Merge] as? Bool ?? false
-        {
-            print("Merging color map to original")
-            let MaskFilter = Masking1()
-            MaskFilter.Initialize(With: InputFormatDescription!, BufferCountHint: 3)
-            OutputBuffer = MaskFilter.RenderWith(PixelBuffer: Buffer, And: OutputBuffer)!
-        }
         
         return OutputBuffer
     }

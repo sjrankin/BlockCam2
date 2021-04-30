@@ -29,10 +29,10 @@ class LineOverlay: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvImageBuffer: Buffer)
+        let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.lineOverlay()
         Adjust.edgeIntensity = Options[.EdgeIntensity] as? Float ?? 5.0
         Adjust.contrast = Options[.Contrast] as? Float ?? 5.0
@@ -55,6 +55,6 @@ class LineOverlay: BuiltInFilterProtocol
                 return OutPixBuf
             }
         }
-        return Buffer
+        return Buffer.first!
     }
 }

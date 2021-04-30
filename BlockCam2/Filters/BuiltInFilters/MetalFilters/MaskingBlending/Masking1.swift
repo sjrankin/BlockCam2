@@ -88,7 +88,7 @@ class Masking1: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RenderWith(PixelBuffer: CVPixelBuffer, And: CVPixelBuffer,
+    func RenderWith(PixelBuffer: [CVPixelBuffer], And: CVPixelBuffer,
                     MaskColor: UIColor = UIColor.white, Tolerance: Int = 10) -> CVPixelBuffer?
     {
         objc_sync_enter(AccessLock)
@@ -120,7 +120,7 @@ class Masking1: MetalFilterParent, BuiltInFilterProtocol
             return nil
         }
         
-        guard let BottomTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm),
+        guard let BottomTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm),
               let TopTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: And, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
@@ -163,10 +163,10 @@ class Masking1: MetalFilterParent, BuiltInFilterProtocol
         return OutputBuffer
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        return Buffer
+        return Buffer.first!
     }
 }
 

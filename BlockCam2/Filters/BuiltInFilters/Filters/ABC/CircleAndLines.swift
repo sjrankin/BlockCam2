@@ -29,13 +29,13 @@ class CircleAndLines: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let Circles = CircularScreen()
         let Lines = LineScreen()
         let CircleBuffer = Circles.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
-        let LineBuffer = Lines.RunFilter(CircleBuffer, BufferPool, ColorSpace, Options: [:])
+        let LineBuffer = Lines.RunFilter([CircleBuffer], BufferPool, ColorSpace, Options: [:])
         return LineBuffer
     }
 }

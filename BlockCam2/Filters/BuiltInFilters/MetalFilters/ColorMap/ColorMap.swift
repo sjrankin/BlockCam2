@@ -85,7 +85,7 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         if !Initialized
@@ -107,7 +107,7 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
         {
             fatalError("Error creating textures for ColorMap.")
         }
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer, TextureFormat: .bgra8Unorm),
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
             fatalError("Error creating textures in ColorMap.")

@@ -188,10 +188,10 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
     /// - Parameter ColorSpace: Not used.
     /// - Parameter Options: Options for mirroring. See notes.
     /// - Returns: Modified pixel buffer.
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        if let Rendered = Render(PixelBuffer: Buffer, SourceIsAV: Options[.SourceIsAV] as? Bool ?? false)
+        if let Rendered = Render(PixelBuffer: Buffer.first!, SourceIsAV: Options[.SourceIsAV] as? Bool ?? false)
         {
             return Rendered
         }

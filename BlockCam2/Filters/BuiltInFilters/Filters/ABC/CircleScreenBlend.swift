@@ -29,16 +29,16 @@ class CircleScreenBlend: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let Lines = CircularScreen()
         let LineBuffer = Lines.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
-        let SourceImage = CIImage(cvPixelBuffer: Buffer)
+        let SourceImage = CIImage(cvPixelBuffer: Buffer.first!)
         if let Merged = FilterHelper.Merge(CIImage(cvPixelBuffer: LineBuffer), SourceImage)
         {
             return FilterHelper.CIImageToCVPixelBuffer(Merged, BufferPool, ColorSpace)
         }
-        return Buffer
+        return Buffer.first!
     }
 }

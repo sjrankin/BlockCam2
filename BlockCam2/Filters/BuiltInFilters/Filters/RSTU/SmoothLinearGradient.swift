@@ -29,10 +29,10 @@ class SmoothLinearGradient: BuiltInFilterProtocol
     {
     }
     
-    func RunFilter(_ Buffer: CVPixelBuffer, _ BufferPool: CVPixelBufferPool,
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        let SourceImage = CIImage(cvPixelBuffer: Buffer)
+        let SourceImage = CIImage(cvPixelBuffer: Buffer.first!)
         let Adjust = CIFilter.smoothLinearGradient()
         Adjust.color0 = Options[.GradientColor0] as? CIColor ?? CIColor.blue
         Adjust.color1 = Options[.GradientColor1] as? CIColor ?? CIColor.black
@@ -54,7 +54,7 @@ class SmoothLinearGradient: BuiltInFilterProtocol
         }
         else
         {
-            return Buffer
+            return Buffer.first!
         }
     }
 }
