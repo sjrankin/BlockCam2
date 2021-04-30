@@ -66,6 +66,11 @@
 		172C8E4626354F0F0096C331 /* FilterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C8E4526354F0F0096C331 /* FilterHelper.swift */; };
 		173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */; };
 		173B2251262835480075EB71 /* Viewer3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B2250262835480075EB71 /* Viewer3D.swift */; };
+		17602410263B9B3C006A3DE2 /* FilterViewServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1760240F263B9B3C006A3DE2 /* FilterViewServer.swift */; };
+		17602413263BA97F006A3DE2 /* HueAdjustFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17602412263BA97F006A3DE2 /* HueAdjustFilter_View.swift */; };
+		17602415263BC051006A3DE2 /* KaleidoscopeFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */; };
+		17602417263BC243006A3DE2 /* NoFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17602416263BC243006A3DE2 /* NoFilter_View.swift */; };
+		17602419263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17602418263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift */; };
 		1764BEF8263909A4001644E3 /* SettingsUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BEF7263909A4001644E3 /* SettingsUI.swift */; };
 		1764BEFA26391F40001644E3 /* SobelBlend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BEF926391F40001644E3 /* SobelBlend.swift */; };
 		1764BF0426392A09001644E3 /* ConditionalTransparency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF0326392A09001644E3 /* ConditionalTransparency.swift */; };
@@ -77,12 +82,8 @@
 		1764BF132639368F001644E3 /* ImageDelta.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF122639368F001644E3 /* ImageDelta.metal */; };
 		1764BF1526393DF4001644E3 /* ImageDeltaParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF1426393DF4001644E3 /* ImageDeltaParameters.swift */; };
 		1764BF1726393F1D001644E3 /* ImageDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF1626393F1D001644E3 /* ImageDelta.swift */; };
-		1764BF1926394074001644E3 /* +Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF1826394074001644E3 /* +Filter.swift */; };
 		1764BF1B26394150001644E3 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF1A26394150001644E3 /* Stack.swift */; };
 		1764BF1D263941B5001644E3 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF1C263941B5001644E3 /* Queue.swift */; };
-		1764BF2026394D93001644E3 /* FilterSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF1F26394D93001644E3 /* FilterSettingsView.swift */; };
-		1764BF2226394F08001644E3 /* Hue_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF2126394F08001644E3 /* Hue_View.swift */; };
-		1764BF24263951E8001644E3 /* NoSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF23263951E8001644E3 /* NoSettingsView.swift */; };
 		1764BF2726398539001644E3 /* MainUIButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764BF2626398539001644E3 /* MainUIButtons.swift */; };
 		1768307026355F24001DC88E /* ColorMapBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1768306F26355F24001DC88E /* ColorMapBad.swift */; };
 		176830722635601E001DC88E /* SmoothLinearGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176830712635601E001DC88E /* SmoothLinearGradient.swift */; };
@@ -118,6 +119,8 @@
 		176FE2A12637E48800650060 /* SettingsUIData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176FE2A02637E48800650060 /* SettingsUIData.swift */; };
 		176FE2A32638090700650060 /* SettingEncapsulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176FE2A22638090700650060 /* SettingEncapsulation.swift */; };
 		176FE2A526380E5E00650060 /* IDString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176FE2A426380E5E00650060 /* IDString.swift */; };
+		17702F23263A7BB000D0C54B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17702F22263A7BB000D0C54B /* LaunchScreen.storyboard */; };
+		17702F38263A9ACF00D0C54B /* FilterSettingsServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17702F37263A9ACF00D0C54B /* FilterSettingsServer.swift */; };
 		1786D23626266B1700B34501 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1786D23526266B1700B34501 /* CIImage.swift */; };
 		179721F7262E8EEB004B7134 /* +PhotoHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721F6262E8EEB004B7134 /* +PhotoHandling.swift */; };
 		179721F9262E8FBD004B7134 /* +JpegDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721F8262E8FBD004B7134 /* +JpegDataClass.swift */; };
@@ -246,6 +249,11 @@
 		172C8E4526354F0F0096C331 /* FilterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterHelper.swift; sourceTree = "<group>"; };
 		173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewControllerUI.swift; sourceTree = "<group>"; };
 		173B2250262835480075EB71 /* Viewer3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewer3D.swift; sourceTree = "<group>"; };
+		1760240F263B9B3C006A3DE2 /* FilterViewServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewServer.swift; sourceTree = "<group>"; };
+		17602412263BA97F006A3DE2 /* HueAdjustFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueAdjustFilter_View.swift; sourceTree = "<group>"; };
+		17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaleidoscopeFilter_View.swift; sourceTree = "<group>"; };
+		17602416263BC243006A3DE2 /* NoFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFilter_View.swift; sourceTree = "<group>"; };
+		17602418263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleKaleidoscopeFilter_View.swift; sourceTree = "<group>"; };
 		1764BEF7263909A4001644E3 /* SettingsUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUI.swift; sourceTree = "<group>"; };
 		1764BEF926391F40001644E3 /* SobelBlend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobelBlend.swift; sourceTree = "<group>"; };
 		1764BF0326392A09001644E3 /* ConditionalTransparency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalTransparency.swift; sourceTree = "<group>"; };
@@ -257,12 +265,8 @@
 		1764BF122639368F001644E3 /* ImageDelta.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImageDelta.metal; sourceTree = "<group>"; };
 		1764BF1426393DF4001644E3 /* ImageDeltaParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDeltaParameters.swift; sourceTree = "<group>"; };
 		1764BF1626393F1D001644E3 /* ImageDelta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDelta.swift; sourceTree = "<group>"; };
-		1764BF1826394074001644E3 /* +Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+Filter.swift"; sourceTree = "<group>"; };
 		1764BF1A26394150001644E3 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		1764BF1C263941B5001644E3 /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
-		1764BF1F26394D93001644E3 /* FilterSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSettingsView.swift; sourceTree = "<group>"; };
-		1764BF2126394F08001644E3 /* Hue_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hue_View.swift; sourceTree = "<group>"; };
-		1764BF23263951E8001644E3 /* NoSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSettingsView.swift; sourceTree = "<group>"; };
 		1764BF2626398539001644E3 /* MainUIButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUIButtons.swift; sourceTree = "<group>"; };
 		1768306F26355F24001DC88E /* ColorMapBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMapBad.swift; sourceTree = "<group>"; };
 		176830712635601E001DC88E /* SmoothLinearGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothLinearGradient.swift; sourceTree = "<group>"; };
@@ -299,6 +303,8 @@
 		176FE2A02637E48800650060 /* SettingsUIData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUIData.swift; sourceTree = "<group>"; };
 		176FE2A22638090700650060 /* SettingEncapsulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingEncapsulation.swift; sourceTree = "<group>"; };
 		176FE2A426380E5E00650060 /* IDString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDString.swift; sourceTree = "<group>"; };
+		17702F22263A7BB000D0C54B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		17702F37263A9ACF00D0C54B /* FilterSettingsServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSettingsServer.swift; sourceTree = "<group>"; };
 		1786D234262665DA00B34501 /* BlockCam2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlockCam2.entitlements; sourceTree = "<group>"; };
 		1786D23526266B1700B34501 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
 		179721F6262E8EEB004B7134 /* +PhotoHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+PhotoHandling.swift"; sourceTree = "<group>"; };
@@ -412,6 +418,7 @@
 				170EFC2F26255755001227D0 /* Assets.xcassets */,
 				170EFC3426255755001227D0 /* Info.plist */,
 				17F8C77E262C10BB00DB7D51 /* BlockCam2-Bridging-Header.h */,
+				17702F22263A7BB000D0C54B /* LaunchScreen.storyboard */,
 				170EFC3126255755001227D0 /* Preview Content */,
 			);
 			path = BlockCam2;
@@ -607,7 +614,6 @@
 				17688E81262C08C200D1523A /* LiveViewController.swift */,
 				179721FD262EC09F004B7134 /* +LiveViewInitialization.swift */,
 				179721FF262EC1F3004B7134 /* +Camera.swift */,
-				1764BF1826394074001644E3 /* +Filter.swift */,
 				17972201262EC2A2004B7134 /* +Audio.swift */,
 				179721F6262E8EEB004B7134 /* +PhotoHandling.swift */,
 				179721F8262E8FBD004B7134 /* +JpegDataClass.swift */,
@@ -615,6 +621,17 @@
 				173B2250262835480075EB71 /* Viewer3D.swift */,
 			);
 			path = LiveView;
+			sourceTree = "<group>";
+		};
+		17602411263B9BEE006A3DE2 /* FilterSettingViews */ = {
+			isa = PBXGroup;
+			children = (
+				17602412263BA97F006A3DE2 /* HueAdjustFilter_View.swift */,
+				17602418263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift */,
+				17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */,
+				17602416263BC243006A3DE2 /* NoFilter_View.swift */,
+			);
+			path = FilterSettingViews;
 			sourceTree = "<group>";
 		};
 		1764BEFB26392009001644E3 /* ABC */ = {
@@ -757,8 +774,8 @@
 		1764BF0A26393202001644E3 /* ImageDelta */ = {
 			isa = PBXGroup;
 			children = (
-				1764BF0B2639321D001644E3 /* kernel */,
 				1764BF1626393F1D001644E3 /* ImageDelta.swift */,
+				1764BF0B2639321D001644E3 /* kernel */,
 			);
 			path = ImageDelta;
 			sourceTree = "<group>";
@@ -773,16 +790,6 @@
 				1764BF1426393DF4001644E3 /* ImageDeltaParameters.swift */,
 			);
 			path = kernel;
-			sourceTree = "<group>";
-		};
-		1764BF1E26394D7F001644E3 /* FilterSettings */ = {
-			isa = PBXGroup;
-			children = (
-				1764BF1F26394D93001644E3 /* FilterSettingsView.swift */,
-				1764BF2126394F08001644E3 /* Hue_View.swift */,
-				1764BF23263951E8001644E3 /* NoSettingsView.swift */,
-			);
-			path = FilterSettings;
 			sourceTree = "<group>";
 		};
 		1764BF252639850B001644E3 /* MainButtons */ = {
@@ -853,7 +860,7 @@
 		176FE2972637E36500650060 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				1764BF1E26394D7F001644E3 /* FilterSettings */,
+				17702F32263A95EA00D0C54B /* FilterSettings2 */,
 				176FE29C2637E43C00650060 /* AboutView.swift */,
 				176FE2952637CCE400650060 /* ProgramSettingsUI.swift */,
 				176FE29A2637E3BF00650060 /* SettingsItemView.swift */,
@@ -862,6 +869,16 @@
 				176FE2982637E39D00650060 /* UnexpectedView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		17702F32263A95EA00D0C54B /* FilterSettings2 */ = {
+			isa = PBXGroup;
+			children = (
+				17702F37263A9ACF00D0C54B /* FilterSettingsServer.swift */,
+				1760240F263B9B3C006A3DE2 /* FilterViewServer.swift */,
+				17602411263B9BEE006A3DE2 /* FilterSettingViews */,
+			);
+			path = FilterSettings2;
 			sourceTree = "<group>";
 		};
 		179721FA262E93CC004B7134 /* Utility */ = {
@@ -998,6 +1015,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17702F23263A7BB000D0C54B /* LaunchScreen.storyboard in Resources */,
 				170EFC3326255755001227D0 /* Preview Assets.xcassets in Resources */,
 				170EFC3026255755001227D0 /* Assets.xcassets in Resources */,
 			);
@@ -1011,15 +1029,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				17EC999B262FE4FA007FCF00 /* Pixellate.swift in Sources */,
+				17702F38263A9ACF00D0C54B /* FilterSettingsServer.swift in Sources */,
 				172ABCCE26367EBC00AE53D1 /* ThresholdParameters.swift in Sources */,
 				17EC99A5262FE62C007FCF00 /* Mono.swift in Sources */,
 				170FAB4B26314E40003DDA35 /* Crystallize.swift in Sources */,
-				1764BF24263951E8001644E3 /* NoSettingsView.swift in Sources */,
+				17602415263BC051006A3DE2 /* KaleidoscopeFilter_View.swift in Sources */,
 				1764BF0426392A09001644E3 /* ConditionalTransparency.swift in Sources */,
 				17EC998D262FE369007FCF00 /* LinearTosRGB.swift in Sources */,
 				172ABCDD2636853D00AE53D1 /* Erode.swift in Sources */,
 				172ABCE726368D2A00AE53D1 /* Dither.swift in Sources */,
 				17BF7C752633E4B200181FA1 /* FilterView.swift in Sources */,
+				17602410263B9B3C006A3DE2 /* FilterViewServer.swift in Sources */,
 				17F70A2326341C9600BCC3CF /* ThermalEffect.swift in Sources */,
 				172C8E3E263549740096C331 /* CircleAndLines.swift in Sources */,
 				17F70A192634153B00BCC3CF /* CircleSplashDistortion.swift in Sources */,
@@ -1111,7 +1131,9 @@
 				17BF7C732633DE1E00181FA1 /* UIColor.swift in Sources */,
 				172C8E4226354C5F0096C331 /* MaskToAlpha.swift in Sources */,
 				170FAB43263129BE003DDA35 /* HistogramDisplay.swift in Sources */,
+				17602413263BA97F006A3DE2 /* HueAdjustFilter_View.swift in Sources */,
 				17BF7C712633D4BA00181FA1 /* FilterData.swift in Sources */,
+				17602417263BC243006A3DE2 /* NoFilter_View.swift in Sources */,
 				176FE29D2637E43C00650060 /* AboutView.swift in Sources */,
 				1764BF1B26394150001644E3 /* Stack.swift in Sources */,
 				176FE29B2637E3BF00650060 /* SettingsItemView.swift in Sources */,
@@ -1122,7 +1144,6 @@
 				1764BF0726392A86001644E3 /* ConditionalTransparencyParameters.swift in Sources */,
 				172C8E4626354F0F0096C331 /* FilterHelper.swift in Sources */,
 				17EC9987262FE2B1007FCF00 /* LineScreen.swift in Sources */,
-				1764BF2026394D93001644E3 /* FilterSettingsView.swift in Sources */,
 				1764BF0F263933DD001644E3 /* ImageOnlyDelta.metal in Sources */,
 				1764BEFA26391F40001644E3 /* SobelBlend.swift in Sources */,
 				170FAB5126314EB6003DDA35 /* Gloom.swift in Sources */,
@@ -1152,11 +1173,11 @@
 				17F70A1126340C3A00BCC3CF /* ColorInvert.swift in Sources */,
 				176FE2802637C38600650060 /* +Boolean.swift in Sources */,
 				17EC99B4262FF178007FCF00 /* Comic.swift in Sources */,
-				1764BF1926394074001644E3 /* +Filter.swift in Sources */,
 				17688E7D262BEB7700D1523A /* Filters.swift in Sources */,
 				172ABCE926368DC300AE53D1 /* Palettize.swift in Sources */,
 				17EC9993262FE3FF007FCF00 /* Posterize.swift in Sources */,
 				1764BF0D2639322E001644E3 /* ImageAbsoluteDelta.metal in Sources */,
+				17602419263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift in Sources */,
 				17688E80262BF36E00D1523A /* AudioProcessor.swift in Sources */,
 				17F70A15263413C100BCC3CF /* AreaHistogram.swift in Sources */,
 				170FAB3B263127B0003DDA35 /* TriangleKaleidoscope.swift in Sources */,
@@ -1170,7 +1191,6 @@
 				176830722635601E001DC88E /* SmoothLinearGradient.swift in Sources */,
 				17F70A1B263415B000BCC3CF /* Droste.swift in Sources */,
 				176FE2882637C43400650060 /* +Enum.swift in Sources */,
-				1764BF2226394F08001644E3 /* Hue_View.swift in Sources */,
 				17F8C780262C23F400DB7D51 /* +Observer.swift in Sources */,
 				17EC99B0262FF0FE007FCF00 /* Vibrance.swift in Sources */,
 				170FAB3F263128EA003DDA35 /* MaximumComponent.swift in Sources */,
