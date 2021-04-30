@@ -37,4 +37,24 @@ class SettingsUI: ObservableObject
             Settings.SetString(.CurrentFilter, self.CurrentFilter)
         }
     }
+    
+    /// Get or set the current filter name.
+    @Published var HueAngle: Double = Settings.GetDouble(.HueAngle)
+    {
+        didSet
+        {
+            Settings.SetDouble(.HueAngle, self.HueAngle)
+        }
+    }
+    
+    @Published var HueAngleString: String = String(Settings.GetDouble(.HueAngle, 0.0))
+    {
+        didSet
+        {
+            if let Actual = Double(self.HueAngleString)
+            {
+                Settings.SetDouble(.HueAngle, Actual)
+            }
+        }
+    }
 }
