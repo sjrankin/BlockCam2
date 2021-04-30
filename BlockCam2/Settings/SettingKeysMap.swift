@@ -24,5 +24,17 @@ extension Settings
             
             // Filter settings.
             .CurrentFilter: String.self,
+            
+            // Hue Adjust
+            .HueAngle: Double.self,
+            
+            // Kaleidoscope
+            .KaleidoscopeSegmentCount: Int.self,
+            .KaleidoscopeAngleOfReflection: Int.self,
+            
+            // Triangular Kaleidoscope
+            .Kaleidoscope3Rotation: Int.self,
+            .Kaleidoscope3Size: Int.self,
+            .Kaleidoscope3Decay: Double.self,
         ]
 }
