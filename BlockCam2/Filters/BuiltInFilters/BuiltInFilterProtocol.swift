@@ -21,6 +21,7 @@ protocol BuiltInFilterProtocol
     /// this function, it is ignored if called.
     func Initialize(With FormatDescription: CMFormatDescription, BufferCountHint: Int)
     
+    #if false
     /// Run the filter.
     /// - Parameter Buffer: The source image buffer upon which the filter will be executed.
     /// - Parameter BufferPool: Managed buffer pool.
@@ -33,4 +34,18 @@ protocol BuiltInFilterProtocol
                    _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace,
                    Options: [FilterOptions: Any]) -> CVPixelBuffer
+    #else
+    /// Run the filter.
+    /// - Parameter Buffer: Array of source image pixel buffers. Most filters use only the first image buffer.
+    /// - Parameter BufferPool: Managed buffer pool.
+    /// - Parameter Colorspace: Current color space.
+    /// - Parameter Options: Dictionary of options to use on the filter. For filters that have no options,
+    ///                      this parameter is ignored. Missing options will result in default values being
+    ///                      used. Incorrect options (as in options the filter does not comprehend) will be
+    ///                      ignored. Set to `[:]` to use all default values.
+    func RunFilter(_ Buffer: [CVPixelBuffer],
+                   _ BufferPool: CVPixelBufferPool,
+                   _ ColorSpace: CGColorSpace,
+                   Options: [FilterOptions: Any]) -> CVPixelBuffer
+    #endif
 }
