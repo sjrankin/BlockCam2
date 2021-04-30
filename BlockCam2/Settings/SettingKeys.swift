@@ -27,4 +27,22 @@ enum SettingKeys: String, CaseIterable
     // MARK: - Filter settings.
     /// String: Current filter in use.
     case CurrentFilter = "CurrentFilter"
+    
+    // - MARK: Hue Adjust
+    /// Double: The angle of the hue for Hue Adjust
+    case HueAngle = "HueAngle"
+    
+    // - MARK: Kaleidoscope
+    /// Int: Number of segments for the kaleidoscope.
+    case KaleidoscopeSegmentCount = "KaleidoscopeSegmentCount"
+    /// Int: Angle of reflection for the kaleidoscope.
+    case KaleidoscopeAngleOfReflection = "KaleidoscopeAngleOfReflection"
+
+    // - MARK: Triangular Kaleidoscope
+    /// Int: Angle of rotation.
+    case Kaleidoscope3Rotation = "Kaleidoscope3Rotation"
+    /// Int: Size of triangles.
+    case Kaleidoscope3Size = "Kaleidoscope3Size"
+    /// Double: Color decay from center to edge.
+    case Kaleidoscope3Decay = "Kaleidoscope3Decay"
 }
