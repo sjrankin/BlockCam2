@@ -16,7 +16,7 @@ struct NoFilter_View: View
     {
         ScrollView
         {
-            Text("No settings for \(FilterName)")
+            Text(FilterName == "Unknown" ? "Unknown Filter" : "No settings for \(FilterName)")
                 .padding()
         }
     }
