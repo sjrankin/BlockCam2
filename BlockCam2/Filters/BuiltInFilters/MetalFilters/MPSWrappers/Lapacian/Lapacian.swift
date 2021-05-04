@@ -79,7 +79,6 @@ class MPSLaplacian: MetalFilterParent, BuiltInFilterProtocol
         objc_sync_enter(AccessLock)
         defer{objc_sync_exit(AccessLock)}
         
-        let Start = CACurrentMediaTime()
         if !Initialized
         {
             fatalError("MPSLaplacian not initialized at Render(CVPixelBuffer) call.")
