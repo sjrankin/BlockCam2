@@ -8,6 +8,59 @@
 import Foundation
 import SwiftUI
 
+struct ButtonIcon: View
+{
+    @State var ImageName: String
+    @State var Foreground: Color
+    @State var ShadowRadius: CGFloat = 3.0
+    
+    var body: some View
+    {
+        Image(systemName: ImageName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 32, height: 32, alignment: .center)
+            .foregroundColor(Foreground)
+            .shadow(radius: ShadowRadius)
+    }
+}
+
+struct CloseButtonIcon: View
+{
+    var body: some View
+    {
+        Image(systemName: "xmark.circle")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 32, height: 32, alignment: .center)
+            .foregroundColor(.black)
+    }
+}
+
+struct CropButtonIcon: View
+{
+    var body: some View
+    {
+        Image(systemName: "crop")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 32, height: 32, alignment: .center)
+            .foregroundColor(.black)
+    }
+}
+
+struct PinButtonIcon: View
+{
+    var body: some View
+    {
+        Image(systemName: "pin")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 32, height: 32, alignment: .center)
+            .foregroundColor(.black)
+    }
+}
+
 struct EditFilterIcon: View
 {
     var body: some View
