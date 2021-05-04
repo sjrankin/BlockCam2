@@ -24,6 +24,7 @@ extension Settings
             
             // Filter settings.
             .CurrentFilter: String.self,
+            .CurrentGroup: String.self,
             
             // Hue Adjust
             .HueAngle: Double.self,
@@ -36,5 +37,15 @@ extension Settings
             .Kaleidoscope3Rotation: Int.self,
             .Kaleidoscope3Size: Int.self,
             .Kaleidoscope3Decay: Double.self,
+            
+            // Mirroring
+            .MirrorDirection: Int.self,
+            .MirrorLeft: Bool.self,
+            .MirrorTop: Bool.self,
+            .MirrorQuadrant: Int.self,
+            .QuadrantsRotated: Bool.self,
+            
+            // Color Map
+            .ColorMapGradient: String.self,
         ]
 }
