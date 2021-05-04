@@ -143,9 +143,32 @@ class MetalFilterParent
         }
     }
     
+    static func GetPixelBufferFrom(_ Image: CIImage) -> CVPixelBuffer?
+    {
+        let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        var PixelBuffer: CVPixelBuffer? = nil
+        let Status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                         Int(Image.extent.width),
+                                         Int(Image.extent.height),
+                                         kCVPixelFormatType_32BGRA,
+                                         Attributes,
+                                         &PixelBuffer)
+        CVPixelBufferLockBaseAddress(PixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+        if let PixelData = CVPixelBufferGetBaseAddress(PixelBuffer!)
+        {
+        let RGBSpace = CGColorSpaceCreateDeviceRGB()
+         let Context = CIContext()
+        Context.render(Image, to: PixelBuffer!)
+        
+        return PixelBuffer
+        }
+        return nil
+    }
+    
     /// Get the pixel buffer from the passed image.
     /// - Note:
-    ///     - [How to convert a UUImage to a CVPixelBuffer](https://stackoverflow.com/questions/44462087/how-to-convert-a-uiimage-to-a-cvpixelbuffer)
+    ///     - [How to convert a UIImage to a CVPixelBuffer](https://stackoverflow.com/questions/44462087/how-to-convert-a-uiimage-to-a-cvpixelbuffer)
     /// - Parameter Image: The image that is the source of the returned pixel buffer.
     /// - Returns: Pixel buffer with image data from the passed image on success, nil on error.
     func GetPixelBufferFrom(_ Image: UIImage) -> CVPixelBuffer?
@@ -153,9 +176,11 @@ class MetalFilterParent
         let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
                           kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
         var PixelBuffer: CVPixelBuffer? = nil
-        let Status = CVPixelBufferCreate(kCFAllocatorDefault, Int(Image.size.width),
+        let Status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                         Int(Image.size.width),
                                          Int(Image.size.height),
-                                         kCVPixelFormatType_32BGRA, Attributes,
+                                         kCVPixelFormatType_32BGRA,
+                                         Attributes,
                                          &PixelBuffer)
         guard Status == kCVReturnSuccess else
         {
@@ -205,21 +230,40 @@ class MetalFilterParent
     
     // MARK: Metal common functions and variables.
     
-    var TextureCache: CVMetalTextureCache!
+    static var StaticTextureCache: CVMetalTextureCache!
     
     /// Return a metal texture from a pixel buffer.
     /// - Parameters:
     ///   - PixelBuffer: The pixel buffer that serves as the source for the resultant metal texture.
     ///   - TextureFormat: Format description of the texture.
+    ///   - TextureSize: If not nil, contains the size of the returned texture. If nil, the returned texture
+    ///                  has the same dimensions as `PixelBuffer`.
     /// - Returns: Metal texture with the contents as the pixel buffer.
-    func MakeTextureFromCVPixelBuffer(PixelBuffer: CVPixelBuffer, TextureFormat: MTLPixelFormat) -> MTLTexture?
+    static func MakeTextureFromCVPixelBuffer(PixelBuffer: CVPixelBuffer, TextureFormat: MTLPixelFormat,
+                                      TextureSize: CGSize? = nil) -> MTLTexture?
     {
-        let Width = CVPixelBufferGetWidth(PixelBuffer)
-        let Height = CVPixelBufferGetHeight(PixelBuffer)
+        var Width: Int = 0
+        var Height: Int = 0
+        if let TWidth = TextureSize?.width
+        {
+            Width = Int(TWidth)
+        }
+        else
+        {
+            Width = CVPixelBufferGetWidth(PixelBuffer)
+        }
+        if let THeight = TextureSize?.height
+        {
+            Height = Int(THeight)
+        }
+        else
+        {
+            Height = CVPixelBufferGetHeight(PixelBuffer)
+        }
         
         // Create a Metal texture from the image buffer
         var cvTextureOut: CVMetalTexture?
-        let Result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, TextureCache, PixelBuffer, nil,
+        let Result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, StaticTextureCache, PixelBuffer, nil,
                                                                TextureFormat, Width, Height, 0, &cvTextureOut)
         if Result != kCVReturnSuccess
         {
@@ -229,8 +273,61 @@ class MetalFilterParent
         
         guard let cvTexture = cvTextureOut, let texture = CVMetalTextureGetTexture(cvTexture) else
         {
-            CVMetalTextureCacheFlush(TextureCache, 0)
+            CVMetalTextureCacheFlush(StaticTextureCache, 0)
             return nil
+        }
+        
+        return texture
+    }
+    
+    var TextureCache: CVMetalTextureCache!
+    
+    /// Return a metal texture from a pixel buffer.
+    /// - Parameters:
+    ///   - PixelBuffer: The pixel buffer that serves as the source for the resultant metal texture.
+    ///   - TextureFormat: Format description of the texture.
+    ///   - TextureSize: If not nil, contains the size of the returned texture. If nil, the returned texture
+    ///                  has the same dimensions as `PixelBuffer`.
+    /// - Returns: Metal texture with the contents as the pixel buffer.
+    func MakeTextureFromCVPixelBuffer(PixelBuffer: CVPixelBuffer, TextureFormat: MTLPixelFormat,
+                                      TextureSize: CGSize? = nil) -> MTLTexture?
+    {
+        var Width: Int = 0
+        var Height: Int = 0
+        if let TWidth = TextureSize?.width
+        {
+            Width = Int(TWidth)
+        }
+        else
+        {
+           Width = CVPixelBufferGetWidth(PixelBuffer)
+        }
+        if let THeight = TextureSize?.height
+        {
+            Height = Int(THeight)
+        }
+        else
+        {
+         Height = CVPixelBufferGetHeight(PixelBuffer)
+        }
+        
+        // Create a Metal texture from the image buffer
+        // https://docs.microsoft.com/en-us/dotnet/api/corevideo.cvreturn?view=xamarin-ios-sdk-12
+        var cvTextureOut: CVMetalTexture?
+        let Result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, TextureCache, PixelBuffer, nil,
+                                                               TextureFormat, Width, Height, 0, &cvTextureOut)
+        if Result != kCVReturnSuccess
+        {
+            fatalError("CVMetalTextureCacheCreateTextureFromImage returned \(Result)")
+        }
+        
+        guard let cvTexture = cvTextureOut else
+        {
+            fatalError("cvTextureOut is nil.")
+        }
+        guard let texture = CVMetalTextureGetTexture(cvTexture) else
+        {
+            fatalError("Error getting metal texture from cvTexture.")
         }
         
         return texture
