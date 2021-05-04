@@ -20,6 +20,7 @@ struct FilterButton: View
     {
         Button(action:
                 {
+                    Settings.SetString(.CurrentGroup, SelectedGroup)
                     SelectedFilter = Name
                     Block?("Filters.\(Name)")
                 })
