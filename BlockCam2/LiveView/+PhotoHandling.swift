@@ -26,12 +26,13 @@ extension LiveViewController
                      didFinishProcessingPhoto photo: AVCapturePhoto,
                      error: Error?)
     {
+        let Start = CACurrentMediaTime()
         guard let PhotoPixelBuffer = photo.pixelBuffer else
         {
+            ShowSaveError(With: "Internal error: \((error?.localizedDescription)!)")
             print("Error capturing photo buffer - no pixel buffer: \((error?.localizedDescription)!)")
             return
         }
-        
         var PhotoFormat: CMFormatDescription?
         CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault,
                                                      imageBuffer: PhotoPixelBuffer,
@@ -59,32 +60,34 @@ extension LiveViewController
                             let CreationRequest = PHAssetCreationRequest.forAsset()
                             let ImageData = ImageToSave.jpegData(compressionQuality: 1.0)!
                             CreationRequest.addResource(with: .photo, data: ImageData, options: nil)
+                            let SaveDuration = CACurrentMediaTime() - Start
+                            if SaveDuration < 2.0
+                            {
+                                self.UIDelegate?.HideShortMessage(With: 2.0 - SaveDuration)
+                            }
+                            else
+                            {
+                                self.UIDelegate?.HideShortMessage()
+                            }
                         },
                         completionHandler:
                             {
                                 _, error in
                                 if let error = error
                                 {
-                                    fatalError("Error saving photo to library: \(error.localizedDescription)")
+                                    self.ShowSaveError(With: "Image save error: \(error.localizedDescription)")
+//                                    fatalError("Error saving photo to library: \(error.localizedDescription)")
                                 }
                             }
                     )
                 }
                 else
                 {
-                    fatalError("Not authorized to save pictures")
+                    self.ShowSaveError(With: "BlockCam is not authorized to save images to the camera roll.")
+//                    fatalError("Not authorized to save pictures")
                 }
             }
         }
-        
-        #if false
-        if _Settings.bool(forKey: "ShowSaveAlert")
-        {
-            let Alert = UIAlertController(title: "Saved", message: "Your filtered image was saved to the photo roll.", preferredStyle: UIAlertController.Style.alert)
-            Alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-            present(Alert, animated: true, completion: nil)
-        }
-        #endif
         
         var WhatSaved = "Image"
         #if false
@@ -99,8 +102,18 @@ extension LiveViewController
             }
         }
         #endif
-        
-        //ShowTransientSaveMessage("\(WhatSaved) Saved")
+    }
+    
+    /// Show a simple (non-SwiftUI) alert intended to display photo save error messages.
+    /// - Note: Currently, the title is set to "Error Saving Image".
+    /// - Parameter With: The message to display.
+    func ShowSaveError(With Message: String)
+    {
+        UIDelegate?.HideShortMessage()
+        let Alert = UIAlertController(title: "Error Saving Image",
+                                      message: Message,
+                                      preferredStyle: .alert)
+        self.present(Alert, animated: true)
     }
     
     /// Determines if the passed UTI is supported on the running system.
