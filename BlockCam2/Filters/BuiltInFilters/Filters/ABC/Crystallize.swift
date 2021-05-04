@@ -35,6 +35,7 @@ class Crystallize: BuiltInFilterProtocol
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.crystallize()
         Adjust.inputImage = SourceImage
+        Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
