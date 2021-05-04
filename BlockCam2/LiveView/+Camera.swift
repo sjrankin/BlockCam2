@@ -25,7 +25,7 @@ extension LiveViewController
     func DoSwitchCameras()
     {
         #if targetEnvironment(simulator)
-        print("On simulator - cannot switch cameras.")
+        print("On simulator - no cameras to switch.")
         return
         #else
         DataOutputQueue.sync
