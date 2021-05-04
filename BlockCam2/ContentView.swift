@@ -11,18 +11,20 @@ import SwiftUI
 struct ContentView: View
 {
     @State var DidTapCommand: Bool = false
-    @State var SelectedFilter: String = ""
-    @State var SelectedGroup: String = ""
+    @State var SelectedFilter: String = Settings.GetString(.CurrentFilter, "Passthrough")
+    @State var SelectedGroup: String = Settings.GetString(.CurrentGroup, " Reset ")
     @State var ShowFilterList: Bool = false
     @State var FilterButtonPressed: String = ""
     @State var FilterButtonTapped: Bool = true
     @State var IsSelfieCamera: Bool = false
-    @State var ShowImageSaved: Bool = false
+    @State var ShowShortMessage: Bool = false
+    @State var ShortMessage: String = ""
     @State var ToolHeight: CGFloat = 150
     @State var WhichCamera: String = "arrow.triangle.2.circlepath.camera"
     @State var ShowSettings: Bool = false
     @State var ShowFilterSettings: Bool = false
     @State var FilterSettingsVisible: Bool = false
+    @State var ShowImageControls: Bool = false
     
     var body: some View
     {
@@ -36,16 +38,17 @@ struct ContentView: View
                 let TopHeight: CGFloat = Geometry.size.height - BottomHeight
                 let TopBarHeight: CGFloat = 64
                 
-                let LiveView = LiveViewControllerUI(FilterButtonPressed: $FilterButtonPressed,
-                                                    IsSelfieCamera: $IsSelfieCamera,
-                                                    ShowFilterSettings: $ShowFilterSettings,
-                                                    ToggleSavedImageNotice: $ShowImageSaved)
-                LiveView
+                LiveViewControllerUI(FilterButtonPressed: $FilterButtonPressed,
+                                     IsSelfieCamera: $IsSelfieCamera,
+                                     ShowFilterSettings: $ShowFilterSettings,
+                                     ShowShortMessageView: $ShowShortMessage,
+                                     ShortMessage: $ShortMessage)
                     .frame(width: Geometry.size.width, height: TopHeight, alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
                               y: TopHeight / 2.0)
                 
-                ImageSaved(IsVisible: $ShowImageSaved,
+                ImageSaved(IsVisible: $ShowShortMessage,
+                           Message: $ShortMessage,
                            Width: Geometry.size.width,
                            Height: Geometry.size.height)
                 
@@ -58,77 +61,147 @@ struct ContentView: View
                            SelectedGroup: $SelectedGroup,
                            Block: HandleFilterButtonPress)
                 
-
-                
                 Group
                 {
-                    HStack(alignment: .top)
+                    ZStack(alignment: .top)
                     {
-                        Spacer()
-                        Group
+                        HStack(alignment: .top)
                         {
-                            Button(action:
-                                    {
-                                  self.FilterSettingsVisible.toggle()
-                                        //self.ShowFilterSettings.toggle()
-                                    }
-                                        )
-                            {
-                                EditFilterIcon()
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                            .shadow(radius: 3)
-                            .padding()
-                        }
-                        .sheet(isPresented: $FilterSettingsVisible)
-                        {
-                            FilterViewServer(IsVisible: $FilterSettingsVisible)
-                        }
-                        Spacer()
-                        Group
-                        {
-                            
-                            Button(action:
-                                    {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "ShareButton"
-                                    })
-                            {
-                                SharingIcon()
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                            .shadow(radius: 3)
-                            .padding()
-                        }
-                        Spacer()
-                        Group
-                        {
-                            Button(action:
-                                    {
-                                        ShowSettings.toggle()
-                                    }
-                            )
-                            {
-                                GearIcon()
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                            .shadow(radius: 3)
-                            .padding()
-                            .sheet(isPresented: $ShowSettings,
-                                   content:
-                                    {
-                                        ProgramSettingsUI(OptionList: SettingsData)
-                                    })
-                            
                             Spacer()
+                            Group
+                            {
+                                Button(action:
+                                        {
+                                            self.FilterSettingsVisible.toggle()
+                                        }
+                                )
+                                {
+                                    EditFilterIcon()
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                                .shadow(radius: 3)
+                                .padding()
+                            }
+                            .sheet(isPresented: $FilterSettingsVisible)
+                            {
+                                FilterViewServer(IsVisible: $FilterSettingsVisible)
+                            }
+                            Spacer()
+                            Group
+                            {
+                                Button(action:
+                                        {
+                                            self.ShowImageControls.toggle()
+                                            self.FilterButtonPressed = ""
+                                            self.FilterButtonPressed = "ShareButton"
+                                        })
+                                {
+                                    SharingIcon()
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                                .shadow(radius: 3)
+                                .padding()
+                            }
+                            Spacer()
+                            Group
+                            {
+                                Button(action:
+                                        {
+                                            self.ShowShortMessage.toggle()
+                                        })
+                                {
+                                ButtonIcon(ImageName: "livephoto",
+                                           Foreground: Color.yellow,
+                                           ShadowRadius: 3)
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                                .padding()
+                            }
+                            Spacer()
+                            Group
+                            {
+                                Button(action:
+                                        {
+                                            ShowSettings.toggle()
+                                        }
+                                )
+                                {
+                                    GearIcon()
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                                .shadow(radius: 3)
+                                .padding()
+                                .sheet(isPresented: $ShowSettings,
+                                       content:
+                                        {
+                                            ProgramSettingsUI(OptionList: SettingsData)
+                                        })
+                                
+                                Spacer()
+                            }
                         }
                     }
+                    .frame(width: Geometry.size.width,
+                           height: TopBarHeight)
+                    .background(Color.red)
+                    .position(x: Geometry.size.width / 2.0,
+                              y: (TopBarHeight) / 2.0)
+                    
+                    HStack(alignment: .top)
+                    {
+                        Group
+                        {
+                            Spacer()
+                            Button(action:
+                                    {
+                                        
+                                    })
+                            {
+                                CropButtonIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                            .padding()
+                        }
+                        
+                        Group
+                        {
+                            Spacer()
+                            Button(action:
+                                    {
+                                        
+                                    })
+                            {
+                                PinButtonIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                            .padding()
+                        }
+                        
+                        Group
+                        {
+                            Spacer()
+                            Button(action:
+                                    {
+                                        ShowImageControls.toggle()
+                                    })
+                            {
+                                CloseButtonIcon()
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .shadow(radius: 3)
+                            .padding()
+                        }
+                    }
+                    .frame(width: Geometry.size.width,
+                           height: TopBarHeight)
+                    .background(Color.yellow)
+                    .position(x: ShowImageControls ? Geometry.size.width / 2.0 : (Geometry.size.width) * 2,
+                              y: (TopBarHeight) / 2.0)
+                    .animation(.linear(duration: ShowImageControls ? 0.1 : 0.2))
+                    .transition(.slide)
                 }
-                .frame(width: Geometry.size.width,
-                       height: TopBarHeight)
-                .background(Color.red)
-                .position(x: Geometry.size.width / 2.0,
-                          y: TopBarHeight / 2.0)
                 
                 Group
                 {
@@ -173,6 +246,8 @@ struct ContentView: View
                             
                             Button(action:
                                     {
+                                        self.ShortMessage = "Saving Image"
+                                        self.ShowShortMessage = true
                                         self.FilterButtonPressed = ""
                                         self.FilterButtonPressed = "Camera"
                                     }
@@ -225,8 +300,6 @@ struct ContentView: View
                 .position(x: Geometry.size.width / 2.0,
                           y: Geometry.size.height - (BottomHeight / 2.0))
             }
-            
-            //FilterViewServer(IsVisible: $FilterSettingsVisible)
         }
     }
     
