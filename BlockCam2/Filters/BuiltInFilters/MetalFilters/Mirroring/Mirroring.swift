@@ -17,7 +17,7 @@ import MetalKit
 class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
 {
     // MARK: - Required by BuiltInFilterProtocol.
-    static var FilterType: BuiltInFilters = .Mirroring
+    static var FilterType: BuiltInFilters = .Mirroring2
     var NeedsInitialization: Bool = true
     
     // MARK: - Class variables.
@@ -34,29 +34,15 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
     var Initialized = false
     var AccessLock = NSObject()
     var ParameterBuffer: MTLBuffer! = nil
-    
-    required override init()
-    {
-        let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
-        let KernelFunction = DefaultLibrary?.makeFunction(name: "MirroringKernel")
-        do
-        {
-            ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
-        }
-        catch
-        {
-            print("Unable to create pipeline state: \(error.localizedDescription)")
-        }
-    }
-    
+
     func Initialize(With FormatDescription: CMFormatDescription, BufferCountHint: Int)
     {
         Reset()
-        (LocalBufferPool, _, OutputFormatDescription) = CreateBufferPool(From: FormatDescription, BufferCountHint: BufferCountHint)
+        (LocalBufferPool, _, OutputFormatDescription) = CreateBufferPool(From: FormatDescription,
+                                                                         BufferCountHint: BufferCountHint)
         if LocalBufferPool == nil
         {
-            print("LocalBufferPool nil in MirrorDistortion.Initialize.")
-            return
+            fatalError("LocalBufferPool nil in MirrorDistortion.Initialize.")
         }
         InputFormatDescription = FormatDescription
         Initialized = true
@@ -82,10 +68,21 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func Render(PixelBuffer: CVPixelBuffer, SourceIsAV: Bool) -> CVPixelBuffer?
+    func Render(PixelBuffer: CVPixelBuffer, _ KernelName: String, SourceIsAV: Bool) -> CVPixelBuffer?
     {
         objc_sync_enter(AccessLock)
         defer{objc_sync_exit(AccessLock)}
+        
+        let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
+        let KernelFunction = DefaultLibrary?.makeFunction(name: KernelName)
+        do
+        {
+            ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
+        }
+        catch
+        {
+            fatalError("Unable to create pipeline state: \(error.localizedDescription)")
+        }
         
         if !Initialized
         {
@@ -99,30 +96,6 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
         {
             fatalError("LocalBufferPool is nil in Mirroring:\(#function)")
         }
- 
-        var MDirection = SourceIsAV ? 1 : 0
-        //Because AV-based images seem to be rotated either 90 or 270 degrees, we need to changed
-        //the direction orientation if necessary.
-        MDirection = [0: 1, 1: 0, 2: 2, 3: 4, 4: 3][MDirection]!
-        let HSide = 1 - 0
-        let VSide = 1 - 0
-        var Quadrant = 1
-        //Because AV-based images are rotated right, we need to rotate the quadrant number for quandrant reflections...
-        Quadrant = [2: 1, 3: 2, 4: 3, 1: 4][Quadrant]!
-        
-        let Parameter = MirrorParameters(Direction: simd_uint1(MDirection),
-                                         HorizontalSide: simd_uint1(HSide),
-                                         VerticalSide: simd_uint1(VSide),
-                                         Quadrant: simd_uint1(Quadrant),
-                                         IsAVRotated: simd_bool(true))
-        let Parameters = [Parameter]
-        ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<MirrorParameters>.stride, options: [])
-        memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<MirrorParameters>.stride)
-        
-        let ResultCount = 10
-        let ResultsBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ReturnBufferType>.stride * ResultCount, options: [])
-        let Results = UnsafeBufferPointer<ReturnBufferType>(start: UnsafePointer(ResultsBuffer!.contents().assumingMemoryBound(to: ReturnBufferType.self)),
-                                                            count: ResultCount)
         
         var NewPixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
@@ -150,8 +123,6 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
         CommandEncoder.setTexture(OutputTexture, index: 1)
         CommandEncoder.setBuffer(ParameterBuffer, offset: 0, index: 0)
         
-        CommandEncoder.setBuffer(ResultsBuffer, offset: 0, index: 1)
-        
         let w = ComputePipelineState!.threadExecutionWidth
         let h = ComputePipelineState!.maxTotalThreadsPerThreadgroup / w
         let ThreadsPerThreadGroup = MTLSize(width: w, height: h, depth: 1)
@@ -162,39 +133,56 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
         CommandEncoder.endEncoding()
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
-        
-        #if false
-        for V in Results
-        {
-            if V > 0
-            {
-                print("V=\(V)")
-            }
-        }
-        #endif
 
         return OutputBuffer
     }
     
-    /// Run the mirroring filter.
-    /// - Warning: Fatal errors are thrown on internal errors.
-    /// - Notes: The following options are valid:
-    ///   - `HorizontalMirrorSide`: Determines which horizontal side to mirror.
-    ///   - `VerticalMirrorSide`: Determines which vertical side to mirror.
-    ///   - `MirrorQuadrant`: Determines which quadrant to mirror.
-    ///   - `SourceIsAV`: Caller should set this to true if the image source is from `AVFoundation`.
-    /// - Parameter Buffer: The source image buffer to mirror.
-    /// - Parameter BufferPool: Not used.
-    /// - Parameter ColorSpace: Not used.
-    /// - Parameter Options: Options for mirroring. See notes.
-    /// - Returns: Modified pixel buffer.
     func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        if let Rendered = Render(PixelBuffer: Buffer.first!, SourceIsAV: Options[.SourceIsAV] as? Bool ?? false)
+        var KernelName = ""
+        switch Settings.GetInt(.MirrorDirection)
+        {
+            case 0:
+                if Settings.GetBool(.MirrorLeft)
+                {
+                    KernelName = "MirrorHorizontalLeftToRight"
+                }
+                else
+                {
+                    KernelName = "MirrorHorizontalRightToLeft"
+                }
+                
+            case 1:
+                if Settings.GetBool(.MirrorTop)
+                {
+                    KernelName = "MirrorVerticalTopToBottom"
+                }
+                else
+                {
+                    KernelName = "MirrorVerticalBottomToTop"
+                }
+                
+            case 2:
+                if Settings.GetInt(.MirrorQuadrant) > 0
+                {
+                    let Quadrant = Settings.GetInt(.MirrorQuadrant)
+                    KernelName = "MirrorQuadrant\(Quadrant)"
+                    //KernelName = "MirrorQuadrant2"
+                    print("KernelName=\(KernelName)")
+                }
+                else
+                {
+                    Settings.SetInt(.MirrorQuadrant, 1)
+                }
+                
+            default:
+                fatalError("Unexpected mirroring direction (\(Settings.GetInt(.MirrorDirection)) encountered.")
+        }
+        if let Rendered = Render(PixelBuffer: Buffer.first!, KernelName, SourceIsAV: Options[.SourceIsAV] as? Bool ?? false)
         {
             return Rendered
         }
-        fatalError("Error returned by Mirroring.Render")
+        fatalError("Error returned by Mirroring.Render with kernel \(KernelName)")
     }
 }
