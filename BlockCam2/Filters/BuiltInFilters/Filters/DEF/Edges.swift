@@ -34,6 +34,7 @@ class Edges: BuiltInFilterProtocol
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.edges()
+        Adjust.intensity = Options[.Intensity] as? Float ?? 1.0
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
