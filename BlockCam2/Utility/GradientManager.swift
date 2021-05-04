@@ -11,7 +11,6 @@ import UIKit
 
 /// Provides functions to parse gradient descriptions as well as to create gradient descriptions, as well as
 /// other functions to help with gradients in general.
-///
 /// - Note:
 ///      - Gradient descriptions are a series of comma-delimited color stops. Each color stop is in the format
 ///        `(color value)@(point)` where `color value` is either a hex value that describes a color, or a color
@@ -66,7 +65,6 @@ class GradientManager
         ]
     
     /// Given a color value, return the color's name if known, hex value if not known.
-    ///
     /// - Parameter Color: Color whose name is desired.
     /// - Returns: Name of the color or #-leading hex value.
     public static func NameFor(Color: UIColor) -> String
@@ -88,9 +86,7 @@ class GradientManager
     /// Handle a hue-based color. The expected format of the color is `[hue {, sat {, bri}}]` where hue is a normalized value
     /// that determines the hue of the color, optional sat is the saturation, and optional bri is the brightness. If brightness
     /// is desired, saturation must also be specified.
-    ///
     /// - Note: This class cues from the color bracket - hue colors use square brackets.
-    ///
     /// - Parameter Raw: String to parse.
     /// - Returns: UIColor created from the raw hue string.
     private static func ParseHueValue(_ Raw: String) -> UIColor?
@@ -174,7 +170,6 @@ class GradientManager
     
     /// Parse a color. The expected format of the color is `(color value)` where `color value` is a color name in
     /// the known color list or a hex value that describes the color.
-    ///
     /// - Parameter Raw: The raw string to parse as a color description.
     /// - Returns: UIColor created from the color description passed in `Raw`. UIColor.white is returned on error.
     private static func ParseColor(_ Raw: String) -> UIColor?
@@ -209,7 +204,6 @@ class GradientManager
     }
     
     /// Parse a color stop's location. The expected format of the location is `(float)`.
-    ///
     /// - Parameter Raw: The raw value to parse.
     /// - Returns: The color stop location.
     private static func ParseLocation(_ Raw: String) -> CGFloat
@@ -222,7 +216,6 @@ class GradientManager
     }
     
     /// Parse a color gradient stop. Expected format is `(color value)@(float)`.
-    ///
     /// - Parameter Stop: Raw color stop in string form.
     /// - Returns: Tuple with the color stop's color and location. Nil return on error.
     private static func ParseGradientStop(_ Stop: String) -> (UIColor, CGFloat)?
@@ -243,7 +236,6 @@ class GradientManager
     }
     
     /// Parse a full gradient description. Expected format is: `(color value)@(float),(color value)@(float)...'.
-    ///
     /// - Parameter Raw: The list of color gradient stops in the format shown in the description.
     /// - Returns: List of tuples. Each tuple has the stop's color and location. The returned list is in the
     ///            same order as the raw list.
@@ -262,7 +254,6 @@ class GradientManager
     }
     
     /// Given a list of gradient color stops, return a string representation of it.
-    ///
     /// - Parameter GradientData: List of gradient stop data, each entry a tuple with the gradient color stop's
     ///                           color and relative location.
     /// - Returns: String representation of the gradient.
@@ -285,7 +276,6 @@ class GradientManager
     
     /// Insert the passed gradient stop into the full gradient. The returned result will have the gradient
     /// in location order.
-    ///
     /// - Parameters:
     ///   - Into: The full gradient where the gradient stop will be placed.
     ///   - Color: The color of the gradient stop to insert.
@@ -300,7 +290,6 @@ class GradientManager
     }
     
     /// Removes the gradient stop at the specified index.
-    ///
     /// - Parameters:
     ///   - Gradients: Source gradient description.
     ///   - AtIndex: The index of the gradient stop to remove.
@@ -322,7 +311,6 @@ class GradientManager
     }
     
     /// Removes all gradient stops at the specified location.
-    ///
     /// - Parameters:
     ///   - Gradients: Source gradient description.
     ///   - AtLocation: The location at which to remove gradient stops.
@@ -336,12 +324,11 @@ class GradientManager
     }
     
     /// Reverse the color locations in the gradient. The locations remain unchanged but the colors are moved.
-    ///
     /// - Parameter Gradients: Source gradient description.
     /// - Returns: New gradient description with inverted color locations.
     public static func ReverseColorLocations(_ Gradients: String) -> String
     {
-        var Parts = ParseGradient(Gradients)
+        let Parts = ParseGradient(Gradients)
         if Parts.count < 1
         {
             return ""
@@ -358,7 +345,6 @@ class GradientManager
     }
     
     /// Add a gradient stop to the end of the passed gradient description.
-    ///
     /// - Parameters:
     ///   - Gradients: Source gradient description.
     ///   - Color: Color of the gradient stop to add.
@@ -373,7 +359,6 @@ class GradientManager
     }
     
     /// Insert a new gradient stop at the specified location in the passed gradient.
-    ///
     /// - Parameters:
     ///   - Gradients: Source gradient description.
     ///   - Index: Where to insert the new gradient.
@@ -391,7 +376,6 @@ class GradientManager
     }
     
     /// Sort the passed gradient by gradient stop location.
-    ///
     /// - Parameter Gradients: Source description of the gradient.
     /// - Returns: Sorted gradient description.
     public static func SortGradient(_ Gradients: String) -> String
@@ -403,7 +387,6 @@ class GradientManager
     
     /// Swap two gradients in the passed gradient description. If Index1 is the same as Index2, the original gradient is returned.
     /// The gradient will be sorted on location order before being returned.
-    ///
     /// - Parameters:
     ///   - Gradients: Source gradient description.
     ///   - Index1: Index of first item to swap.
@@ -448,7 +431,6 @@ class GradientManager
     }
     
     /// Replace an existing gradient stop in the passed gradient with a new gradient stop.
-    ///
     /// - Parameters:
     ///   - Gradients: Source gradient description.
     ///   - Color: The new gradient stop color.
@@ -472,7 +454,6 @@ class GradientManager
     }
     
     /// Return the gradient stop at the specified index in the passed gradient description.
-    ///
     /// - Parameters:
     ///   - From: Source gradient description.
     ///   - At: Indicates the position in the gradient description of the gradient stop to return.
@@ -493,7 +474,6 @@ class GradientManager
     
     /// Creates and returns a CAGradientLayer with the gradient defined by the passed string
     /// (which uses this class' gradient definition).
-    ///
     /// - Parameters:
     ///   - From: Describes the gradient to create.
     ///   - WithFrame: The frame of the layer.
@@ -543,7 +523,6 @@ class GradientManager
     }
     
     /// Creates and returns a CAGradientLayer with the predefined gradient.
-    ///
     /// - Parameters:
     ///   - From: Determines the predefined gradient to use to create the image.
     ///   - WithFrame: The frame of the layer.
@@ -558,7 +537,6 @@ class GradientManager
     }
     
     /// Creates and returns a UIImage with the gradient defined by the passed string.
-    ///
     /// - Parameters:
     ///   - From: Describes the gradient to create.
     ///   - WithFrame: The frame of the layer (and resultant image).
@@ -617,7 +595,6 @@ class GradientManager
     }
     
     /// Creates and returns a UIImage with the gradient defined by the passed enum value.
-    ///
     /// - Parameters:
     ///   - From: Predefined gradient.
     ///   - WithFrame: The frame of the layer (and resultant image).
@@ -641,13 +618,11 @@ class GradientManager
     }
     
     /// Resolve the passed gradient description into a list of 256 colors.
-    ///
     /// - Note:
     ///    - If the description does not contain a color at (0.0) or at (1.0), an implicit color will be
     ///      added at each missing end. See `GenerateGradient` for more information.
     ///    - Provided the description is not changed between calls, resolved gradients are cached for
     ///      improving performance.
-    ///
     /// - Parameter Description: The gradient description.
     /// - Returns: List of 256 colors based on the gradient description.
     public static func ResolveGradient(_ Description: String) -> [UIColor]
@@ -663,7 +638,6 @@ class GradientManager
     
     /// Resolve a gradient of 256 colors from `Color1` to `Color2`. `Color1` starts at (0.0) and
     /// `Color2` starts at (1.0).
-    ///
     /// - Parameters:
     ///   - Color1: First color of the gradient.
     ///   - Color2: Second color of the gradient.
@@ -674,7 +648,6 @@ class GradientManager
     }
     
     /// Generate a list of colors with `Range` colors from the passed gradient description.
-    ///
     /// - Parameters:
     ///   - From: The gradient description used to create the list of colors.
     ///   - Range: Determines the number of colors in the list.
@@ -741,7 +714,6 @@ class GradientManager
     }
     
     /// Generate a list of colors with in the specified range of colors.
-    ///
     /// - Parameters:
     ///   - From: Starting color (position set to (0.0)).
     ///   - To: Ending color (position set to (1.0)).
@@ -765,7 +737,6 @@ class GradientManager
     
     /// Given two colors and value indicating a percent somewhere in between them, return the color a the
     /// percent.
-    ///
     /// - Parameter Segment: Tuple with the low color, high color, and the percent in between them.
     /// - Returns: Color derived from the two passed colors and location between them.
     private static func CreateImpliedColor(_ Segment: (UIColor, UIColor, Double)) -> UIColor
@@ -781,7 +752,6 @@ class GradientManager
     
     /// Given a location, return the two colors that define the segment where the location is, as well as the
     /// percent between the two ccolors for the location.
-    ///
     /// - Parameters:
     ///   - Index: Location of the point that defines which colors to return.
     ///   - ColorList: List of colors and points for the colors.
@@ -814,9 +784,7 @@ class GradientManager
     /// Determines if the passed gradient has any white colors in it. The determination is made simply by
     /// looking at the gradient stops for any white color stops. If there are no white color stops, then
     /// there is no white in the gradient.
-    ///
     /// - Note: This function is provided to assist in combining color maps with source images.
-    ///
     /// - Parameter InGradient: The gradient to check for color stops of all white.
     /// - Returns: True if a white color stop is present, false if not.
     public static func HasWhite(_ InGradient: String) -> Bool
@@ -835,7 +803,6 @@ class GradientManager
     // MARK: Predefined gradients.
     
     /// Return a gradient description based on its type.
-    ///
     /// - Parameter GradientType: The type of gradient to return.
     /// - Returns: Description of the gradient on success, nil if not found.
     public static func GetGradient(_ GradientType: Gradients) -> String?
@@ -851,7 +818,6 @@ class GradientManager
     }
     
     /// Determines if the passed gradient desciption is in the predefined gradient list.
-    ///
     /// - Parameter Description: Description to compare against the predefined gradient list.
     /// - Returns: True if the gradient is in the predefined gradient list, false if not.
     public static func IsPredefinedGradient(_ Description: String) -> Bool
@@ -880,7 +846,6 @@ class GradientManager
     }
     
     /// Given a predefined gradient name (from the Gradients enum), return the gradient description.
-    ///
     /// - Parameter GradientName: The name of the gradient whose description will be returned.
     /// - Returns: Gradient description of the passed gradient name if found, nil if not found.
     public static func PredefinedGradientFromName(_ GradientName: String) -> String?
