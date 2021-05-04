@@ -36,28 +36,55 @@ struct FilterViewServer: View
                 {
                     HueAdjustFilter_View()
                 }
-                .opacity(IsVisible ? 1.0 : 0.0)
                 
             case BuiltInFilters.Kaleidoscope.rawValue:
                 SettingsContainer
                 {
                     KaleidoscopeFilter_View()
                 }
-                .opacity(IsVisible ? 1.0 : 0.0)
                 
             case BuiltInFilters.TriangleKaleidoscope.rawValue:
                 SettingsContainer
                 {
                     TriangleKaleidoscopeFilter_View()
                 }
-                .opacity(IsVisible ? 1.0 : 0.0)
+                
+            case BuiltInFilters.Mirroring2.rawValue:
+                SettingsContainer
+                {
+                    MirrorFilter_View()
+                }
+                
+            case BuiltInFilters.Bloom.rawValue,
+                 BuiltInFilters.CircleAndLines.rawValue,
+                 BuiltInFilters.ColorInvert.rawValue,
+                 BuiltInFilters.Chrome.rawValue,
+                 BuiltInFilters.EdgeWork.rawValue,
+                 BuiltInFilters.Fade.rawValue,
+                 BuiltInFilters.GaborGradients.rawValue,
+                 BuiltInFilters.Gloom.rawValue,
+                 BuiltInFilters.Instant.rawValue,
+                 BuiltInFilters.LinearTosRGB.rawValue,
+                 BuiltInFilters.MaximumComponent.rawValue,
+                 BuiltInFilters.MinimumComponent.rawValue,
+                 BuiltInFilters.Mono.rawValue,
+                 BuiltInFilters.Noir.rawValue,
+                 BuiltInFilters.Otsu.rawValue,
+                 BuiltInFilters.Passthrough.rawValue,
+                 BuiltInFilters.Process.rawValue,
+                 BuiltInFilters.Sobel.rawValue,
+                 BuiltInFilters.SobelBlend.rawValue,
+                 BuiltInFilters.ThermalEffect.rawValue,
+                 BuiltInFilters.Tonal.rawValue,
+                 BuiltInFilters.Transfer.rawValue,
+                 BuiltInFilters.XRay.rawValue:
+                NoFilter_View(FilterName: Settings.GetString(.CurrentFilter, "Unknown"))
             
             default:
                 SettingsContainer
                 {
-                    NoFilter_View(FilterName: "Unknown")
+                    NoFilter_View(FilterName: Settings.GetString(.CurrentFilter, "Unknown"))
                 }
-                .opacity(IsVisible ? 1.0 : 0.0)
         }
     }
 }
