@@ -112,7 +112,8 @@ extension Filters
         FilterMap[.HoleDistortion] = BlockCam2.HoleDistortion()
         FilterMap[.LightTunnel] = BlockCam2.LightTunnel()
         FilterMap[.TwirlDistortion] = BlockCam2.TwirlDistortion()
-        FilterMap[.Mirroring] = BlockCam2.MirroringDistortion()
+ //       FilterMap[.Mirroring] = BlockCam2.MirroringDistortion()
+        FilterMap[.Mirroring2] = BlockCam2.Mirror2()
         FilterMap[.Dilate] = BlockCam2.Dilate()
         FilterMap[.Erode] = BlockCam2.Erode()
         FilterMap[.Median] = BlockCam2.Median()
@@ -182,6 +183,16 @@ extension Filters
         return FilterMap
     }
     
+    private static func MakeTestFilters() -> [BuiltInFilters: BuiltInFilterProtocol]?
+    {
+        var FilterMap = [BuiltInFilters: BuiltInFilterProtocol]()
+        FilterMap[.Crop] = BlockCam2.Crop()
+        FilterMap[.Crop2] = BlockCam2.Crop2()
+        FilterMap[.Reflect] = BlockCam2.Reflect()
+        FilterMap[.QuadrantTest] = BlockCam2.QuadrantTest()
+        return FilterMap
+    }
+    
     public static func InitializeFilterTree()
     {
         if TreeInitialized
@@ -235,6 +246,9 @@ extension Filters
                     
                 case .Edges:
                     FilterData = MakeEdgeFilters()
+                    
+                case .Test:
+                    FilterData = MakeTestFilters()
             }
             if let Final = FilterData
             {
@@ -356,5 +370,6 @@ enum FilterOptions: String
     case SourceIsAV = "SourceIsAV"
     case Invert = "Invert"
     case Decay = "Decay"
+    case FilterName = "FilterName"
 }
 
