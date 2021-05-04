@@ -22,7 +22,8 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     @Binding var FilterButtonPressed: String
     @Binding var IsSelfieCamera: Bool
     @Binding var ShowFilterSettings: Bool
-    @Binding var ToggleSavedImageNotice: Bool
+    @Binding var ShowShortMessageView: Bool
+    @Binding var ShortMessage: String
     
     /// Returns the LiveViewController instance.
     func makeUIViewController(context: Context) -> LiveViewController
@@ -58,9 +59,29 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
         }
         
         /// Called when the live view wants to show the "image saved" message.
-        func ToggleImageSavedNotice()
+        func ShowShortMessage(With Text: String)
         {
-            Parent.ToggleSavedImageNotice = true
+            Parent.ShortMessage = Text
+            Parent.ShowShortMessageView = true
+        }
+        
+        /// Unconditionally hide the short status message.
+        func HideShortMessage()
+        {
+            Parent.ShowShortMessageView = false
+        }
+        
+        /// Hide the short status message after a delay.
+        /// - Parameter With: Number of seconds to wait before hiding the message.
+        func HideShortMessage(With Delay: Double)
+        {
+            perform(#selector(DoHideMessage), with: nil, afterDelay: Delay)
+        }
+        
+        /// Hide the short status message.
+        @objc func DoHideMessage()
+        {
+            Parent.ShowShortMessageView = false
         }
     }
 }
@@ -69,5 +90,12 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
 protocol ViewControllerDelegate: AnyObject
 {
     /// Toggle the image saved message.
-    func ToggleImageSavedNotice()
+    func ShowShortMessage(With Text: String)
+    
+    /// Unconditionally hide the short status message.
+    func HideShortMessage()
+    
+    /// Hide the short status message after a delay.
+    /// - Parameter With: Number of seconds to wait before hiding the message.
+    func HideShortMessage(With Delay: Double)
 }
