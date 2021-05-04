@@ -30,6 +30,11 @@ class Filters
         {
             return
         }
+        let LastFilterName = Settings.GetString(.CurrentFilter, "")
+        if let LastSaved = BuiltInFilters(rawValue: LastFilterName)
+        {
+            LastBuiltInFilterUsed = LastSaved
+        }
         _Initialized = true
     }
     
@@ -157,6 +162,19 @@ class Filters
     public static func RunFilter(_ Filter: BuiltInFilters? = nil,
                                  With Buffer: CVPixelBuffer) -> CVPixelBuffer?
     {
+        return RunFilter(Filter, With: Buffer, Options: [:])
+    }
+    
+    /// Run a built-in filter on the passed buffer.
+    /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
+    ///                     prior to this call, `.Passthrough` is used.
+    /// - Parameter With: The buffer to filter.
+    /// - Parameter Options: Options to send to the filter.
+    /// - Returns: Filtered data according to `Filter`. Nil on error.
+    public static func RunFilter(_ Filter: BuiltInFilters? = nil,
+                                 With Buffer: CVPixelBuffer,
+                                 Options: [FilterOptions: Any]) -> CVPixelBuffer?
+    {
         if Filter == nil && LastBuiltInFilterUsed == nil
         {
             return Filters.RunFilter(.Passthrough, With: Buffer)
@@ -178,7 +196,7 @@ class Filters
         if let FilterInTree = Filters.FilterFromTree(FilterToUse)
         {
             FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
-            return FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: [:])
+            return FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: Options)
         }
         return nil
     }
@@ -230,6 +248,7 @@ enum FilterGroups: String, CaseIterable
     case Reset = " Reset "
     case Edges = "Edges"
     case MultiFrame = "Frames"
+    case Test = "Test/Debug"
 }
 
 /// Individual filters.
@@ -300,7 +319,8 @@ enum BuiltInFilters: String, CaseIterable
     case Masking1 = "Masking1"
     case GradientToAlpha = "Gradient->Alpha"
     case AlphaBlend = "AlphaBlend"
-    case Mirroring = "Mirroring"
+//    case Mirroring = "Mirroring"
+    case Mirroring2 = "Mirroring 2"
     case Threshold = "Threshold"
     case Lapacian = "Lapacian"
     case Dilate = "Dilate"
@@ -319,6 +339,12 @@ enum BuiltInFilters: String, CaseIterable
     case ColorControls = "Control"
     case ConditionalTransparency = "Conditional Transparency"
     case ImageDelta = "Image Delta"
+    
+    //Internal filters
+    case Crop = "Crop"
+    case Crop2 = "Crop2"
+    case Reflect = "Reflect"
+    case QuadrantTest = "Quadrant Test"
     
     //3D Filters
     case Blocks = "Blocks"
