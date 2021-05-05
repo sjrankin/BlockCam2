@@ -21,6 +21,7 @@ extension Settings
             // User interface settings.
             .ShowAudioWaveform: Bool.self,
             .SaveOriginalImage: Bool.self,
+            .SampleImageIndex: Int.self,
             
             // Filter settings.
             .CurrentFilter: String.self,
@@ -47,5 +48,8 @@ extension Settings
             
             // Color Map
             .ColorMapGradient: String.self,
+            
+            // Color monochrome map
+            .ColorMonochromeColor: UIColor.self,
         ]
 }
