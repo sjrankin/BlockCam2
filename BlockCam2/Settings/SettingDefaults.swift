@@ -19,6 +19,7 @@ extension Settings
             // User interface settings.
             .ShowAudioWaveform: false,
             .SaveOriginalImage: true,
+            .SampleImageIndex: 0,
             
             // Filter settings.
             .CurrentFilter: "",
@@ -45,5 +46,8 @@ extension Settings
             
             // Color Map.
             .ColorMapGradient: "(White)@(0.0),(Black)@(1.0)",
+        
+            // Color monochrome.
+            .ColorMonochromeColor: UIColor.green,
         ]
 }
