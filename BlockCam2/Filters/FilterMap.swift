@@ -352,6 +352,7 @@ enum FilterOptions: String
     case GradientColor1 = "GradientColor1"
     case GradientPoint0 = "GradientPoint0"
     case GradientPoint1 = "GradientPoint1"
+    case GradientDefinition = "GradientDefinition"
     case ChainedFilters = "ChainedFilters"
     case ShaderBias = "ShaderBias"
     case ErodeWidth = "ErodeWidth"
