@@ -7,10 +7,26 @@
 
 import Foundation
 import UIKit
+import VideoToolbox
 
 extension UIImage
 {
     // MARK: - UIImage extensions.
+    
+    /// Create a UI image from a pixel buffer.
+    /// - Note: See [How to turn a CVPixelBuffer Into a UIImage](https://stackoverflow.com/questions/8072208/how-to-turn-a-cvpixelbuffer-into-a-uiimage)
+    /// - Parameter Buffer: A `CVPixelBuffer` with image data to convert to a `UIImage`.
+    /// - Returns: `UIImage` on success, nil on failure.
+    public convenience init?(Buffer: CVPixelBuffer)
+    {
+        var CGImg: CGImage? = nil
+        VTCreateCGImageFromCVPixelBuffer(Buffer, options: nil, imageOut: &CGImg)
+        guard let FinalCG = CGImg else
+        {
+            return nil
+        }
+        self.init(cgImage: FinalCG)
+    }
     
     /// Rotate the instance image by the passed number of radians.
     /// - Parameter By: Number of radians by which to rotate the image.
