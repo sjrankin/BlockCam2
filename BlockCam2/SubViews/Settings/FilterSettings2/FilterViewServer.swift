@@ -55,6 +55,18 @@ struct FilterViewServer: View
                     MirrorFilter_View()
                 }
                 
+            case BuiltInFilters.ColorMap.rawValue:
+                SettingsContainer
+                {
+                    ColorMapFilter_View()
+                }
+                
+            case BuiltInFilters.ColorMonochrome.rawValue:
+                SettingsContainer
+                {
+                    ColorMonochromeFilter_View()
+                }
+                
             case BuiltInFilters.Bloom.rawValue,
                  BuiltInFilters.CircleAndLines.rawValue,
                  BuiltInFilters.ColorInvert.rawValue,
