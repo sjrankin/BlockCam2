@@ -23,6 +23,8 @@ enum SettingKeys: String, CaseIterable
     case ShowAudioWaveform = "ShowAudioWaveform"
     /// Boolean: If true, the original image is saved along with the modified image.
     case SaveOriginalImage = "SaveOriginalImage"
+    /// Integer: Index of the sample image.
+    case SampleImageIndex = "SampleImageIndex"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.
@@ -67,4 +69,8 @@ enum SettingKeys: String, CaseIterable
     // MARK: - Color map
     /// String: Gradient description to use with the color map.
     case ColorMapGradient = "ColorMapGradient"
+    
+    // MARK: - Color monochrome
+    /// UIColor: Color for the color monochrome filter.
+    case ColorMonochromeColor = "ColorMonochromeColor"
 }
