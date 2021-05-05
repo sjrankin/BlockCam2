@@ -64,6 +64,8 @@
 		172C8E4626354F0F0096C331 /* FilterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C8E4526354F0F0096C331 /* FilterHelper.swift */; };
 		173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */; };
 		173B2251262835480075EB71 /* Viewer3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B2250262835480075EB71 /* Viewer3D.swift */; };
+		174AE02E2642857200105425 /* CMFormatDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174AE02D2642857200105425 /* CMFormatDescription.swift */; };
+		174AE030264285A200105425 /* CMSampleBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174AE02F264285A200105425 /* CMSampleBuffer.swift */; };
 		17602410263B9B3C006A3DE2 /* FilterViewServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1760240F263B9B3C006A3DE2 /* FilterViewServer.swift */; };
 		17602413263BA97F006A3DE2 /* HueAdjustFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17602412263BA97F006A3DE2 /* HueAdjustFilter_View.swift */; };
 		17602415263BC051006A3DE2 /* KaleidoscopeFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */; };
@@ -121,6 +123,8 @@
 		17702F38263A9ACF00D0C54B /* FilterSettingsServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17702F37263A9ACF00D0C54B /* FilterSettingsServer.swift */; };
 		177A004E26410CA600017FB0 /* ColorMapFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A004D26410CA600017FB0 /* ColorMapFilter_View.swift */; };
 		1786D23626266B1700B34501 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1786D23526266B1700B34501 /* CIImage.swift */; };
+		178F9A7C264227C400AEF6D8 /* ColorMonochromeFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178F9A7B264227C400AEF6D8 /* ColorMonochromeFilter_View.swift */; };
+		178F9A7E264253E100AEF6D8 /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178F9A7D264253E100AEF6D8 /* SampleImage.swift */; };
 		179721F7262E8EEB004B7134 /* +PhotoHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721F6262E8EEB004B7134 /* +PhotoHandling.swift */; };
 		179721F9262E8FBD004B7134 /* +JpegDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721F8262E8FBD004B7134 /* +JpegDataClass.swift */; };
 		179721FC262E93E5004B7134 /* FileIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179721FB262E93E5004B7134 /* FileIO.swift */; };
@@ -260,6 +264,8 @@
 		172C8E4526354F0F0096C331 /* FilterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterHelper.swift; sourceTree = "<group>"; };
 		173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewControllerUI.swift; sourceTree = "<group>"; };
 		173B2250262835480075EB71 /* Viewer3D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewer3D.swift; sourceTree = "<group>"; };
+		174AE02D2642857200105425 /* CMFormatDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMFormatDescription.swift; sourceTree = "<group>"; };
+		174AE02F264285A200105425 /* CMSampleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSampleBuffer.swift; sourceTree = "<group>"; };
 		1760240F263B9B3C006A3DE2 /* FilterViewServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewServer.swift; sourceTree = "<group>"; };
 		17602412263BA97F006A3DE2 /* HueAdjustFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueAdjustFilter_View.swift; sourceTree = "<group>"; };
 		17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaleidoscopeFilter_View.swift; sourceTree = "<group>"; };
@@ -319,6 +325,8 @@
 		177A004D26410CA600017FB0 /* ColorMapFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMapFilter_View.swift; sourceTree = "<group>"; };
 		1786D234262665DA00B34501 /* BlockCam2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlockCam2.entitlements; sourceTree = "<group>"; };
 		1786D23526266B1700B34501 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
+		178F9A7B264227C400AEF6D8 /* ColorMonochromeFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMonochromeFilter_View.swift; sourceTree = "<group>"; };
+		178F9A7D264253E100AEF6D8 /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
 		179721F6262E8EEB004B7134 /* +PhotoHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+PhotoHandling.swift"; sourceTree = "<group>"; };
 		179721F8262E8FBD004B7134 /* +JpegDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+JpegDataClass.swift"; sourceTree = "<group>"; };
 		179721FB262E93E5004B7134 /* FileIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIO.swift; sourceTree = "<group>"; };
@@ -658,6 +666,7 @@
 				17602412263BA97F006A3DE2 /* HueAdjustFilter_View.swift */,
 				179DD4E3263CE813007A12FA /* MirrorFilter_View.swift */,
 				177A004D26410CA600017FB0 /* ColorMapFilter_View.swift */,
+				178F9A7B264227C400AEF6D8 /* ColorMonochromeFilter_View.swift */,
 				17602418263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift */,
 				17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */,
 				17602416263BC243006A3DE2 /* NoFilter_View.swift */,
@@ -825,13 +834,15 @@
 			path = Kernel;
 			sourceTree = "<group>";
 		};
-		1764BF252639850B001644E3 /* MainButtons */ = {
+		1764BF252639850B001644E3 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				17E927DC2634EE3E00708522 /* GroupButton.swift */,
+				17E927DE2634EFAE00708522 /* FilterButton.swift */,
 				1764BF2626398539001644E3 /* MainUIButtons.swift */,
 				179DD50A263D531A007A12FA /* QuadrantButton.swift */,
 			);
-			path = MainButtons;
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		17688E74262BE70B00D1523A /* CameraOutput */ = {
@@ -899,6 +910,7 @@
 				176FE29C2637E43C00650060 /* AboutView.swift */,
 				176FE2952637CCE400650060 /* ProgramSettingsUI.swift */,
 				176FE29A2637E3BF00650060 /* SettingsItemView.swift */,
+				178F9A7D264253E100AEF6D8 /* SampleImage.swift */,
 				176FE2A02637E48800650060 /* SettingsUIData.swift */,
 				176FE29E2637E46300650060 /* SettingsView.swift */,
 				176FE2982637E39D00650060 /* UnexpectedView.swift */,
@@ -976,11 +988,9 @@
 			isa = PBXGroup;
 			children = (
 				176FE2972637E36500650060 /* Settings */,
-				1764BF252639850B001644E3 /* MainButtons */,
+				1764BF252639850B001644E3 /* Buttons */,
 				17BF7C742633E4B200181FA1 /* FilterView.swift */,
-				17E927DE2634EFAE00708522 /* FilterButton.swift */,
 				17F70A242634413800BCC3CF /* Glow.swift */,
-				17E927DC2634EE3E00708522 /* GroupButton.swift */,
 				176FE2A426380E5E00650060 /* IDString.swift */,
 				17BF7C772633E5FC00181FA1 /* ImageSaved.swift */,
 				173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */,
@@ -1003,6 +1013,8 @@
 			isa = PBXGroup;
 			children = (
 				1786D23526266B1700B34501 /* CIImage.swift */,
+				174AE02D2642857200105425 /* CMFormatDescription.swift */,
+				174AE02F264285A200105425 /* CMSampleBuffer.swift */,
 				172ABCAD2636543E00AE53D1 /* Double.swift */,
 				17BF7C722633DE1E00181FA1 /* UIColor.swift */,
 				17EC997A262FA8F7007FCF00 /* UIImage.swift */,
@@ -1024,7 +1036,6 @@
 		17EC9981262FE120007FCF00 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				17A6126B263E9E2F00B9BB1F /* Test */,
 				1764BEFB26392009001644E3 /* ABC */,
 				1764BEFC26392056001644E3 /* DEF */,
 				1764BEFD26392088001644E3 /* GHI */,
@@ -1032,6 +1043,7 @@
 				1764BEFF26392110001644E3 /* NOPQ */,
 				1764BF0026392145001644E3 /* RSTU */,
 				1764BF012639214E001644E3 /* VWXYZ */,
+				17A6126B263E9E2F00B9BB1F /* Test */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -1172,6 +1184,7 @@
 				17F70A09263409CD00BCC3CF /* GaussianBlur.swift in Sources */,
 				17BF7C782633E5FC00181FA1 /* ImageSaved.swift in Sources */,
 				17EC9991262FE3D1007FCF00 /* ExposureAdjust.swift in Sources */,
+				178F9A7E264253E100AEF6D8 /* SampleImage.swift in Sources */,
 				17EC9995262FE43D007FCF00 /* DotScreen.swift in Sources */,
 				17F70A1326340D0200BCC3CF /* GrayscaleInvert.swift in Sources */,
 				172ABCF52636964E00AE53D1 /* ColorControls.swift in Sources */,
@@ -1211,6 +1224,7 @@
 				172ABCE32636890F00AE53D1 /* Median.swift in Sources */,
 				17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */,
 				17F8C784262C307C00DB7D51 /* Mixer.metal in Sources */,
+				178F9A7C264227C400AEF6D8 /* ColorMonochromeFilter_View.swift in Sources */,
 				176FE2962637CCE500650060 /* ProgramSettingsUI.swift in Sources */,
 				176FE2A12637E48800650060 /* SettingsUIData.swift in Sources */,
 				173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */,
@@ -1224,6 +1238,7 @@
 				1764BF1B26394150001644E3 /* Stack.swift in Sources */,
 				176FE29B2637E3BF00650060 /* SettingsItemView.swift in Sources */,
 				170FAB4526312E02003DDA35 /* SharpenLuminance.swift in Sources */,
+				174AE02E2642857200105425 /* CMFormatDescription.swift in Sources */,
 				172ABCA426364B6600AE53D1 /* ColorMapParameters.swift in Sources */,
 				170FAB4D26314E73003DDA35 /* Edges.swift in Sources */,
 				17EC9997262FE46B007FCF00 /* HatchedScreen.swift in Sources */,
@@ -1291,6 +1306,7 @@
 				176FE28A2637C45C00650060 /* +Int.swift in Sources */,
 				172ABCA826364C3100AE53D1 /* ColorMap.swift in Sources */,
 				17EC9999262FE4AE007FCF00 /* LineOverlay.swift in Sources */,
+				174AE030264285A200105425 /* CMSampleBuffer.swift in Sources */,
 				173B2251262835480075EB71 /* Viewer3D.swift in Sources */,
 				17EC997D262FDFF5007FCF00 /* FilterMap.swift in Sources */,
 				17EC998F262FE39C007FCF00 /* HueAdjust.swift in Sources */,
@@ -1435,6 +1451,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Irorio.BlockCam2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1463,6 +1480,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Irorio.BlockCam2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
