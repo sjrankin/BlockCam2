@@ -33,6 +33,17 @@ class LineOverlay: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in LineOverlay.")
+        }
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
+                                                                                     height: SourceImage.extent.height)) else
+        {
+            fatalError("Error creating local buffer pool in LineOverlay.")
+        }
         let Adjust = CIFilter.lineOverlay()
         Adjust.edgeIntensity = Options[.EdgeIntensity] as? Float ?? 5.0
         Adjust.contrast = Options[.Contrast] as? Float ?? 5.0
@@ -45,7 +56,7 @@ class LineOverlay: BuiltInFilterProtocol
             if let Merged = FilterHelper.Merge(Filtered, SourceImage)
             {
                 var PixBuf: CVPixelBuffer? = nil
-                CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+                CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
                 guard let OutPixBuf = PixBuf else
                 {
                     fatalError("Allocation failure in \(#function)")

@@ -34,7 +34,7 @@ class Crop: MetalFilterParent, BuiltInFilterProtocol
     
     override required init()
     {
-        print("Metal kernel function ImageDelta initialized")
+        print("Metal kernel function Crop initialized")
         let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
         let KernelFunction = DefaultLibrary?.makeFunction(name: "Crop")
         do
@@ -43,7 +43,7 @@ class Crop: MetalFilterParent, BuiltInFilterProtocol
         }
         catch
         {
-            print("Unable to create pipeline state in ImageDelta: \(error.localizedDescription)")
+            print("Unable to create pipeline state in Crop: \(error.localizedDescription)")
         }
     }
     
@@ -126,7 +126,7 @@ class Crop: MetalFilterParent, BuiltInFilterProtocol
               let CommandBuffer = CommandQ.makeCommandBuffer(),
               let CommandEncoder = CommandBuffer.makeComputeCommandEncoder() else
         {
-            fatalError("Error creating Metal command queue.")
+            fatalError("Error creating Metal command queue in Crop.")
         }
         
         CommandEncoder.label = "Crop Kernel"

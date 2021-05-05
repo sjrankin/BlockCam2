@@ -33,6 +33,17 @@ class HoleDistortion: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in HoleDistortion.")
+        }
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
+                                                                                     height: SourceImage.extent.height)) else
+        {
+            fatalError("Error creating local buffer pool in HoleDistortion.")
+        }
         let Adjust = CIFilter.holeDistortion()
         Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
         Adjust.radius = Options[.Radius] as? Float ?? 300.0
@@ -40,7 +51,7 @@ class HoleDistortion: BuiltInFilterProtocol
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")

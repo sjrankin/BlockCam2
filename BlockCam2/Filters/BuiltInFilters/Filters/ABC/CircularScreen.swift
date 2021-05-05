@@ -33,6 +33,17 @@ class CircularScreen: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in CircularScreen.")
+        }
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
+                                                                                     height: SourceImage.extent.height)) else
+        {
+            fatalError("Error creating local buffer pool in CircularScreen.")
+        }
         let Adjust = CIFilter.circularScreen()
         Adjust.width = Options[.Width] as? Float ?? 6.0
         Adjust.sharpness = Options[.Sharpness] as? Float ?? 0.7
@@ -41,7 +52,7 @@ class CircularScreen: BuiltInFilterProtocol
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")

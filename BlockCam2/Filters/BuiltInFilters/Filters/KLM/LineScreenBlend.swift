@@ -33,11 +33,22 @@ class LineScreenBlend: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let Lines = LineScreen()
-        let LineBuffer = Lines.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
         let SourceImage = CIImage(cvPixelBuffer: Buffer.first!)
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in LineScreenBlend.")
+        }
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
+                                                                                     height: SourceImage.extent.height)) else
+        {
+            fatalError("Error creating local buffer pool in LineScreenBlend.")
+        }
+        let LineBuffer = Lines.RunFilter(Buffer, LocalBufferPool, ColorSpace, Options: [:])
         if let Merged = FilterHelper.Merge(CIImage(cvPixelBuffer: LineBuffer), SourceImage)
         {
-            return FilterHelper.CIImageToCVPixelBuffer(Merged, BufferPool, ColorSpace)
+            return FilterHelper.CIImageToCVPixelBuffer(Merged, LocalBufferPool, ColorSpace)
         }
         return Buffer.first!
     }

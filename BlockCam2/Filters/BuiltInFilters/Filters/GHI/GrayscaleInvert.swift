@@ -70,14 +70,28 @@ class GrayscaleInvert: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
-        let GrayBuffer = GrayFilter.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
+        let Initial = CIImage(cvPixelBuffer: Buffer.first!)
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in HueAdjust.")
+        }
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: CGSize(width: Initial.extent.width,
+                                                                                     height: Initial.extent.height)) else
+        {
+            fatalError("Error creating local buffer pool in HueAdjust.")
+        }
+        
+        let GrayBuffer = GrayFilter.RunFilter(Buffer, LocalBufferPool, ColorSpace, Options: [:])
         let SourceImage = CIImage(cvImageBuffer: GrayBuffer)
+        
         let Adjust = CIFilter.colorInvert()
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")

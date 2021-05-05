@@ -120,10 +120,18 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
             fatalError("Error creating Metal command queue.")
         }
         
+        #if true
+        guard let GradDef = Options[.GradientDefinition] as? String ?? Settings.SettingDefaults[.ColorMapGradient] as? String else
+        {
+            fatalError("Error getting color map gradient definition.")
+        }
+        let ActualGradient = GradientManager.ResolveGradient(GradDef)
+        #else
         let First = Options[.Color0] as? UIColor ?? UIColor.red
         let Second = Options[.Color1] as? UIColor ?? UIColor.blue
         let GradientDescription = GradientManager.AssembleGradient([(First, 0.0),(Second, 1.0)])
         let ActualGradient = GradientManager.ResolveGradient(GradientDescription)
+        #endif
         var GradientData = [simd_float4](repeating: simd_float4(0.0, 0.0, 0.0, 0.0), count: 256)
         for Index in 0 ... 255
         {

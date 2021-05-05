@@ -33,13 +33,24 @@ class HexagonalPixellate: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in HexagonalPixellate.")
+        }
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
+                                                                                     height: SourceImage.extent.height)) else
+        {
+            fatalError("Error creating local buffer pool in HexagonalPixellate.")
+        }
         let Adjust = CIFilter.hexagonalPixellate()
         Adjust.inputImage = SourceImage
         Adjust.scale = Options[.Scale] as? Float ?? 24.0
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")

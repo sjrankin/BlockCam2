@@ -32,6 +32,9 @@ class SaliencyMap: BuiltInFilterProtocol
     func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
+        #if true
+        return Buffer.first!
+        #else
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
         let Adjust = CIFilter.saliencyMap()
         Adjust.inputImage = SourceImage
@@ -51,5 +54,6 @@ class SaliencyMap: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+        #endif
     }
 }
