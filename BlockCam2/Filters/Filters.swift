@@ -142,7 +142,8 @@ class Filters
         var PixelBuffer: CVPixelBuffer?
         while Error == kCVReturnSuccess
         {
-            Error = CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(kCFAllocatorDefault, Pool, AuxAttributes, &PixelBuffer)
+            Error = CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(kCFAllocatorDefault, Pool,
+                                                                        AuxAttributes, &PixelBuffer)
             if let PixelBuffer = PixelBuffer
             {
                 PixelBuffers.append(PixelBuffer)
@@ -153,7 +154,7 @@ class Filters
     }
     
     static var BufferPool: CVPixelBufferPool? = nil
-    
+    /*
     /// Run a built-in filter on the passed buffer.
     /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
     ///                     prior to this call, `.Passthrough` is used.
@@ -162,18 +163,99 @@ class Filters
     public static func RunFilter(_ Filter: BuiltInFilters? = nil,
                                  With Buffer: CVPixelBuffer) -> CVPixelBuffer?
     {
-        return RunFilter(Filter, With: Buffer, Options: [:])
+        return RunFilter(Filter, With: Buffer)//, Options: [:])
+    }
+ */
+    
+    /// Returns a dictionary of options for the passed filter.
+    /// - Note: Values in the `Settings` system are used to populate the returned dictionary. If a given
+    ///          filter does not have any options, an empty dictionary is returned.
+    /// - Parameter For: The filter whose option dictionary is populated with `Settings` values.
+    /// - Returns: Dictionary of options for the passed filter. May be empty if a given filter does not have
+    ///            any options.
+    public static func GetOptions(For Filter: BuiltInFilters) -> [FilterOptions: Any]
+    {
+        var Options = [FilterOptions: Any]()
+        switch Filter
+        {
+            case .ColorMonochrome:
+                Options[.Color] = Settings.GetColor(.ColorMonochromeColor)
+                
+            case .ColorMap:
+                Options[.GradientDefinition] = Settings.GetString(.ColorMapGradient,
+                                                                  Settings.SettingDefaults[.ColorMapGradient] as! String)
+            case .HueAdjust:
+                Options[.Angle] = Settings.GetDouble(.HueAngle, 0.0)
+                //print("Angle=\(Settings.GetDouble(.HueAngle, 0.0))")
+                
+            case .Kaleidoscope:
+                Options[.Count] = Settings.GetInt(.KaleidoscopeSegmentCount)
+                Options[.Angle] = Settings.GetInt(.KaleidoscopeAngleOfReflection)
+
+            case .TriangleKaleidoscope:
+                Options[.Size] = Settings.GetInt(.Kaleidoscope3Size)
+                Options[.Angle] = Settings.GetInt(.Kaleidoscope3Rotation)
+                Options[.Decay] = Settings.GetDouble(.Kaleidoscope3Decay, 0.0)
+                
+            default:
+                break
+        }
+        return Options
+    }
+    
+    /// Run a built-in filter on the passed image.
+    /// - Parameter On: The image on which to run the filter.
+    /// - Parameter Filter: The filter to use on the image.
+    /// - Parameter Options: Options to apply to the filter. If Options is nil, this function will populate
+    ///                      options from Settings.
+    /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
+    ///                                    nil is returned on error.
+    /// - Returns: New and filtered `UIImage` on success, nil on error.
+    public static func RunFilter(On Image: UIImage,
+                                 Filter: BuiltInFilters,
+                                 //Options: [FilterOptions: Any]? = nil,
+                                 ReturnOriginalOnError: Bool = true) -> UIImage?
+    {
+        let CImg = CIImage(image: Image)
+        var Buffer: CVPixelBuffer?
+        let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            Int(Image.size.width),
+                            Int(Image.size.height),
+                            kCVPixelFormatType_32BGRA,
+                            Attributes,
+                            &Buffer)
+        let Context = CIContext()
+        Context.render(CImg!, to: Buffer!)
+        //let FinalOptions = Options ?? GetOptions(For: Filter)
+        //let FinalOptions = GetOptions(For: Filter)
+        print("HueAdjust.Angle=\(Settings.GetDouble(.HueAngle, -1.0))")
+        if let NewBuffer = RunFilter(Filter, With: Buffer!)//, Options: FinalOptions)
+        {
+            let FinalImage = UIImage(Buffer: NewBuffer)
+            //print("Image.size=\(Image.size), FinalImage.size=\(FinalImage!.size)")
+            return FinalImage
+        }
+        if ReturnOriginalOnError
+        {
+            Debug.Print("Returning original image due to processing error: \(#function)")
+            return Image
+        }
+        return nil
     }
     
     /// Run a built-in filter on the passed buffer.
     /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
     ///                     prior to this call, `.Passthrough` is used.
     /// - Parameter With: The buffer to filter.
-    /// - Parameter Options: Options to send to the filter.
+    /// - Parameter Options: Options to send to the filter. If this value is nil, options from the `Settings`
+    ///                      system are used to populate options as needed.
     /// - Returns: Filtered data according to `Filter`. Nil on error.
     public static func RunFilter(_ Filter: BuiltInFilters? = nil,
-                                 With Buffer: CVPixelBuffer,
-                                 Options: [FilterOptions: Any]) -> CVPixelBuffer?
+                                 With Buffer: CVPixelBuffer//,
+                                 /*Options: [FilterOptions: Any]? = nil*/) -> CVPixelBuffer?
     {
         if Filter == nil && LastBuiltInFilterUsed == nil
         {
@@ -196,7 +278,9 @@ class Filters
         if let FilterInTree = Filters.FilterFromTree(FilterToUse)
         {
             FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
-            return FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: Options)
+//            let FinalOptions = Options ?? GetOptions(For: FilterToUse)
+            let FinalOptions = GetOptions(For: FilterToUse)
+            return FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: FinalOptions)
         }
         return nil
     }
