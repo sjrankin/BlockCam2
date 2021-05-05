@@ -146,6 +146,7 @@ class MetalFilterParent
     static func GetPixelBufferFrom(_ Image: CIImage) -> CVPixelBuffer?
     {
         let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue,
                           kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
         var PixelBuffer: CVPixelBuffer? = nil
         let Status = CVPixelBufferCreate(kCFAllocatorDefault,
@@ -174,6 +175,7 @@ class MetalFilterParent
     func GetPixelBufferFrom(_ Image: UIImage) -> CVPixelBuffer?
     {
         let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue,
                           kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
         var PixelBuffer: CVPixelBuffer? = nil
         let Status = CVPixelBufferCreate(kCFAllocatorDefault,
@@ -334,6 +336,103 @@ class MetalFilterParent
     }
     
     // MARK: Common pixel buffer allocation functions.
+    
+    /// Create a buffer pool with the suggested number of entries and passed format.
+    /// - Parameters:
+    ///   - From: Format to use for the buffer.
+    ///   - BufferCountHint: Suggested number of entries in the buffer pool.
+    ///   - BufferSize: If present the buffer size to create for the buffer pool. If absent, the size of
+    ///                 each buffer is determined from the passed `CMFormatDescription`.
+    /// - Returns: Tuple with the following contents: (The buffer pool to use, the color space of
+    ///            the buffer pool, and a description of the format of the buffer pool).
+    func CreateBufferPool(From: CMFormatDescription, BufferCountHint: Int, BufferSize: CGSize? = nil) ->
+    (BufferPool: CVPixelBufferPool?,
+     ColorSpace: CGColorSpace?,
+     FormatDescription: CMFormatDescription?)
+    {
+        let InputSubType = CMFormatDescriptionGetMediaSubType(From)
+        if InputSubType != kCVPixelFormatType_32BGRA
+        {
+            print("Invalid pixel buffer type \(InputSubType)")
+            return (nil, nil, nil)
+        }
+        
+        var Width: Int = 0
+        var Height: Int = 0
+        if let PassedSize = BufferSize
+        {
+            Width = Int(PassedSize.width)
+            Height = Int(PassedSize.height)
+        }
+        else
+        {
+            let InputSize = CMVideoFormatDescriptionGetDimensions(From)
+            Width = Int(InputSize.width)
+            Height = Int(InputSize.height)
+        }
+        var PixelBufferAttrs: [String: Any] =
+            [
+                kCVPixelBufferPixelFormatTypeKey as String: UInt(InputSubType),
+                kCVPixelBufferWidthKey as String: Width,
+                kCVPixelBufferHeightKey as String: Height,
+                kCVPixelBufferIOSurfacePropertiesKey as String: [:]
+            ]
+        
+        var GColorSpace = CGColorSpaceCreateDeviceRGB()
+        if let FromEx = CMFormatDescriptionGetExtensions(From) as Dictionary?
+        {
+            let ColorPrimaries = FromEx[kCVImageBufferColorPrimariesKey]
+            if let ColorPrimaries = ColorPrimaries
+            {
+                var ColorSpaceProps: [String: AnyObject] = [kCVImageBufferColorPrimariesKey as String: ColorPrimaries]
+                if let YCbCrMatrix = FromEx[kCVImageBufferYCbCrMatrixKey]
+                {
+                    ColorSpaceProps[kCVImageBufferYCbCrMatrixKey as String] = YCbCrMatrix
+                }
+                if let XferFunc = FromEx[kCVImageBufferTransferFunctionKey]
+                {
+                    ColorSpaceProps[kCVImageBufferTransferFunctionKey as String] = XferFunc
+                }
+                PixelBufferAttrs[kCVBufferPropagatedAttachmentsKey as String] = ColorSpaceProps
+            }
+            if let CVColorSpace = FromEx[kCVImageBufferCGColorSpaceKey]
+            {
+                GColorSpace = CVColorSpace as! CGColorSpace
+            }
+            else
+            {
+                if (ColorPrimaries as? String) == (kCVImageBufferColorPrimaries_P3_D65 as String)
+                {
+                    GColorSpace = CGColorSpace(name: CGColorSpace.displayP3)!
+                }
+            }
+        }
+        
+        let PoolAttrs = [kCVPixelBufferPoolMinimumBufferCountKey as String: BufferCountHint]
+        var CVPixBufPool: CVPixelBufferPool?
+        CVPixelBufferPoolCreate(kCFAllocatorDefault, PoolAttrs as NSDictionary?,
+                                PixelBufferAttrs as NSDictionary?,
+                                &CVPixBufPool)
+        guard let BufferPool = CVPixBufPool else
+        {
+            print("Allocation failure - could not allocate pixel buffer pool.")
+            return (nil, nil, nil)
+        }
+        
+        PreAllocateBuffers(Pool: BufferPool, AllocationThreshold: BufferCountHint)
+        
+        var PixelBuffer: CVPixelBuffer?
+        var OutFormatDesc: CMFormatDescription?
+        let AuxAttrs = [kCVPixelBufferPoolAllocationThresholdKey as String: BufferCountHint] as NSDictionary
+        CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(kCFAllocatorDefault, BufferPool, AuxAttrs, &PixelBuffer)
+        if let PixelBuffer = PixelBuffer
+        {
+            CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: PixelBuffer, formatDescriptionOut: &OutFormatDesc)
+        }
+        PixelBuffer = nil
+        
+        return(BufferPool, GColorSpace, OutFormatDesc)
+    }
     
     /// Create a buffer pool with the suggested number of entries and passed format.
     /// - Parameters:
