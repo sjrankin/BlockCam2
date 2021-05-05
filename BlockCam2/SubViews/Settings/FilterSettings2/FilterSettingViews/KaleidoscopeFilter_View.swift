@@ -10,10 +10,13 @@ import SwiftUI
 
 struct KaleidoscopeFilter_View: View
 {
+    @State var Updated: Bool = false
     @State var Angle: Double = Double(Settings.GetInt(.KaleidoscopeAngleOfReflection))
     @State var AngleString: String = "\(Settings.GetInt(.KaleidoscopeAngleOfReflection))"
     @State var SegmentCount: Double = Double(Settings.GetInt(.KaleidoscopeSegmentCount))
     @State var SegmentCountString: String = "\(Settings.GetInt(.KaleidoscopeSegmentCount))"
+    @State var Options: [FilterOptions: Any] = [.Count: Double(Settings.GetInt(.KaleidoscopeSegmentCount)),
+                                                .Angle: Settings.GetInt(.KaleidoscopeAngleOfReflection)]
     
     var body: some View
     {
@@ -42,21 +45,21 @@ struct KaleidoscopeFilter_View: View
                                     {
                                         SegmentCountString = "\(Int(SegmentCount))"
                                         Settings.SetInt(.KaleidoscopeSegmentCount, Int(SegmentCount))
+                                        Options[.Count] = Int(SegmentCount)
                                     }
                                 })
-                            //.frame(width: Geometry.size.width * 0.35)
-                        TextField("2", text: $SegmentCountString,
+                        TextField("", text: $SegmentCountString,
                                   onCommit:
                                     {
                                         if let Actual = Int(self.SegmentCountString)
                                         {
                                             Settings.SetInt(.KaleidoscopeSegmentCount, Actual)
                                             SegmentCount = Double(Actual)
+                                            Options[.Count] = Int(SegmentCount)
                                         }
                                     })
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .font(.custom("Avenir-Black", size: 18.0))
-                            //.frame(width: Geometry.size.width * 0.35)
                             .keyboardType(.numbersAndPunctuation)
                     }
                     .padding()
@@ -83,9 +86,9 @@ struct KaleidoscopeFilter_View: View
                                 {
                                     AngleString = "\(Int(Angle))"
                                     Settings.SetInt(.KaleidoscopeAngleOfReflection, Int(Angle))
+                                    Options[.Angle] = Int(Angle)
                                 }
                             })
-                        //.frame(width: Geometry.size.width * 0.38)
                     TextField("0", text: $AngleString,
                               onCommit:
                                 {
@@ -93,17 +96,31 @@ struct KaleidoscopeFilter_View: View
                                     {
                                         Settings.SetInt(.KaleidoscopeAngleOfReflection, Actual)
                                         Angle = Double(Actual)
+                                        Options[.Angle] = Int(Angle)
                                     }
                                 })
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .font(.custom("Avenir-Black", size: 18.0))
-                        //.frame(width: Geometry.size.width * 0.35)
                         .keyboardType(.numbersAndPunctuation)
                 }
-                //.frame(width: Geometry.size.width * 0.38)
                 .padding()
                 }
-
+            Spacer()
+            #if true
+            SampleImage(Filter: .Kaleidoscope, Updated: $Updated.wrappedValue)
+                .frame(width: 300, height: 300, alignment: .center)
+            #else
+            SampleImage(FilterOptions: $Options, Filter: .Kaleidoscope)
+                .frame(width: 300, height: 300, alignment: .center)
+            #endif
         }
+    }
+}
+
+struct KaleidoscopeFilter_Preview: PreviewProvider
+{
+    static var previews: some View
+    {
+        KaleidoscopeFilter_View()
     }
 }
