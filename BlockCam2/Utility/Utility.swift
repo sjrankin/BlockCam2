@@ -1159,5 +1159,106 @@ class Utility
         }
         return "\(HourS):\(MinuteS):\(SecondS)"
     }
+    
+    // MARK: - Sample image handling.
+    
+    public static func GetCurrentSampleImage() -> UIImage
+    {
+        var Index = Settings.GetInt(.SampleImageIndex)
+        if Index < 1
+        {
+           Index = 1
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        let Name = "Sample\(Index)"
+        if let Result = UIImage(named: Name)
+        {
+            return Result
+        }
+        else
+        {
+            return UIImage(named: "Sample1")!
+        }
+    }
+    
+    public static func IncrementSampleImage() -> UIImage
+    {
+        var Index = Settings.GetInt(.SampleImageIndex)
+        if Index < 1
+        {
+            Index = 1
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        Index = Index + 1
+        if Index > 6
+        {
+            Index = 1
+        }
+        Settings.SetInt(.SampleImageIndex, Index)
+        return GetCurrentSampleImage()
+    }
+    
+    public static func IncrementSampleImageName() -> String
+    {
+        var Index = Settings.GetInt(.SampleImageIndex)
+        if Index < 1
+        {
+            Index = 1
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        Index = Index + 1
+        if Index > 6
+        {
+            Index = 1
+        }
+        Settings.SetInt(.SampleImageIndex, Index)
+        return GetSampleImageName()
+    }
+    
+    public static func DecrementSampleImage() -> UIImage
+    {
+        var Index = Settings.GetInt(.SampleImageIndex)
+        if Index < 1
+        {
+            Index = 1
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        Index = Index - 1
+        if Index < 1
+        {
+            Index = 6
+        }
+        Settings.SetInt(.SampleImageIndex, Index)
+        return GetCurrentSampleImage()
+    }
+    
+    public static func DecrementSampleImageName() -> String
+    {
+        var Index = Settings.GetInt(.SampleImageIndex)
+        if Index < 1
+        {
+            Index = 1
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        Index = Index - 1
+        if Index < 1
+        {
+            Index = 6
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        Settings.SetInt(.SampleImageIndex, Index)
+        return GetSampleImageName()
+    }
+    
+    public static func GetSampleImageName() -> String
+    {
+        var Index = Settings.GetInt(.SampleImageIndex)
+        if Index < 1
+        {
+            Index = 1
+            Settings.SetInt(.SampleImageIndex, Index)
+        }
+        return "Sample\(Index)"
+    }
 }
 
