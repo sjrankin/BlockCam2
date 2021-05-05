@@ -12,6 +12,8 @@ struct HueAdjustFilter_View: View
 {
     @State var CurrentAngle: String = "\(Int(Settings.GetDouble(.HueAngle, 0.0)))"
     @State var ActualAngle: Double = Double(Int(Settings.GetDouble(.HueAngle, 0.0)))
+    @State var Options: [FilterOptions: Any] = [.Angle: Settings.GetDouble(.HueAngle, 0.0)]
+    @State var Updated: Bool = false
     
     var body: some View
     {
@@ -45,6 +47,7 @@ struct HueAdjustFilter_View: View
                                             {
                                                 ActualAngle = Double(Int(Actual))
                                                 Settings.SetDouble(.HueAngle, Double(Int(Actual)))
+                                                Options[.Angle] = Actual
                                             }
                                         })
                                 .padding()
@@ -52,30 +55,43 @@ struct HueAdjustFilter_View: View
                                 .font(.custom("Avenir-Black", size: 18.0))
                                 .frame(width: Geometry.size.width * 0.35)
                                 .keyboardType(.numbersAndPunctuation)
-                            
-                            Slider(value: $ActualAngle, in: 0 ... 359,
-                                   onEditingChanged:
-                                    {
-                                        Editing in
-                                        if !Editing
+
+                            Slider(value: Binding(
+                                    get:
                                         {
-                                            CurrentAngle = "\(Int(ActualAngle))"
-                                            Settings.SetDouble(.HueAngle, ActualAngle)
+                                            self.ActualAngle
+                                        },
+                                    set:
+                                        {
+                                            (newValue) in
+                                            self.ActualAngle = newValue
+                                            CurrentAngle = "\(Int(self.ActualAngle))"
+                                            Settings.SetDouble(.HueAngle, Double(Int(self.ActualAngle)))
+                                            Updated.toggle()
                                         }
-                                    })
-                                .frame(width: Geometry.size.width * 0.30)
-                                .onChange(of: "value")
-                                {
-                                    value in
-                                    if let Actual = Int(value)
-                                    {
-                                        CurrentAngle = "\(Int(Actual))"
-                                    }
-                                }
+                            ), in: 0 ... 359)
+                            .frame(width: Geometry.size.width * 0.3)
                         }
                     }
+                    Spacer()
+                    Spacer()
+                    #if true
+                    SampleImage(Filter: .HueAdjust, Updated: $Updated.wrappedValue)
+                        .frame(width: 300, height: 300, alignment: .center)
+                    #else
+                    SampleImage(FilterOptions: $Options, Filter: .HueAdjust)
+                        .frame(width: 300, height: 300, alignment: .center)
+                    #endif
                 }
             }
         }
+    }
+}
+
+struct HueAdjustFilter_Preview: PreviewProvider
+{
+    static var previews: some View
+    {
+        HueAdjustFilter_View()
     }
 }
