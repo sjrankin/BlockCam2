@@ -1162,6 +1162,79 @@ class Utility
     
     // MARK: - Sample image handling.
     
+    /// Current number of sample images.
+    public static var MaxSamples: Int = 7
+    
+    /// Returns a nice sample name for the current sample image.
+    /// - Returns: Nice sample name for the current sample image. If the sample
+    ///            image has a name not understood, a default name is returned.
+    public static func GetCurrentSampleImageName() -> String
+    {
+        switch GetSampleImageName()
+        {
+            case "Sample1":
+                return "Cat"
+                
+            case "Sample2":
+                return "Mom"
+                
+            case "Sample3":
+                return "Yokai"
+                
+            case "Sample4":
+                return "Galaxy"
+                
+            case "Sample5":
+                return "Hokkaido"
+                
+            case "Sample6":
+                return "Apollo 17"
+                
+            case "Sample7":
+                return "Grid"
+                
+            default:
+                return "Sample Image"
+        }
+    }
+    
+    /// Returns a nice sample name for the sample image title passed.
+    /// - Parameter From: The name of the sample image whose nice title is returned.
+    /// - Returns: Nice sample name for the current sample image. If the passed sample
+    ///            name is not understood, a default name is returned.
+    public static func GetCurrentSampleImageName(From Title: String) -> String
+    {
+        switch Title
+        {
+            case "Sample1":
+                return "Cat"
+                
+            case "Sample2":
+                return "Mom"
+                
+            case "Sample3":
+                return "Yokai"
+                
+            case "Sample4":
+                return "Galaxy"
+                
+            case "Sample5":
+                return "Hokkaido"
+                
+            case "Sample6":
+                return "Apollo 17"
+                
+            case "Sample7":
+                return "Grid"
+                
+            default:
+                return "Sample Image"
+        }
+    }
+    
+    /// Returns the current sample image. Current is defined by the value
+    /// `.SampleImageIndex` in the settings system.
+    /// - Returns: Current sample image.
     public static func GetCurrentSampleImage() -> UIImage
     {
         var Index = Settings.GetInt(.SampleImageIndex)
@@ -1181,6 +1254,9 @@ class Utility
         }
     }
     
+    /// Increments the sample image and returns the new image.
+    /// - Returns: Next image in a positive direction. Wraps around to the
+    ///            first image automatically.
     public static func IncrementSampleImage() -> UIImage
     {
         var Index = Settings.GetInt(.SampleImageIndex)
@@ -1190,7 +1266,7 @@ class Utility
             Settings.SetInt(.SampleImageIndex, Index)
         }
         Index = Index + 1
-        if Index > 6
+        if Index > MaxSamples
         {
             Index = 1
         }
@@ -1198,6 +1274,9 @@ class Utility
         return GetCurrentSampleImage()
     }
     
+    /// Increments the sample image name and returns the new name.
+    /// - Returns: Next name in a positive direction. Wraps around to the
+    ///            first name automatically.
     public static func IncrementSampleImageName() -> String
     {
         var Index = Settings.GetInt(.SampleImageIndex)
@@ -1207,7 +1286,7 @@ class Utility
             Settings.SetInt(.SampleImageIndex, Index)
         }
         Index = Index + 1
-        if Index > 6
+        if Index > MaxSamples
         {
             Index = 1
         }
@@ -1215,6 +1294,9 @@ class Utility
         return GetSampleImageName()
     }
     
+    /// Decrements the sample image and returns the new image.
+    /// - Returns: Next image in a negative direction. Wraps around to the
+    ///            last image automatically.
     public static func DecrementSampleImage() -> UIImage
     {
         var Index = Settings.GetInt(.SampleImageIndex)
@@ -1226,12 +1308,15 @@ class Utility
         Index = Index - 1
         if Index < 1
         {
-            Index = 6
+            Index = MaxSamples
         }
         Settings.SetInt(.SampleImageIndex, Index)
         return GetCurrentSampleImage()
     }
     
+    /// Decrements the sample image and returns the new name.
+    /// - Returns: Next name in a negative direction. Wraps around to the
+    ///            last name automatically.
     public static func DecrementSampleImageName() -> String
     {
         var Index = Settings.GetInt(.SampleImageIndex)
@@ -1243,13 +1328,15 @@ class Utility
         Index = Index - 1
         if Index < 1
         {
-            Index = 6
+            Index = MaxSamples
             Settings.SetInt(.SampleImageIndex, Index)
         }
         Settings.SetInt(.SampleImageIndex, Index)
         return GetSampleImageName()
     }
     
+    /// Returns the current sample image name (stored in the asset catalog).
+    /// - Returns: Current sample image name.
     public static func GetSampleImageName() -> String
     {
         var Index = Settings.GetInt(.SampleImageIndex)
@@ -1259,6 +1346,22 @@ class Utility
             Settings.SetInt(.SampleImageIndex, Index)
         }
         return "Sample\(Index)"
+    }
+    
+    /// Resets the sample image to the first in the asset catalog.
+    /// - Returns: First sample image.
+    public static func ResetSampleImage() -> UIImage
+    {
+        Settings.SetInt(.SampleImageIndex, 1)
+        return GetCurrentSampleImage()
+    }
+    
+    /// Resets the sample image name to the first image in the sample image asset catalog.
+    /// - Returns: First sample image name.
+    public static func ResetSampleImageName() -> String
+    {
+        Settings.SetInt(.SampleImageIndex, 1)
+        return GetSampleImageName()
     }
 }
 
