@@ -85,22 +85,9 @@ struct SharingIcon: View
     }
 }
 
-struct CameraIcon: View
-{
-    var body: some View
-    {
-        Image(systemName: "camera")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(.yellow)
-    }
-}
-
 struct FiltersIcon: View
 {
     @Binding var IsHighlighted: Bool
-    @Binding var DoRotate: Bool
     
     var body: some View
     {
@@ -108,10 +95,7 @@ struct FiltersIcon: View
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 32, height: 32, alignment: .center)
-            .foregroundColor(!IsHighlighted ? .black : .yellow)
-            .rotationEffect(.degrees(!DoRotate ? 360.0 : 0.0))
-            .animation(!DoRotate ? Animation.linear(duration: 10.0)
-                        .repeatForever(autoreverses: false) : Animation.default)
+            .foregroundColor(!IsHighlighted ? .white : .yellow)
     }
 }
 
