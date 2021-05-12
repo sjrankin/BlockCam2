@@ -13,7 +13,7 @@ import SwiftUI
     {
         WindowGroup
         {
-            ContentView()
+            ContentView().environmentObject(ChangedSettings())
         }
     }
 }
