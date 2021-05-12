@@ -154,18 +154,6 @@ class Filters
     }
     
     static var BufferPool: CVPixelBufferPool? = nil
-    /*
-    /// Run a built-in filter on the passed buffer.
-    /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
-    ///                     prior to this call, `.Passthrough` is used.
-    /// - Parameter With: The buffer to filter.
-    /// - Returns: Filtered data according to `Filter`. Nil on error.
-    public static func RunFilter(_ Filter: BuiltInFilters? = nil,
-                                 With Buffer: CVPixelBuffer) -> CVPixelBuffer?
-    {
-        return RunFilter(Filter, With: Buffer)//, Options: [:])
-    }
- */
     
     /// Returns a dictionary of options for the passed filter.
     /// - Note: Values in the `Settings` system are used to populate the returned dictionary. If a given
@@ -178,24 +166,108 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .EdgeWork:
+                Options[.Intensity] = Settings.GetDouble(.EdgeWorkThickness,
+                                                         Settings.SettingDefaults[.EdgeWorkThickness] as! Double)
+            
+            case .Sepia:
+                Options[.Intensity] = Settings.GetDouble(.SepiaIntensity,
+                                                         Settings.SettingDefaults[.SepiaIntensity] as! Double)
+            
+            case .TwirlDistortion:
+                Options[.Radius] = Settings.GetDouble(.TwirlRadius,
+                                                      Settings.SettingDefaults[.TwirlRadius] as! Double)
+                Options[.Angle] = Settings.GetDouble(.TwirlAngle,
+                                                      Settings.SettingDefaults[.TwirlAngle] as! Double)
+            
+            case .ExposureAdjust:
+                Options[.ExposureValue] = Settings.GetDouble(.ExposureValue,
+                                                             Settings.SettingDefaults[.ExposureValue] as! Double)
+            
+            case .Edges:
+                Options[.Intensity] = Settings.GetDouble(.EdgesIntensity,
+                                                         Settings.SettingDefaults[.EdgesIntensity] as! Double)
+            
+            case .Droste:
+                Options[.Strands] = Settings.GetDouble(.DrosteStrands,
+                                                       Settings.SettingDefaults[.DrosteStrands] as! Double)
+                Options[.Periodicity] = Settings.GetDouble(.DrostePeriodicity,
+                                                           Settings.SettingDefaults[.DrostePeriodicity] as! Double)
+                Options[.Rotation] = Settings.GetDouble(.DrosteRotation,
+                                                        Settings.SettingDefaults[.DrosteRotation] as! Double)
+                Options[.Zoom] = Settings.GetDouble(.DrosteZoom,
+                                                    Settings.SettingDefaults[.DrosteZoom] as! Double)
+            
+            case .Dither:
+                Options[.DitherIntensity] = Settings.GetDouble(.DitherIntensity,
+                                                         Settings.SettingDefaults[.DitherIntensity] as! Double)
+            
+            case .DotScreen:
+                Options[.Sharpness] = Settings.GetDouble(.DotScreenSharpness,
+                                                         Settings.SettingDefaults[.DotScreenSharpness] as! Double)
+                Options[.Width] = Settings.GetDouble(.DotScreenWidth,
+                                                     Settings.SettingDefaults[.DotScreenWidth] as! Double)
+                Options[.Angle] = Settings.GetDouble(.DotScreenAngle,
+                                                     Settings.SettingDefaults[.DotScreenAngle] as! Double)
+                
+            case .CMYKHalftone:
+                Options[.Sharpness] = Settings.GetDouble(.CMYKHalftoneSharpness,
+                                                     Settings.SettingDefaults[.CMYKHalftoneSharpness] as! Double)
+                Options[.Width] = Settings.GetDouble(.CMYKHalftoneWidth,
+                                                    Settings.SettingDefaults[.CMYKHalftoneWidth] as! Double)
+                Options[.Angle] = Settings.GetDouble(.CMYKHalftoneAngle,
+                                                     Settings.SettingDefaults[.CMYKHalftoneAngle] as! Double)
+            
+            case .CircleSplashDistortion:
+                Options[.Radius] = Settings.GetDouble(.CircleSplashDistortionRadius,
+                                                      Settings.SettingDefaults[.CircleSplashDistortionRadius] as! Double)
+            
             case .ColorMonochrome:
                 Options[.Color] = Settings.GetColor(.ColorMonochromeColor)
                 
             case .ColorMap:
-                Options[.GradientDefinition] = Settings.GetString(.ColorMapGradient,
-                                                                  Settings.SettingDefaults[.ColorMapGradient] as! String)
+                Options[.Color0] = Settings.GetColor(.ColorMapColor1)
+                Options[.Color1] = Settings.GetColor(.ColorMapColor2)
+
             case .HueAdjust:
                 Options[.Angle] = Settings.GetDouble(.HueAngle, 0.0)
-                //print("Angle=\(Settings.GetDouble(.HueAngle, 0.0))")
                 
             case .Kaleidoscope:
                 Options[.Count] = Settings.GetInt(.KaleidoscopeSegmentCount)
                 Options[.Angle] = Settings.GetInt(.KaleidoscopeAngleOfReflection)
+                Options[.BackgroundFill] = Settings.GetBool(.KaleidoscopeFillBackground) 
 
             case .TriangleKaleidoscope:
-                Options[.Size] = Settings.GetInt(.Kaleidoscope3Size)
-                Options[.Angle] = Settings.GetInt(.Kaleidoscope3Rotation)
-                Options[.Decay] = Settings.GetDouble(.Kaleidoscope3Decay, 0.0)
+                Options[.Size] = Settings.GetDouble(.Kaleidoscope3Size,
+                                                    Settings.SettingDefaults[.Kaleidoscope3Size] as! Double)
+                Options[.Angle] = Settings.GetDouble(.Kaleidoscope3Rotation,
+                                                     Settings.SettingDefaults[.Kaleidoscope3Rotation] as! Double)
+                Options[.Decay] = Settings.GetDouble(.Kaleidoscope3Decay,
+                                                     Settings.SettingDefaults[.Kaleidoscope3Decay] as! Double)
+                
+            case .BumpDistortion:
+                Options[.Radius] = Settings.GetDouble(.BumpDistortionRadius,
+                                                      Settings.SettingDefaults[.BumpDistortionRadius] as! Double)
+                Options[.Scale] = Settings.GetDouble(.BumpDistortionScale,
+                                                      Settings.SettingDefaults[.BumpDistortionScale] as! Double)
+                
+            case .Vibrance:
+                Options[.Amount] = Settings.GetDouble(.VibranceAmount,
+                                                      Settings.SettingDefaults[.VibranceAmount] as! Double)
+                
+            case .ColorControls:
+                Options[.Brightness] = Settings.GetDouble(.ColorControlsBrightness,
+                                                          Settings.SettingDefaults[.ColorControlsBrightness] as! Double)
+                Options[.Contrast] = Settings.GetDouble(.ColorControlsBrightness,
+                                                          Settings.SettingDefaults[.ColorControlsContrast] as! Double)
+                Options[.Saturation] = Settings.GetDouble(.ColorControlsBrightness,
+                                                          Settings.SettingDefaults[.ColorControlsSaturation] as! Double)
+                
+            case .UnsharpMask:
+                Options[.Intensity] = Settings.GetDouble(.UnsharpIntensity,
+                                                         Settings.SettingDefaults[.UnsharpIntensity] as! Double)
+                Options[.Radius] = Settings.GetDouble(.UnsharpRadius,
+                                                         Settings.SettingDefaults[.UnsharpRadius] as! Double)
                 
             default:
                 break
@@ -203,19 +275,25 @@ class Filters
         return Options
     }
     
+    public static func BufferToUIImage(_ Buffer: CVPixelBuffer) -> UIImage?
+    {
+        let CImg = CIImage(cvImageBuffer: Buffer)
+        let Img = UIImage(ciImage: CImg)
+        return Img
+    }
+    
     /// Run a built-in filter on the passed image.
     /// - Parameter On: The image on which to run the filter.
-    /// - Parameter Filter: The filter to use on the image.
-    /// - Parameter Options: Options to apply to the filter. If Options is nil, this function will populate
-    ///                      options from Settings.
+    /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
+    ///                     filter will be used.
     /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
     ///                                    nil is returned on error.
     /// - Returns: New and filtered `UIImage` on success, nil on error.
     public static func RunFilter(On Image: UIImage,
-                                 Filter: BuiltInFilters,
-                                 //Options: [FilterOptions: Any]? = nil,
+                                 Filter: BuiltInFilters? = nil,
                                  ReturnOriginalOnError: Bool = true) -> UIImage?
     {
+
         let CImg = CIImage(image: Image)
         var Buffer: CVPixelBuffer?
         let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
@@ -229,13 +307,10 @@ class Filters
                             &Buffer)
         let Context = CIContext()
         Context.render(CImg!, to: Buffer!)
-        //let FinalOptions = Options ?? GetOptions(For: Filter)
-        //let FinalOptions = GetOptions(For: Filter)
-        print("HueAdjust.Angle=\(Settings.GetDouble(.HueAngle, -1.0))")
-        if let NewBuffer = RunFilter(Filter, With: Buffer!)//, Options: FinalOptions)
+
+        if let NewBuffer = RunFilter(Filter, With: Buffer!)
         {
             let FinalImage = UIImage(Buffer: NewBuffer)
-            //print("Image.size=\(Image.size), FinalImage.size=\(FinalImage!.size)")
             return FinalImage
         }
         if ReturnOriginalOnError
@@ -245,17 +320,14 @@ class Filters
         }
         return nil
     }
-    
+
     /// Run a built-in filter on the passed buffer.
     /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
     ///                     prior to this call, `.Passthrough` is used.
     /// - Parameter With: The buffer to filter.
-    /// - Parameter Options: Options to send to the filter. If this value is nil, options from the `Settings`
-    ///                      system are used to populate options as needed.
     /// - Returns: Filtered data according to `Filter`. Nil on error.
     public static func RunFilter(_ Filter: BuiltInFilters? = nil,
-                                 With Buffer: CVPixelBuffer//,
-                                 /*Options: [FilterOptions: Any]? = nil*/) -> CVPixelBuffer?
+                                 With Buffer: CVPixelBuffer) -> CVPixelBuffer?
     {
         if Filter == nil && LastBuiltInFilterUsed == nil
         {
@@ -277,10 +349,27 @@ class Filters
         }
         if let FilterInTree = Filters.FilterFromTree(FilterToUse)
         {
-            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
-//            let FinalOptions = Options ?? GetOptions(For: FilterToUse)
+            #if targetEnvironment(simulator)
+            guard let Format = FilterHelper.GetFormatDescription(From: Buffer) else
+            {
+                fatalError("Error getting description of buffer in \(#function).")
+            }
+            guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                      BufferCountHint: 3,
+                                                                      BufferSize: CGSize(width: Int(Format.dimensions.width),
+                                                                                         height: Int(Format.dimensions.height))) else
+            {
+                fatalError("Error creating local buffer pool in \(#function).")
+            }
+            FilterInTree.Initialize(With: Format, BufferCountHint: 3)
             let FinalOptions = GetOptions(For: FilterToUse)
-            return FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: FinalOptions)
+            let FinalBuffer = FilterInTree.RunFilter([Buffer], LocalBufferPool, CGColorSpaceCreateDeviceRGB(), Options: FinalOptions)
+            #else
+            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
+            let FinalOptions = GetOptions(For: FilterToUse)
+            let FinalBuffer = FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: FinalOptions)
+            #endif
+            return FinalBuffer
         }
         return nil
     }
@@ -311,7 +400,8 @@ class Filters
             .Grayscale: 0xbcbcbc,
             .Reset: 0xffffff,
             .Edges: 0xfae6fa,
-            .MultiFrame: 0xea71c6
+            .MultiFrame: 0xea71c6,
+            .Test: 0xffe0d0,
         ]
 }
 
@@ -423,6 +513,7 @@ enum BuiltInFilters: String, CaseIterable
     case ColorControls = "Control"
     case ConditionalTransparency = "Conditional Transparency"
     case ImageDelta = "Image Delta"
+    case HSB = "HSB"
     
     //Internal filters
     case Crop = "Crop"
