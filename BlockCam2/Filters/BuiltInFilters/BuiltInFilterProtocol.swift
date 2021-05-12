@@ -45,4 +45,11 @@ protocol BuiltInFilterProtocol
                    _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace) -> CVPixelBuffer
     #endif
+    
+    #if false
+    func RunFilter(_ Buffer: [CVPixelBuffer])
+    #endif
+    
+    /// Resets the filter's parameters in user `Settings`.
+    static func ResetFilter()
 }
