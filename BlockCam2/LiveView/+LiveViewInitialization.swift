@@ -151,6 +151,9 @@ extension LiveViewController
     /// Initialize image capturing.
     func InitializeCapture()
     {
+        #if targetEnvironment(simulator)
+        return
+        #else
         SessionQueue.async
         {
             if self.ConfiguredOK
@@ -185,6 +188,7 @@ extension LiveViewController
                 self.present(Alert, animated: true, completion: nil)
             }
         }
+        #endif
     }
     
     /// Ask for the necessary permissions from the user.
