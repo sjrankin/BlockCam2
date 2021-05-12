@@ -22,6 +22,7 @@ extension Settings
             .ShowAudioWaveform: Bool.self,
             .SaveOriginalImage: Bool.self,
             .SampleImageIndex: Int.self,
+            .InputSourceIndex: Int.self,
             
             // Filter settings.
             .CurrentFilter: String.self,
@@ -33,10 +34,11 @@ extension Settings
             // Kaleidoscope
             .KaleidoscopeSegmentCount: Int.self,
             .KaleidoscopeAngleOfReflection: Int.self,
+            .KaleidoscopeFillBackground: Bool.self,
             
             // Triangular Kaleidoscope
-            .Kaleidoscope3Rotation: Int.self,
-            .Kaleidoscope3Size: Int.self,
+            .Kaleidoscope3Rotation: Double.self,
+            .Kaleidoscope3Size: Double.self,
             .Kaleidoscope3Decay: Double.self,
             
             // Mirroring
@@ -48,8 +50,72 @@ extension Settings
             
             // Color Map
             .ColorMapGradient: String.self,
+            .ColorMapColor1: UIColor.self,
+            .ColorMapColor2: UIColor.self,
             
             // Color monochrome map
             .ColorMonochromeColor: UIColor.self,
+            
+            // Bump distortion
+            .BumpDistortionRadius: Double.self,
+            .BumpDistortionScale: Double.self,
+            
+            // Color controls
+            .ColorControlsBrightness: Double.self,
+            .ColorControlsContrast: Double.self,
+            .ColorControlsSaturation: Double.self,
+            
+            // HSB settings
+            .HSBHueValue: Double.self,
+            .HSBSaturationValue: Double.self,
+            .HSBBrightnessValue: Double.self,
+            .HSBChangeBrightness: Bool.self,
+            .HSBChangeSaturation: Bool.self,
+            .HSBChangeHue: Bool.self,
+            
+            // Circle splash distortion
+            .CircleSplashDistortionRadius: Double.self,
+            
+            // Vibrance settings
+            .VibranceAmount: Double.self,
+            
+            // CMYK halftone settings
+            .CMYKHalftoneWidth: Double.self,
+            .CMYKHalftoneSharpness: Double.self,
+            .CMYKHalftoneAngle: Double.self,
+            
+            // Dither settings
+            .DitherIntensity: Double.self,
+            
+            // Dot screen settings
+            .DotScreenWidth: Double.self,
+            .DotScreenSharpness: Double.self,
+            .DotScreenAngle: Double.self,
+            
+            // Droste settings
+            .DrosteZoom: Double.self,
+            .DrosteRotation: Double.self,
+            .DrosteStrands: Double.self,
+            .DrostePeriodicity: Double.self,
+            
+            // Edges settings
+            .EdgesIntensity: Double.self,
+            
+            // Exposure value
+            .ExposureValue: Double.self,
+            
+            // Unsharp mask
+            .UnsharpIntensity: Double.self,
+            .UnsharpRadius: Double.self,
+            
+            // Twirl distortion
+            .TwirlRadius: Double.self,
+            .TwirlAngle: Double.self,
+            
+            // Sepia filter
+            .SepiaIntensity: Double.self,
+            
+            // EdgeWork filter
+            .EdgeWorkThickness: Double.self,
         ]
 }
