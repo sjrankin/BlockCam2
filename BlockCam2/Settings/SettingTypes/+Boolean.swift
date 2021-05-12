@@ -57,7 +57,6 @@ extension Settings
         {
             Debug.FatalError("\(Setting) is not a boolean")
         }
-        print("Setting \(Setting.rawValue) to \(Value)")
         let OldValue = UserDefaults.standard.bool(forKey: Setting.rawValue)
         let NewValue = Value
         UserDefaults.standard.set(NewValue, forKey: Setting.rawValue)
