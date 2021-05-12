@@ -239,7 +239,7 @@ class GradientManager
     /// - Parameter Raw: The list of color gradient stops in the format shown in the description.
     /// - Returns: List of tuples. Each tuple has the stop's color and location. The returned list is in the
     ///            same order as the raw list.
-    public static func ParseGradient(_ Raw: String) -> [(UIColor, CGFloat)]
+    public static func ParseGradient(_ Raw: String) -> [(GradientColor: UIColor, GradientStop: CGFloat)]
     {
         var Results = [(UIColor, CGFloat)]()
         let Parts = Raw.split(separator: ",")
@@ -592,6 +592,14 @@ class GradientManager
         let Image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return Image!
+    }
+    
+    public static func CreateGradientImage(Stops: [(UIColor, CGFloat)], WithFrame: CGRect, IsVertical: Bool = true,
+                                           ReverseColors: Bool = false) -> UIImage
+    {
+        let Gradient = AssembleGradient(Stops)
+        return CreateGradientImage(From: Gradient, WithFrame: WithFrame,
+                                   IsVertical: IsVertical, ReverseColors: ReverseColors)
     }
     
     /// Creates and returns a UIImage with the gradient defined by the passed enum value.
