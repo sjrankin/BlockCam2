@@ -19,6 +19,33 @@ class MetalFilterParent
 {
     // MARK: Common convenience functions.
     
+    var BufferFormat: CMFormatDescription? = nil
+    var BasePool: CVPixelBufferPool? = nil
+    var PreviousSize: CGSize? = nil
+    
+    func CreateBufferPool(Source: CIImage, From PixelBuffer: CVPixelBuffer, Hint: Int = 3)
+    {
+        if let Previous = PreviousSize
+        {
+            if Source.extent.width == Previous.width && Source.extent.height == Previous.height
+            {
+                return
+            }
+        }
+        PreviousSize = CGSize(width: Source.extent.width, height: Source.extent.height)
+        guard let Format = FilterHelper.GetFormatDescription(From: PixelBuffer) else
+        {
+            Debug.FatalError("Error getting format description.")
+        }
+        BasePool = FilterHelper.CreateBufferPool(From: Format,
+                                                 BufferCountHint: Hint,
+                                                 BufferSize: PreviousSize!)
+        guard BasePool != nil else
+        {
+            Debug.FatalError("Error create base buffer pool.")
+        }
+    }
+    
     /// Merge two images using the SourceAtop compositing filter.
     /// - Parameters:
     ///   - Top: The top image (eg, closest to the viewer).
