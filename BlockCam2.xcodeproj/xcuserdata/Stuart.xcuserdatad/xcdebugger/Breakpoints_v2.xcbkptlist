@@ -7,32 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "69918BA8-F07A-43A3-99D1-21CA5B9EF9D2"
+            uuid = "BAFCED3D-36AB-4960-8AD2-A5874A860020"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BlockCam2/Filters/BuiltInFilters/Filters/Test/QuadrantTest.swift"
+            filePath = "BlockCam2/Filters/Filters.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "RunFilter(_:_:_:Options:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1A93BF6A-827B-44FE-9620-8B9F32FCECA0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BlockCam2/Filters/BuiltInFilters/Filters/ABC/Crop2.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "RunFilter(_:_:_:Options:)"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
+            landmarkName = "RunFilter(_:With:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
