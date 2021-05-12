@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Thermal: BuiltInFilterProtocol
+class Thermal: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .ThermalEffect
     
@@ -33,24 +33,14 @@ class Thermal: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in ThermalEffect.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in ThermalEffect.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         if let Adjust = CIFilter(name: "CIThermal")
         {
             Adjust.setValue(SourceImage, forKey: kCIInputImageKey)
             if let Adjusted = Adjust.outputImage
             {
                 var PixBuf: CVPixelBuffer? = nil
-                CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+                CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
                 guard let OutPixBuf = PixBuf else
                 {
                     fatalError("Allocation failure in \(#function)")
@@ -68,5 +58,10 @@ class Thermal: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

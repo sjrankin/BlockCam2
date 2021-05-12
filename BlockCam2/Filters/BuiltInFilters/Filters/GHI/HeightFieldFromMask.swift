@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class HeightField: BuiltInFilterProtocol
+class HeightField: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .HeightField 
     
@@ -33,24 +33,14 @@ class HeightField: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in HeightFieldFromMask.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in HeightFieldFromMask.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.heightFieldFromMask()
         Adjust.inputImage = SourceImage
-        Adjust.radius = Options[.Radius] as? Float ?? 25.0
+        Adjust.radius = Float(Options[.Radius] as? Double ?? 25.0)
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -63,5 +53,10 @@ class HeightField: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

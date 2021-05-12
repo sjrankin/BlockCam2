@@ -86,14 +86,14 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         defer{objc_sync_exit(AccessLock)}
         if !Initialized
         {
-            fatalError("Threshold not initialized at Render(CVPixelBuffer) call.")
+            Debug.FatalError("Threshold not initialized.")
         }
-        
+        /*
         guard LocalBufferPool != nil else
         {
             return PixelBuffer.first!
         }
-
+*/
         let TValue = Options[.Threshold] as? Double ?? 0.5
         let TInput = Options[.ThresholdInput] as? Int ?? 0
         let ApplyIfBig = Options[.ApplyIfHigher] as? Bool ?? false
@@ -109,18 +109,25 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<ThresholdParameters>.stride)
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer.first!), From: PixelBuffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for Threshold.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
-            print("Allocation failure for new pixel buffer pool in type(of: self).")
-            return PixelBuffer.first!
+            Debug.FatalError("Allocation failure for new pixel buffer pool in Threshold.")
         }
+        #endif
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
-            print("Error creating textures in type(of: self).")
-            return PixelBuffer.first!
+            Debug.FatalError("Error creating textures in Threshold.")
         }
         
         guard let CommandQ = CommandQueue,
@@ -150,5 +157,10 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.waitUntilCompleted()
 
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

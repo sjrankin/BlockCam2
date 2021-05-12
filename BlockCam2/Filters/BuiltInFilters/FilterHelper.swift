@@ -9,9 +9,23 @@ import Foundation
 import UIKit
 import CoreImage
 import CoreMedia
+import CoreImage.CIFilterBuiltins
 
 class FilterHelper
 {
+    /// Blit the top image onto the bottom unconditionally.
+    /// - Parameter Top: The top image (closest to the viewer).
+    /// - Parameter Bottom: The bottom image (the background image).
+    /// - Returns: Blitted image on success, nil on error.
+    public static func Blit(_ Top: CIImage, _ Bottom: CIImage) -> CIImage?
+    {
+        let BlitFilter = CIFilter.sourceAtopCompositing()
+        BlitFilter.backgroundImage = Bottom
+        BlitFilter.inputImage = Top
+        let Blitted = BlitFilter.outputImage
+        return Blitted
+    }
+    
     /// Merge two images using the SourceAtop compositing filter.
     /// - Parameters:
     ///   - Top: The top image (eg, closest to the viewer).

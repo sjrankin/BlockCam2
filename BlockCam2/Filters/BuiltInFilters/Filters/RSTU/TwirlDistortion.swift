@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class TwirlDistortion: BuiltInFilterProtocol
+class TwirlDistortion: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .TwirlDistortion
     
@@ -33,26 +33,17 @@ class TwirlDistortion: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in TwirlDistortion.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in TwirlDistortion.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.twirlDistortion()
-        Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
-        Adjust.radius = Options[.Radius] as? Float ?? Float((SourceImage.extent.width / 2.0) * 0.85)
-        Adjust.angle = Options[.Angle] as? Float ?? Float(CGFloat.pi * 2)
+        Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0,
+                                                                y: SourceImage.extent.height / 2.0)
+        Adjust.radius = Float(Options[.Radius] as? Double ?? Double((SourceImage.extent.width / 2.0) * 0.85))
+        Adjust.angle = Float(Options[.Angle] as? Double ?? Double(Double.pi * 2))
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -65,5 +56,14 @@ class TwirlDistortion: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetDouble(.TwirlRadius,
+                           Settings.SettingDefaults[.TwirlRadius] as! Double)
+        Settings.SetDouble(.TwirlAngle,
+                           Settings.SettingDefaults[.TwirlAngle] as! Double)
     }
 }

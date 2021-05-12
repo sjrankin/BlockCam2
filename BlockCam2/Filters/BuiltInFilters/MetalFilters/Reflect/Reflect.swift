@@ -92,11 +92,20 @@ class Reflect: MetalFilterParent, BuiltInFilterProtocol
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for Reflect.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard var OutputBuffer = NewPixelBuffer else
         {
             fatalError("Error creating textures for Reflect.")
         }
+        #endif
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm) else
         {
@@ -114,7 +123,7 @@ class Reflect: MetalFilterParent, BuiltInFilterProtocol
             fatalError("Error creating Metal command queue.")
         }
         
-        CommandEncoder.label = "Reflect Kernel"
+        CommandEncoder.label = FilterName
         CommandEncoder.setComputePipelineState(ComputePipelineState!)
         CommandEncoder.setTexture(InputTexture, index: 0)
         CommandEncoder.setTexture(OutputTexture, index: 1)
@@ -131,5 +140,10 @@ class Reflect: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.waitUntilCompleted()
         
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

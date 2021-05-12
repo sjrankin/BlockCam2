@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class BumpDistortion: BuiltInFilterProtocol
+class BumpDistortion: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .BumpDistortion
     
@@ -33,26 +33,16 @@ class BumpDistortion: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in BumpDistortion.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in BumpDistortion.")
-        }
+        CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.bumpDistortion()
-        Adjust.radius = Options[.Radius] as? Float ?? 350.0
-        Adjust.scale = Options[.Scale] as? Float ?? 0.65
+        Adjust.radius = Float(Options[.Radius] as? Double ?? 350.0)
+        Adjust.scale = Float(Options[.Scale] as? Double ?? 0.65)
         Adjust.center = CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -65,5 +55,14 @@ class BumpDistortion: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetDouble(.BumpDistortionScale,
+                           Settings.SettingDefaults[.BumpDistortionScale] as! Double)
+        Settings.SetDouble(.BumpDistortionRadius,
+                           Settings.SettingDefaults[.BumpDistortionRadius] as! Double)
     }
 }

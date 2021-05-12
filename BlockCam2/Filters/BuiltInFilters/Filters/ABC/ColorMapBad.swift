@@ -66,4 +66,9 @@ class ColorMapBad: BuiltInFilterProtocol
             return Buffer.first!
         }
     }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+    }
 }

@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Passthrough: BuiltInFilterProtocol
+class Passthrough: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .Passthrough
     
@@ -33,5 +33,10 @@ class Passthrough: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         return Buffer.first!
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

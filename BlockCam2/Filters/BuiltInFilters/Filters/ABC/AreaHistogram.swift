@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class AreaHistogram: BuiltInFilterProtocol
+class AreaHistogram: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .AreaHistogram
     
@@ -33,6 +33,29 @@ class AreaHistogram: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        #if true
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
+        let Adjust = CIFilter.areaHistogram()
+        Adjust.extent = SourceImage.extent
+        Adjust.count = Options[.Count] as? Int ?? 256
+        Adjust.scale = Options[.Scale] as? Float ?? 1.0
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                Debug.FatalError("Allocation failure in AreaHistogram.RunFilter")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer.first!
+        }
+        #else
         guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
         {
             fatalError("Error getting description of buffer in AreaHistogram.")
@@ -64,5 +87,12 @@ class AreaHistogram: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+        #endif
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        
     }
 }

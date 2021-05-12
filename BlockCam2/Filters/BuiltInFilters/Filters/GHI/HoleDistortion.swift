@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class HoleDistortion: BuiltInFilterProtocol
+class HoleDistortion: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .HoleDistortion
     
@@ -33,25 +33,16 @@ class HoleDistortion: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in HoleDistortion.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in HoleDistortion.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.holeDistortion()
-        Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
-        Adjust.radius = Options[.Radius] as? Float ?? 300.0
+        Adjust.center = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0,
+                                                                y: SourceImage.extent.height / 2.0)
+        Adjust.radius = Float(Options[.Radius] as? Double ?? 300.0)
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -64,5 +55,10 @@ class HoleDistortion: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

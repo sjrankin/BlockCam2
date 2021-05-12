@@ -101,12 +101,34 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
                                                   options: [])
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<ColorMapParameters>.stride)
         
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
         var NewPixelBuffer: CVPixelBuffer? = nil
-        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard var OutputBuffer = NewPixelBuffer else
+        {
+            fatalError("Error creation textures for ColorMap.")
+        }
+        #else
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
+        {
+            fatalError("Error getting description of buffer in ColorMap.")
+        }
+        let ImageSize = CGSize(width: Int(Format.dimensions.width), height: Int(Format.dimensions.height))
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: ImageSize) else
+        {
+            fatalError("Error creating local buffer pool in ColorMap.")
+        }
+        var NewPixelBuffer: CVPixelBuffer? = nil
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &NewPixelBuffer)
         guard var OutputBuffer = NewPixelBuffer else
         {
             fatalError("Error creating textures for ColorMap.")
         }
+        #endif
+
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
@@ -120,18 +142,12 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
             fatalError("Error creating Metal command queue.")
         }
         
-        #if true
-        guard let GradDef = Options[.GradientDefinition] as? String ?? Settings.SettingDefaults[.ColorMapGradient] as? String else
-        {
-            fatalError("Error getting color map gradient definition.")
-        }
-        let ActualGradient = GradientManager.ResolveGradient(GradDef)
-        #else
-        let First = Options[.Color0] as? UIColor ?? UIColor.red
-        let Second = Options[.Color1] as? UIColor ?? UIColor.blue
-        let GradientDescription = GradientManager.AssembleGradient([(First, 0.0),(Second, 1.0)])
-        let ActualGradient = GradientManager.ResolveGradient(GradientDescription)
-        #endif
+        var Grdnt: String = ""
+        Grdnt = GradientManager.AddGradientStop(Grdnt, Color: Options[.Color0] as? UIColor ?? UIColor.white,
+                                                Location: 0.0)
+        Grdnt = GradientManager.AddGradientStop(Grdnt, Color: Options[.Color1] as? UIColor ?? UIColor.black,
+                                                Location: 1.0)
+        let ActualGradient = GradientManager.ResolveGradient(Grdnt)
         var GradientData = [simd_float4](repeating: simd_float4(0.0, 0.0, 0.0, 0.0), count: 256)
         for Index in 0 ... 255
         {
@@ -175,5 +191,16 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
         }
         
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetColor(.ColorMapColor1,
+                          Settings.SettingDefaults[.ColorMapColor1] as! UIColor)
+        Settings.SetColor(.ColorMapColor2,
+                          Settings.SettingDefaults[.ColorMapColor2] as! UIColor)
+        Settings.SetString(.ColorMapGradient,
+                           Settings.SettingDefaults[.ColorMapGradient] as! String)
     }
 }

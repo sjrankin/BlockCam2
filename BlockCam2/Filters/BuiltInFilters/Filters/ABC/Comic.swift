@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Comic: BuiltInFilterProtocol
+class Comic: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .Comic
     
@@ -33,6 +33,9 @@ class Comic: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        #if true
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
+        #else
         guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
         {
             fatalError("Error getting description of buffer in Comic.")
@@ -44,12 +47,14 @@ class Comic: BuiltInFilterProtocol
         {
             fatalError("Error creating local buffer pool in Comic.")
         }
+        #endif
         let Adjust = CIFilter.comicEffect()
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
+//            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -62,5 +67,10 @@ class Comic: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

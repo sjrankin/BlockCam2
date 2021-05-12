@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class SaliencyMap: BuiltInFilterProtocol
+class SaliencyMap: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .SaliencyMap
     
@@ -55,5 +55,10 @@ class SaliencyMap: BuiltInFilterProtocol
             return Buffer.first!
         }
         #endif
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

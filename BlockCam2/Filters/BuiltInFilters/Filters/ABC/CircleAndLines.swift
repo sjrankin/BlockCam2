@@ -38,4 +38,11 @@ class CircleAndLines: BuiltInFilterProtocol
         let LineBuffer = Lines.RunFilter([CircleBuffer], BufferPool, ColorSpace, Options: [:])
         return LineBuffer
     }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetDouble(.CircleSplashDistortionRadius,
+                           Settings.SettingDefaults[.CircleSplashDistortionRadius] as! Double)
+    }
 }

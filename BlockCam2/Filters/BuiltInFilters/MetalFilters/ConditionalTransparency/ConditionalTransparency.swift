@@ -103,13 +103,22 @@ class ConditionalTransparency: MetalFilterParent, BuiltInFilterProtocol
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ConditionalTransparencyParameters>.stride,
                                                   options: [])
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<ConditionalTransparencyParameters>.stride)
-        
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvImageBuffer: Buffer.first!), From: Buffer.first!)
+        var NewPixelBuffer: CVPixelBuffer? = nil
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard var OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating textures for ConditionalTransparency.")
+        }
+        #else
         var NewPixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard var OutputBuffer = NewPixelBuffer else
         {
             fatalError("Error creating textures for ConditionalTransparency.")
         }
+        #endif
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
@@ -155,5 +164,10 @@ class ConditionalTransparency: MetalFilterParent, BuiltInFilterProtocol
         }
         
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

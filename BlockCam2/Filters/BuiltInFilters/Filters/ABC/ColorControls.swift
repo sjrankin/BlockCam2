@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class ColorControls: BuiltInFilterProtocol
+class ColorControls: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .ColorControls
     
@@ -33,26 +33,16 @@ class ColorControls: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in ColorControls.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in ColorControls.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.colorControls()
         Adjust.inputImage = SourceImage
-        Adjust.brightness = Options[.Brightness] as? Float ?? 0.0
-        Adjust.contrast = Options[.Contrast] as? Float ?? 0.0
-        Adjust.saturation = Options[.Saturation] as? Float ?? 0.5
+        Adjust.brightness = Float(Options[.Brightness] as? Double ?? 0.0)
+        Adjust.contrast = Float(Options[.Contrast] as? Double ?? 0.0)
+        Adjust.saturation = Float(Options[.Saturation] as? Double ?? 0.5)
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -65,5 +55,16 @@ class ColorControls: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetDouble(.ColorControlsBrightness,
+                           Settings.SettingDefaults[.ColorControlsBrightness] as! Double)
+        Settings.SetDouble(.ColorControlsContrast,
+                           Settings.SettingDefaults[.ColorControlsContrast] as! Double)
+        Settings.SetDouble(.ColorControlsSaturation,
+                           Settings.SettingDefaults[.ColorControlsSaturation] as! Double)
     }
 }

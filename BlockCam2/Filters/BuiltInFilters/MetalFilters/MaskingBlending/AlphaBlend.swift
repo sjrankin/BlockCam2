@@ -109,12 +109,21 @@ class AlphaBlend: MetalFilterParent, BuiltInFilterProtocol
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer), From: PixelBuffer)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, BufferPool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
             print("Allocation failure for new pixel buffer pool in AlphaBlend.")
             return nil
         }
+        #endif
         
         guard let BottomTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm),
               let TopTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: And, TextureFormat: .bgra8Unorm),
@@ -163,6 +172,11 @@ class AlphaBlend: MetalFilterParent, BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         return Buffer.first!
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }
 

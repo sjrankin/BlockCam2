@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class GrayscaleInvert: BuiltInFilterProtocol
+class GrayscaleInvert: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .GrayscaleInvert
     
@@ -71,19 +71,9 @@ class GrayscaleInvert: BuiltInFilterProtocol
             return Buffer.first!
         }
         let Initial = CIImage(cvPixelBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in HueAdjust.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: Initial.extent.width,
-                                                                                     height: Initial.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in HueAdjust.")
-        }
+        super.CreateBufferPool(Source: Initial, From: Buffer.first!)
         
-        let GrayBuffer = GrayFilter.RunFilter(Buffer, LocalBufferPool, ColorSpace, Options: [:])
+        let GrayBuffer = GrayFilter.RunFilter(Buffer, super.BasePool!, ColorSpace, Options: [:])
         let SourceImage = CIImage(cvImageBuffer: GrayBuffer)
         
         let Adjust = CIFilter.colorInvert()
@@ -91,7 +81,7 @@ class GrayscaleInvert: BuiltInFilterProtocol
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -104,5 +94,10 @@ class GrayscaleInvert: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class TriangleKaleidoscope: BuiltInFilterProtocol
+class TriangleKaleidoscope: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .TriangleKaleidoscope
     
@@ -33,27 +33,18 @@ class TriangleKaleidoscope: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in TriangleKaleidoscope.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in TriangleKaleidoscope.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.triangleKaleidoscope()
-        Adjust.decay = Options[.Decay] as? Float ?? 0.0
+        Adjust.decay = Float(Options[.Decay] as? Double ?? 0.0)
         Adjust.rotation = Float(Options[.Rotation] as? Int ?? 0)
         Adjust.size = Float(Options[.Size] as? Int ?? 300)
-        Adjust.point = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0, y: SourceImage.extent.height / 2.0)
+        Adjust.point = Options[.Center] as? CGPoint ?? CGPoint(x: SourceImage.extent.width / 2.0,
+                                                               y: SourceImage.extent.height / 2.0)
         Adjust.inputImage = SourceImage
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -66,5 +57,16 @@ class TriangleKaleidoscope: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetDouble(.Kaleidoscope3Rotation,
+                        Settings.SettingDefaults[.Kaleidoscope3Rotation] as! Double)
+        Settings.SetDouble(.Kaleidoscope3Size,
+                        Settings.SettingDefaults[.Kaleidoscope3Size] as! Double)
+        Settings.SetDouble(.Kaleidoscope3Decay,
+                           Settings.SettingDefaults[.Kaleidoscope3Decay] as! Double)
     }
 }

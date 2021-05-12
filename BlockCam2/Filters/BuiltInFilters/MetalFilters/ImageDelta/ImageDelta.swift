@@ -102,8 +102,13 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<ColorMapParameters>.stride)
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
-        guard var OutputBuffer = NewPixelBuffer else
+        #endif
+        guard let OutputBuffer = NewPixelBuffer else
         {
             fatalError("Error creating textures for ImageDelta.")
         }
@@ -144,5 +149,10 @@ class ImageDelta: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.waitUntilCompleted()
         
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

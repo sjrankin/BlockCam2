@@ -49,4 +49,9 @@ class QuadrantTest: BuiltInFilterProtocol
         }
         return Buffer.first!
     }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+    }
 }

@@ -79,35 +79,43 @@ class Dilate: MetalFilterParent, BuiltInFilterProtocol
         objc_sync_enter(AccessLock)
         defer{objc_sync_exit(AccessLock)}
         
-        let Start = CACurrentMediaTime()
         if !Initialized
         {
-            fatalError("MPSLaplacian not initialized at Render(CVPixelBuffer) call.")
+            fatalError("Dilate not initialized.")
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer.first!), From: PixelBuffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for Dilate.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
-            print("Allocation failure for new pixel buffer pool in MPSLaplacian.")
+            print("Allocation failure for new pixel buffer pool in Dilate.")
             return PixelBuffer.first!
         }
+        #endif
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm) else
         {
-            print("Error creating input texture in MPSLaplacian.")
+            print("Error creating input texture in Dilate.")
             return PixelBuffer.first!
         }
         guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
-            print("Error creating output texture in MPSLaplacian.")
+            print("Error creating output texture in Dilate.")
             return PixelBuffer.first!
         }
         
         guard let CommandQ = CommandQueue,
               let CommandBuffer = CommandQ.makeCommandBuffer() else
         {
-            print("Error creating Metal command queue in MPSLaplacian.")
+            print("Error creating Metal command queue in Dilate.")
             CVMetalTextureCacheFlush(TextureCache!, 0)
             return PixelBuffer.first!
         }
@@ -175,5 +183,10 @@ class Dilate: MetalFilterParent, BuiltInFilterProtocol
         
         Probe[Center] = 0.0
         return Probe
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

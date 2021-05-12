@@ -82,32 +82,41 @@ class Erode: MetalFilterParent, BuiltInFilterProtocol
         let Start = CACurrentMediaTime()
         if !Initialized
         {
-            fatalError("MPSLaplacian not initialized at Render(CVPixelBuffer) call.")
+            fatalError("Erode not initialized.")
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer.first!), From: PixelBuffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
-            print("Allocation failure for new pixel buffer pool in MPSLaplacian.")
+            print("Allocation failure for new pixel buffer pool in Erode.")
             return PixelBuffer.first!
         }
+        #endif
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm) else
         {
-            print("Error creating input texture in MPSLaplacian.")
+            print("Error creating input texture in Erode.")
             return PixelBuffer.first!
         }
         guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
         {
-            print("Error creating output texture in MPSLaplacian.")
+            print("Error creating output texture in Erode.")
             return PixelBuffer.first!
         }
         
         guard let CommandQ = CommandQueue,
               let CommandBuffer = CommandQ.makeCommandBuffer() else
         {
-            print("Error creating Metal command queue in MPSLaplacian.")
+            print("Error creating Metal command queue in Erode.")
             CVMetalTextureCacheFlush(TextureCache!, 0)
             return PixelBuffer.first!
         }
@@ -175,5 +184,10 @@ class Erode: MetalFilterParent, BuiltInFilterProtocol
         
         Probe[Center] = 0.0
         return Probe
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

@@ -108,13 +108,22 @@ class Crop: MetalFilterParent, BuiltInFilterProtocol
                                                   options: [])
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<CropParameters>.stride)
         
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvImageBuffer: Buffer.first!), From: Buffer.first!)
+        var NewPixelBuffer: CVPixelBuffer? = nil
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            fatalError("Error creating textures for Crop.")
+        }
+        #else
         var NewPixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard var OutputBuffer = NewPixelBuffer else
         {
             fatalError("Error creating textures for Crop.")
         }
-    
+        #endif
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm,
                                                                TextureSize: TargetSize) else
@@ -147,5 +156,10 @@ class Crop: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.waitUntilCompleted()
         
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

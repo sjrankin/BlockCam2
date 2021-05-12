@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Palettize: BuiltInFilterProtocol
+class Palettize: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .Noir
     
@@ -55,5 +55,10 @@ class Palettize: BuiltInFilterProtocol
             return Buffer.first!
         }
         #endif
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

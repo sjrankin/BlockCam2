@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class Bloom: BuiltInFilterProtocol
+class Bloom: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .Bloom
     
@@ -33,6 +33,27 @@ class Bloom: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
+        #if true
+        CreateBufferPool(Source: SourceImage, From: Buffer.first!)
+        let Adjust = CIFilter.bloom()
+        Adjust.inputImage = SourceImage
+        if let Adjusted = Adjust.outputImage
+        {
+            var PixBuf: CVPixelBuffer? = nil
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
+            guard let OutPixBuf = PixBuf else
+            {
+                fatalError("Allocation failure in \(#function)")
+            }
+            CIContext().render(Adjusted, to: OutPixBuf, bounds: SourceImage.extent,
+                               colorSpace: ColorSpace)
+            return OutPixBuf
+        }
+        else
+        {
+            return Buffer.first!
+        }
+        #else
         guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
         {
             fatalError("Error getting description of buffer in Bloom.")
@@ -62,5 +83,12 @@ class Bloom: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+        #endif
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        
     }
 }

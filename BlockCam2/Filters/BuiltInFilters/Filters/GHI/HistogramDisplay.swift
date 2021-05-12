@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class HistogramDisplay: BuiltInFilterProtocol
+class HistogramDisplay: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .HistogramDisplay
     
@@ -33,18 +33,8 @@ class HistogramDisplay: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let Initial = CIImage(cvImageBuffer: Buffer.first!)
+        super.CreateBufferPool(Source: Initial, From: Buffer.first!)
         let AreaHisto = AreaHistogram()
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in HistogramDisplay.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: Initial.extent.width,
-                                                                                     height: Initial.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in HistogramDisplay.")
-        }
         let Histo1D = AreaHisto.RunFilter(Buffer, BufferPool, ColorSpace, Options: [:])
         let SourceImage = CIImage(cvImageBuffer: Histo1D)
         let Adjust = CIFilter.histogramDisplay()
@@ -53,7 +43,7 @@ class HistogramDisplay: BuiltInFilterProtocol
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -66,5 +56,10 @@ class HistogramDisplay: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

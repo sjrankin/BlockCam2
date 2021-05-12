@@ -98,11 +98,20 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer), From: PixelBuffer)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for MirrorDistortion.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
             fatalError("Allocation failure for new pixel buffer pool in MirrorDistortion.")
         }
+        #endif
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
@@ -184,5 +193,10 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
             return Rendered
         }
         fatalError("Error returned by Mirroring.Render with kernel \(KernelName)")
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

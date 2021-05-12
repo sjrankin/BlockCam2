@@ -81,16 +81,25 @@ class MPSLaplacian: MetalFilterParent, BuiltInFilterProtocol
         
         if !Initialized
         {
-            fatalError("MPSLaplacian not initialized at Render(CVPixelBuffer) call.")
+            fatalError("MPSLaplacian not initialized.")
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
+        #if true
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer.first!), From: PixelBuffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for Lapacian.")
+        }
+        #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
             print("Allocation failure for new pixel buffer pool in MPSLaplacian.")
             return PixelBuffer.first!
         }
+        #endif
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!,
                                                               TextureFormat: .bgra8Unorm) else
@@ -120,5 +129,10 @@ class MPSLaplacian: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.waitUntilCompleted()
         
         return OutputBuffer
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
     }
 }

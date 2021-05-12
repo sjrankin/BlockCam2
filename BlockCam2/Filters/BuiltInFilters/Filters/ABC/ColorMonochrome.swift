@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class ColorMonochrome: BuiltInFilterProtocol
+class ColorMonochrome: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .ColorMonochrome
     
@@ -33,17 +33,7 @@ class ColorMonochrome: BuiltInFilterProtocol
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
         let SourceImage = CIImage(cvImageBuffer: Buffer.first!)
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in ColorMonochrome.")
-        }
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: CGSize(width: SourceImage.extent.width,
-                                                                                     height: SourceImage.extent.height)) else
-        {
-            fatalError("Error creating local buffer pool in ColorMonochrome.")
-        }
+        super.CreateBufferPool(Source: SourceImage, From: Buffer.first!)
         let Adjust = CIFilter.colorMonochrome()
         let ImageColor = CIColor(color: Options[.Color] as? UIColor ?? UIColor.blue)
         Adjust.color = ImageColor
@@ -51,7 +41,7 @@ class ColorMonochrome: BuiltInFilterProtocol
         if let Adjusted = Adjust.outputImage
         {
             var PixBuf: CVPixelBuffer? = nil
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &PixBuf)
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &PixBuf)
             guard let OutPixBuf = PixBuf else
             {
                 fatalError("Allocation failure in \(#function)")
@@ -64,5 +54,12 @@ class ColorMonochrome: BuiltInFilterProtocol
         {
             return Buffer.first!
         }
+    }
+    
+    /// Reset the filter's settings.
+    static func ResetFilter()
+    {
+        Settings.SetColor(.ColorMonochromeColor,
+                          Settings.SettingDefaults[.ColorMonochromeColor] as! UIColor)
     }
 }
