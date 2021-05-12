@@ -123,6 +123,10 @@ extension LiveViewController
                at devicePoint: CGPoint,
                monitorSubjectAreaChange: Bool)
     {
+        #if targetEnvironment(simulator)
+        Debug.Print("focus not supported on simulator")
+        return
+        #else
         SessionQueue.async
         {
             let VideoDevice = self.VideoDeviceInput.device
@@ -149,6 +153,7 @@ extension LiveViewController
                 print("Error locking device for focus configuration: \(error.localizedDescription)")
             }
         }
+        #endif
     }
     
     /// Take a picture and save it.
