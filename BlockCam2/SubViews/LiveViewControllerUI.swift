@@ -9,17 +9,11 @@ import Foundation
 import UIKit
 import SwiftUI
 
-enum ChangedDataTypes
-{
-    case None
-    case Button
-    case Setting
-}
 
 /// Wrapper for the live view UI (which requires components not yet available in SwiftUI).
 struct LiveViewControllerUI: UIViewControllerRepresentable
 {
-    @Binding var FilterButtonPressed: String
+    @Binding var UICommand: String
     @Binding var IsSelfieCamera: Bool
     @Binding var ShowFilterSettings: Bool
     @Binding var ShowShortMessageView: Bool
@@ -36,7 +30,16 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     /// Handles data from the UI to the live view.
     func updateUIViewController(_ uiViewController: LiveViewController, context: Context)
     {
-        uiViewController.ButtonPressed(FilterButtonPressed)
+        if !UICommand.isEmpty
+        {
+            print("UI control: \(UICommand)")
+            uiViewController.ButtonPressed(UICommand)
+            DispatchQueue.main.async
+            {
+                //Reset the control command.
+                UICommand = ""
+            }
+        }
     }
    
     /// Create a coordinator for the class to talk with the main live view.
@@ -98,4 +101,18 @@ protocol ViewControllerDelegate: AnyObject
     /// Hide the short status message after a delay.
     /// - Parameter With: Number of seconds to wait before hiding the message.
     func HideShortMessage(With Delay: Double)
+}
+
+enum UICommands: String
+{
+    case TakePicture = "TakePicture"
+    case SaveStill = "SaveStill"
+    case SelectFromAlbum = "SelectFromAlbum"
+    case ToggleCamera = "ToggleCamera"
+    case SelectFilter = "Filters"
+    case ShareImage = "ShareImage"
+    case SaveOriginalSample = "SaveOriginalSample"
+    case SaveFilteredSample = "SaveFilteredSample"
+    case SetLiveViewMode = "SetLiveViewMode"
+    case SetStillImageMode = "SetStillImageMode"
 }
