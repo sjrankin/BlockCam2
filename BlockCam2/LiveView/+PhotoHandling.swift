@@ -60,6 +60,7 @@ extension LiveViewController
                             let CreationRequest = PHAssetCreationRequest.forAsset()
                             let ImageData = ImageToSave.jpegData(compressionQuality: 1.0)!
                             CreationRequest.addResource(with: .photo, data: ImageData, options: nil)
+                            #if false
                             let SaveDuration = CACurrentMediaTime() - Start
                             if SaveDuration < 2.0
                             {
@@ -69,6 +70,7 @@ extension LiveViewController
                             {
                                 self.UIDelegate?.HideShortMessage()
                             }
+                            #endif
                         },
                         completionHandler:
                             {
@@ -77,6 +79,10 @@ extension LiveViewController
                                 {
                                     self.ShowSaveError(With: "Image save error: \(error.localizedDescription)")
 //                                    fatalError("Error saving photo to library: \(error.localizedDescription)")
+                                }
+                                else
+                                {
+                                    self.UIDelegate?.HideShortMessage()
                                 }
                             }
                     )
@@ -113,6 +119,8 @@ extension LiveViewController
         let Alert = UIAlertController(title: "Error Saving Image",
                                       message: Message,
                                       preferredStyle: .alert)
+        let OKButton = UIAlertAction(title: "OK", style: .default, handler: nil)
+        Alert.addAction(OKButton)
         self.present(Alert, animated: true)
     }
     
