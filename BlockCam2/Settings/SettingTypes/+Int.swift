@@ -29,14 +29,20 @@ extension Settings
     /// Returns an integer from the specified setting.
     /// - Warning: A fatal error will be thrown if the type of `Setting` is not Int.
     /// - Parameter Setting: The setting whose integer value will be returned.
+    /// - Parameter Block: Trailing closure. Passes the value to the closure. Defaults to `nil`.
     /// - Returns: Integer found at the specified setting.
-    public static func GetInt(_ Setting: SettingKeys) -> Int
+    public static func GetInt(_ Setting: SettingKeys, Block: ((Int) -> ())? = nil) -> Int
     {
         guard TypeIsValid(Setting, Type: Int.self) else
         {
             Debug.FatalError("\(Setting) is not an Int")
         }
-        return UserDefaults.standard.integer(forKey: Setting.rawValue)
+        let ReturnMe = UserDefaults.standard.integer(forKey: Setting.rawValue)
+        if let Closure = Block
+        {
+            Closure(ReturnMe)
+        }
+        return ReturnMe
     }
     
     /// Returns an integer from the specified setting.
