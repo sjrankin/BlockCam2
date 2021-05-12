@@ -18,6 +18,8 @@ import CoreMotion
 
 /// View controller to display the live view from the camera as well as 3D results if required.
 class LiveViewController: UIViewController,
+                          UIImagePickerControllerDelegate,
+                          UINavigationControllerDelegate,
                           AVCapturePhotoCaptureDelegate,
                           AVCaptureVideoDataOutputSampleBufferDelegate,
                           AVCaptureDepthDataOutputDelegate,
@@ -41,10 +43,43 @@ class LiveViewController: UIViewController,
         definesPresentationContext = true
         MetalView = LiveMetalView()
         MetalView?.Initialize(self.view.frame)
+        MetalView?.layer.zPosition = 100
         self.view.addSubview(MetalView!)
         let Tap = UITapGestureRecognizer(target: self, action: #selector(HandleMetalViewTap))
         Tap.numberOfTapsRequired = 1
         MetalView?.addGestureRecognizer(Tap)
+        
+        let Window = UIApplication.shared.windows[0]
+        let TopPadding = Window.safeAreaInsets.top
+        let BottomPadding = Window.safeAreaInsets.bottom
+        let HeightOffset = TopPadding + BottomPadding + (64 * 2)
+        let StillFrame = CGRect(x: self.view.frame.origin.x,
+                                y: self.view.frame.origin.y + 64,
+                                width: self.view.frame.size.width,
+                                height: self.view.frame.size.height - HeightOffset)
+        StillImageView = UIImageView(frame: StillFrame)
+        StillImageView?.backgroundColor = UIColor.systemGray2
+        StillImageView?.contentMode = .scaleAspectFit
+        self.view.addSubview(StillImageView!)
+        #if targetEnvironment(simulator)
+        StillImageView?.layer.zPosition = 150
+        MetalView?.layer.zPosition = 50
+        #else
+        switch Settings.GetInt(.InputSourceIndex)
+        {
+            case 0:
+                StillImageView?.layer.zPosition = 50
+                MetalView?.layer.zPosition = 150
+                
+            case 1:
+                StillImageView?.layer.zPosition = 150
+                MetalView?.layer.zPosition = 50
+                
+            default:
+                StillImageView?.layer.zPosition = 50
+                MetalView?.layer.zPosition = 150
+        }
+        #endif
         
         GetPermissions()
         #if !targetEnvironment(simulator)
@@ -102,7 +137,43 @@ class LiveViewController: UIViewController,
 
     // MARK: - UI actions
     
+    /// Load an image from the album.
+    public func ImageFromAlbum(_ Image: UIImage)
+    {
+        StillImage = Image
+        if let FilterName = Settings.GetString(.CurrentFilter)
+        {
+            if let Filter = BuiltInFilters(rawValue: FilterName)
+            {
+                FilteredStillImage = Filters.RunFilter(On: Image, Filter: Filter)
+                StillImageView?.image = FilteredStillImage
+                return
+            }
+        }
+        StillImageView?.image = Image
+    }
     
+    var StillImage: UIImage? = nil
+    var FilteredStillImage: UIImage? = nil
+    
+    /// Update the still image. If not in still image mode, no action is taken. If there is no still image,
+    /// no action is taken.
+    public func UpdateStillImage()
+    {
+        guard StillImage != nil else
+        {
+            return
+        }
+        if let FilterName = Settings.GetString(.CurrentFilter)
+        {
+            if let Filter = BuiltInFilters(rawValue: FilterName)
+            {
+                FilteredStillImage = Filters.RunFilter(On: StillImage!, Filter: Filter)
+                StillImageView?.image = FilteredStillImage
+                return
+            }
+        }
+    }
     
     var PreviousButtonCommand: String = ""
     
@@ -121,16 +192,23 @@ class LiveViewController: UIViewController,
             }
             switch FirstName
             {
-                case "Camera":
-                    TakePicture() 
+                case UICommands.TakePicture.rawValue:
+                    TakePicture()
                     
-                case "Album":
-                    break
+                case UICommands.SaveStill.rawValue:
+                    guard FilteredStillImage != nil else
+                    {
+                        return
+                    }
+                    UIImageWriteToSavedPhotosAlbum(FilteredStillImage!, nil, nil, nil)
                     
-                case "Selfie":
+                case UICommands.SelectFromAlbum.rawValue:
+                    GetImageFromAlbum()
+                    
+                case UICommands.ToggleCamera.rawValue:
                     DoSwitchCameras()
                     
-                case "Filters":
+                case UICommands.SelectFilter.rawValue:
                     if SecondName == Name
                     {
                         return
@@ -146,9 +224,18 @@ class LiveViewController: UIViewController,
                         Settings.SetString(.CurrentFilter, "Passthrough")
                         Filters.SetFilter(.Passthrough)
                     }
+                    UpdateStillImage()
                     
-                case "Settings":
+                case UICommands.ShareImage.rawValue:
                     break
+                    
+                case UICommands.SetStillImageMode.rawValue:
+                    StillImageView?.layer.zPosition = 150
+                    MetalView?.layer.zPosition = 50
+                    
+                case UICommands.SetLiveViewMode.rawValue:
+                    StillImageView?.layer.zPosition = 50
+                    MetalView?.layer.zPosition = 150
                     
                 default:
                     break
@@ -226,6 +313,7 @@ class LiveViewController: UIViewController,
     var CameraHasDepth = false
     var DeviceHasCamera = true
     var MetalView: LiveMetalView? = nil
+    var StillImageView: UIImageView? = nil
     static let RollingMeanWindowSize = 10
     static let AccumulationCount = 10
     static let MicrophoneBinCount = 256
