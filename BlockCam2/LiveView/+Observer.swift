@@ -132,6 +132,8 @@ extension LiveViewController
     /// Device orientation change handling.
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
     {
+        #if targetEnvironment(simulator)
+        #else
         coordinator.animate(
             alongsideTransition:
                 {
@@ -157,6 +159,7 @@ extension LiveViewController
                     }
                 }
             , completion: nil)
+        #endif
     }
     
     /// Thermal state change handling.
