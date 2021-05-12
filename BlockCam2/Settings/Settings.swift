@@ -106,6 +106,83 @@ class Settings
         }
         return false
     }
+    
+    // MARK: - Filter management.
+    
+    public static func ResetCurrentFilter()
+    {
+       if let FilterToReset = Settings.GetString(.CurrentFilter)
+       {
+        switch FilterToReset
+        {
+            case BuiltInFilters.UnsharpMask.rawValue:
+                UnsharpMask.ResetFilter()
+                
+            case BuiltInFilters.TwirlDistortion.rawValue:
+                TwirlDistortion.ResetFilter()
+            
+            case BuiltInFilters.EdgeWork.rawValue:
+                EdgeWork.ResetFilter()
+                
+            case BuiltInFilters.Sepia.rawValue:
+                Sepia.ResetFilter()
+            
+            case BuiltInFilters.BumpDistortion.rawValue:
+                BumpDistortion.ResetFilter()
+                
+            case BuiltInFilters.CircleSplashDistortion.rawValue:
+                CircleSplashDistortion.ResetFilter()
+                
+            case BuiltInFilters.CMYKHalftone.rawValue:
+                CMYKHalftone.ResetFilter()
+                
+            case BuiltInFilters.ColorControls.rawValue:
+                ColorControls.ResetFilter()
+                
+            case BuiltInFilters.ColorMap.rawValue:
+                ColorMap.ResetFilter()
+                
+            case BuiltInFilters.ColorMonochrome.rawValue:
+                ColorMonochrome.ResetFilter()
+                
+            case BuiltInFilters.Dither.rawValue:
+                Dither.ResetFilter()
+                
+            case BuiltInFilters.DotScreen.rawValue:
+                DotScreen.ResetFilter()
+                
+            case BuiltInFilters.Droste.rawValue:
+                Droste.ResetFilter()
+                
+            case BuiltInFilters.Edges.rawValue:
+                Edges.ResetFilter()
+                
+            case BuiltInFilters.ExposureAdjust.rawValue:
+                ExposureAdjust.ResetFilter()
+                
+            case BuiltInFilters.HueAdjust.rawValue:
+                HueAdjust.ResetFilter()
+                
+            case BuiltInFilters.HSB.rawValue:
+                HSB.ResetFilter()
+                
+            case BuiltInFilters.Kaleidoscope.rawValue:
+                Kaleidoscope.ResetFilter()
+                
+            case BuiltInFilters.Mirroring2.rawValue:
+                Mirror2.ResetFilter()
+                
+            case BuiltInFilters.TriangleKaleidoscope.rawValue:
+                TriangleKaleidoscope.ResetFilter()
+                
+            case BuiltInFilters.Vibrance.rawValue:
+                Vibrance.ResetFilter()
+                
+            default:
+                break
+        }
+       }
+    }
 }
 
 /// Setting errors that may occur.
