@@ -63,7 +63,6 @@ struct ProgramSettingsUI: View
     }
 }
 
-#if DEBUG
 struct ProgramSettingsUI_Previews: PreviewProvider
 {
     static var previews: some View
@@ -71,4 +70,3 @@ struct ProgramSettingsUI_Previews: PreviewProvider
         ProgramSettingsUI(OptionList: SettingsData)
     }
 }
-#endif
