@@ -66,6 +66,7 @@ extension Filters
         FilterMap[.ExposureAdjust] = BlockCam2.ExposureAdjust()
         FilterMap[.GammaAdjust] = BlockCam2.GammaAdjust()
         FilterMap[.ColorControls] = BlockCam2.ColorControls()
+        FilterMap[.HSB] = BlockCam2.HSB()
         return FilterMap
     }
     
@@ -372,5 +373,10 @@ enum FilterOptions: String
     case Invert = "Invert"
     case Decay = "Decay"
     case FilterName = "FilterName"
+    case Hue = "Hue"
+    case ChangeHue = "ChangeHue"
+    case ChangeSaturation = "ChangeSaturation"
+    case ChangeBrightness = "ChangeBrightness"
+    case BackgroundFill = "BackgroundFill"
 }
 
