@@ -7,14 +7,20 @@
 
 import SwiftUI
 
-
 struct ContentView: View
 {
+    @State var PhotoActionImageName: String = "camera"
+    @State var ShowSaveIcon: Bool = false
+    @State var InputSourceIndex: Int = Settings.GetInt(.InputSourceIndex)
+    {
+        Value in
+        print("Starting InputSourceIndex = \(Value)")
+    }
     @State var DidTapCommand: Bool = false
     @State var SelectedFilter: String = Settings.GetString(.CurrentFilter, "Passthrough")
     @State var SelectedGroup: String = Settings.GetString(.CurrentGroup, " Reset ")
     @State var ShowFilterList: Bool = false
-    @State var FilterButtonPressed: String = ""
+    @State var UICommand: String = ""
     @State var FilterButtonTapped: Bool = true
     @State var IsSelfieCamera: Bool = false
     @State var ShowShortMessage: Bool = false
@@ -25,6 +31,13 @@ struct ContentView: View
     @State var ShowFilterSettings: Bool = false
     @State var FilterSettingsVisible: Bool = false
     @State var ShowImageControls: Bool = false
+    @EnvironmentObject var Changed: ChangedSettings
+    #if targetEnvironment(simulator)
+    @State var OnSimulator: Bool = true
+    #else
+    @State var OnSimulator: Bool = false
+    #endif
+    @State var ShowPhotoLibrary: Bool = false
     
     var body: some View
     {
@@ -38,12 +51,13 @@ struct ContentView: View
                 let TopHeight: CGFloat = Geometry.size.height - BottomHeight
                 let TopBarHeight: CGFloat = 64
                 
-                LiveViewControllerUI(FilterButtonPressed: $FilterButtonPressed,
+                LiveViewControllerUI(UICommand: $UICommand,
                                      IsSelfieCamera: $IsSelfieCamera,
                                      ShowFilterSettings: $ShowFilterSettings,
                                      ShowShortMessageView: $ShowShortMessage,
                                      ShortMessage: $ShortMessage)
-                    .frame(width: Geometry.size.width, height: TopHeight, alignment: .top)
+                    .frame(width: Geometry.size.width, height: TopHeight,
+                           alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
                               y: TopHeight / 2.0)
                 
@@ -84,7 +98,9 @@ struct ContentView: View
                             }
                             .sheet(isPresented: $FilterSettingsVisible)
                             {
-                                FilterViewServer(IsVisible: $FilterSettingsVisible)
+                                FilterViewServer(UICommand: $UICommand,
+                                                 IsVisible: $FilterSettingsVisible)
+                                    .environmentObject(Changed)
                             }
                             Spacer()
                             Group
@@ -92,8 +108,8 @@ struct ContentView: View
                                 Button(action:
                                         {
                                             self.ShowImageControls.toggle()
-                                            self.FilterButtonPressed = ""
-                                            self.FilterButtonPressed = "ShareButton"
+                                            //self.FilterButtonPressed = ""
+                                            self.UICommand = UICommands.ShareImage.rawValue
                                         })
                                 {
                                     SharingIcon()
@@ -110,7 +126,7 @@ struct ContentView: View
                                             self.ShowShortMessage.toggle()
                                         })
                                 {
-                                ButtonIcon(ImageName: "livephoto",
+                                ButtonIcon(ImageName: "star.circle.fill",
                                            Foreground: Color.yellow,
                                            ShadowRadius: 3)
                                 }
@@ -216,8 +232,12 @@ struct ContentView: View
                                         FilterButtonTapped.toggle()
                                     })
                             {
+                                #if true
+                                FiltersIcon(IsHighlighted: $FilterButtonTapped)
+                                #else
                                 FiltersIcon(IsHighlighted: $FilterButtonTapped,
                                             DoRotate: $FilterButtonTapped)
+                                #endif
                             }
                             .buttonStyle(BorderlessButtonStyle())
                             .shadow(radius: 3)
@@ -229,12 +249,35 @@ struct ContentView: View
                             
                             Button(action:
                                     {
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Album"
+                                        if $InputSourceIndex.wrappedValue > 0
+                                        {
+                                            ShowSaveIcon = true
+                                            self.UICommand = UICommands.SelectFromAlbum.rawValue
+                                        }
+                                        else
+                                        {
+                                            ShowSaveIcon = false
+                                        }
                                     }
                             )
                             {
-                                PhotoLibraryIcon()
+                                ImageSourceButton(Source: $InputSourceIndex)
+                                    .onChange(of: InputSourceIndex, perform:
+                                                {
+                                                    value in
+                                                    if value > 0
+                                                    {
+                                                        PhotoActionImageName = "square.and.arrow.down"
+                                                        self.UICommand = UICommands.SetStillImageMode.rawValue
+                                                        Settings.SetInt(.InputSourceIndex, 1)
+                                                    }
+                                                    else
+                                                    {
+                                                        PhotoActionImageName = "camera"
+                                                        self.UICommand = UICommands.SetLiveViewMode.rawValue
+                                                        Settings.SetInt(.InputSourceIndex, 0)
+                                                    }
+                                    })
                             }
                             .buttonStyle(BorderlessButtonStyle())
                             .shadow(radius: 3)
@@ -243,17 +286,26 @@ struct ContentView: View
                         Group
                         {
                             Spacer()
-                            
                             Button(action:
                                     {
-                                        self.ShortMessage = "Saving Image"
-                                        self.ShowShortMessage = true
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = "Camera"
+                                        if $InputSourceIndex.wrappedValue > 0
+                                        {
+                                            self.UICommand = UICommands.SaveStill.rawValue
+                                        }
+                                        else
+                                        {
+                                            #if targetEnvironment(simulator)
+                                            Debug.Print("Camera action not supported on simulator.")
+                                            #else
+                                            self.ShortMessage = "Saving Image"
+                                            self.ShowShortMessage = true
+                                            self.UICommand = UICommands.TakePicture.rawValue
+                                            #endif
+                                        }
                                     }
                             )
                             {
-                                CameraIcon()
+                                PhotoActionButton(ImageName: $PhotoActionImageName) 
                             }
                             .buttonStyle(BorderlessButtonStyle())
                             .shadow(radius: 3)
@@ -265,7 +317,9 @@ struct ContentView: View
                             
                             Button(action:
                                     {
-                                        let CommandString = "Selfie"
+                                        #if targetEnvironment(simulator)
+                                        Debug.Print("Action not supported on simulator.")
+                                        #else
                                         self.IsSelfieCamera = !self.IsSelfieCamera
                                         if self.IsSelfieCamera
                                         {
@@ -275,8 +329,8 @@ struct ContentView: View
                                         {
                                             self.WhichCamera = "arrow.triangle.2.circlepath.camera"
                                         }
-                                        self.FilterButtonPressed = ""
-                                        self.FilterButtonPressed = CommandString
+                                        self.UICommand = UICommands.ToggleCamera.rawValue
+                                        #endif
                                     })
                             {
                                 Image(systemName: WhichCamera)
@@ -305,8 +359,8 @@ struct ContentView: View
     
     func HandleFilterButtonPress(_ Value: String)
     {
-        self.FilterButtonPressed = ""
-        self.FilterButtonPressed = Value
+        //self.UICommand = ""
+        self.UICommand = Value
     }
 }
 
