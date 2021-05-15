@@ -122,7 +122,7 @@ class Median: MetalFilterParent, BuiltInFilterProtocol
             return PixelBuffer.first!
         }
         
-        let Diameter = Options[.MedianDiameter] as? Int ?? 5
+        let Diameter = Int(Options[.MedianDiameter] as? Int ?? 5)
         let Shader = MPSImageMedian(device: MetalDevice!, kernelDiameter: Diameter)
         Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture,
                       destinationTexture: OutputTexture)
