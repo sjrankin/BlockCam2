@@ -166,6 +166,27 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .Convolution:
+                Options[.Bias] = Settings.GetDouble(.ConvolutionBias,
+                                                    Settings.SettingDefaults[.ConvolutionBias] as! Double)
+                Options[.Width] = Settings.GetInt(.ConvolutionWidth,
+                                                  IfZero: Settings.SettingDefaults[.ConvolutionWidth] as! Int)
+                Options[.Height] = Settings.GetInt(.ConvolutionHeight,
+                                                   IfZero: Settings.SettingDefaults[.ConvolutionHeight] as! Int)
+                Options[.Matrix] = Settings.GetMatrix(.ConvolutionKernel,
+                                                      CreateIfEmpty: true) ??
+                    Settings.SettingDefaults[.ConvolutionKernel] as! [[Double]]
+            
+            case .Threshold:
+                Options[.LowColor] = Settings.GetColor(.ThresholdLowColor,
+                                             Settings.SettingDefaults[.ThresholdLowColor] as! UIColor)
+                Options[.HighColor] = Settings.GetColor(.ThresholdHighColor,
+                                                        Settings.SettingDefaults[.ThresholdHighColor] as! UIColor)
+                Options[.ThresholdInput] = Settings.GetInt(.ThresholdInputChannel)
+                Options[.ApplyIfHigher] = Settings.GetBool(.ThresholdApplyIfGreater)
+                Options[.Threshold] = Settings.GetDouble(.ThresholdValue,
+                                                         Settings.SettingDefaults[.ThresholdValue] as! Double)
+            
             case .EdgeWork:
                 Options[.Intensity] = Settings.GetDouble(.EdgeWorkThickness,
                                                          Settings.SettingDefaults[.EdgeWorkThickness] as! Double)
@@ -293,45 +314,51 @@ class Filters
                                  Filter: BuiltInFilters? = nil,
                                  ReturnOriginalOnError: Bool = true) -> UIImage?
     {
-
-        let CImg = CIImage(image: Image)
-        var Buffer: CVPixelBuffer?
-        let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                          kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
-                          kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue] as CFDictionary
-        CVPixelBufferCreate(kCFAllocatorDefault,
-                            Int(Image.size.width),
-                            Int(Image.size.height),
-                            kCVPixelFormatType_32BGRA,
-                            Attributes,
-                            &Buffer)
-        let Context = CIContext()
-        Context.render(CImg!, to: Buffer!)
-
-        if let NewBuffer = RunFilter(Filter, With: Buffer!)
+        if let CImg = CIImage(image: Image)
         {
-            let FinalImage = UIImage(Buffer: NewBuffer)
-            return FinalImage
-        }
-        if ReturnOriginalOnError
-        {
-            Debug.Print("Returning original image due to processing error: \(#function)")
-            return Image
+            var Buffer: CVPixelBuffer?
+            let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                              kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
+                              kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue] as CFDictionary
+            CVPixelBufferCreate(kCFAllocatorDefault,
+                                Int(Image.size.width),
+                                Int(Image.size.height),
+                                kCVPixelFormatType_32BGRA,
+                                Attributes,
+                                &Buffer)
+            let Context = CIContext()
+            guard let ActualBuffer = Buffer else
+            {
+                Debug.Print("Error creating buffer")
+                return Image
+            }
+            Context.render(CImg, to: ActualBuffer)
+            
+//            if let NewBuffer = RunFilter(Filter, With: ActualBuffer)
+            if let NewBuffer = RunFilter(With: ActualBuffer, Filter)
+            {
+                let FinalImage = UIImage(Buffer: NewBuffer)
+                return FinalImage
+            }
+            if ReturnOriginalOnError
+            {
+                Debug.Print("Returning original image due to processing error: \(#function)")
+                return Image
+            }
         }
         return nil
     }
 
     /// Run a built-in filter on the passed buffer.
+    /// - Parameter With: The buffer to filter.
     /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
     ///                     prior to this call, `.Passthrough` is used.
-    /// - Parameter With: The buffer to filter.
     /// - Returns: Filtered data according to `Filter`. Nil on error.
-    public static func RunFilter(_ Filter: BuiltInFilters? = nil,
-                                 With Buffer: CVPixelBuffer) -> CVPixelBuffer?
+    public static func RunFilter(With Buffer: CVPixelBuffer, _ Filter: BuiltInFilters? = nil) -> CVPixelBuffer?
     {
         if Filter == nil && LastBuiltInFilterUsed == nil
         {
-            return Filters.RunFilter(.Passthrough, With: Buffer)
+            return Filters.RunFilter(With: Buffer, .Passthrough)
         }
         var FilterToUse: BuiltInFilters = .Passthrough
         if Filter == nil
@@ -363,11 +390,20 @@ class Filters
             }
             FilterInTree.Initialize(With: Format, BufferCountHint: 3)
             let FinalOptions = GetOptions(For: FilterToUse)
-            let FinalBuffer = FilterInTree.RunFilter([Buffer], LocalBufferPool, CGColorSpaceCreateDeviceRGB(), Options: FinalOptions)
+            let FinalBuffer = FilterInTree.RunFilter([Buffer],
+                                                     LocalBufferPool,
+                                                     CGColorSpaceCreateDeviceRGB(),
+                                                     Options: FinalOptions)
             #else
-            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
+            guard let Format = FilterHelper.GetFormatDescription(From: Buffer) else
+            {
+                fatalError("Error getting description of buffer in \(#function).")
+            }
+                FilterInTree.Initialize(With: Format, BufferCountHint: 3)
+//            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
             let FinalOptions = GetOptions(For: FilterToUse)
-            let FinalBuffer = FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!, Options: FinalOptions)
+            let FinalBuffer = FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!,
+                                                     Options: FinalOptions)
             #endif
             return FinalBuffer
         }
@@ -496,7 +532,7 @@ enum BuiltInFilters: String, CaseIterable
 //    case Mirroring = "Mirroring"
     case Mirroring2 = "Mirroring 2"
     case Threshold = "Threshold"
-    case Lapacian = "Lapacian"
+    case Laplacian = "Laplacian"
     case Dilate = "Dilate"
     case Emboss = "Emboss"
     case Erode = "Erode"
@@ -514,12 +550,19 @@ enum BuiltInFilters: String, CaseIterable
     case ConditionalTransparency = "Conditional Transparency"
     case ImageDelta = "Image Delta"
     case HSB = "HSB"
+    case ThresholdInput = "Threshold Input"
+    case ApplyIfGreater = "Apply If Greater"
+    case LowColor = "Low Color"
+    case HighColor = "High Color"
+    case AreaMax = "Area Max"
+    case Convolution = "Convolution"
     
     //Internal filters
     case Crop = "Crop"
     case Crop2 = "Crop2"
     case Reflect = "Reflect"
     case QuadrantTest = "Quadrant Test"
+    case MatrixTest = "Matrix Test"
     
     //3D Filters
     case Blocks = "Blocks"
