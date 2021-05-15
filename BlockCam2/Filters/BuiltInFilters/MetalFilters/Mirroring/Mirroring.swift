@@ -98,25 +98,20 @@ class MirroringDistortion: MetalFilterParent, BuiltInFilterProtocol
         }
         
         var NewPixelBuffer: CVPixelBuffer? = nil
-        #if true
         super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer), From: PixelBuffer)
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
             Debug.FatalError("Error creating buffer pool for MirrorDistortion.")
         }
-        #else
-        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
-        guard let OutputBuffer = NewPixelBuffer else
-        {
-            fatalError("Allocation failure for new pixel buffer pool in MirrorDistortion.")
-        }
-        #endif
         
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm),
-              let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer, TextureFormat: .bgra8Unorm) else
         {
-            fatalError("Error creating textures in MirrorDistortion.")
+            fatalError("Error creating input texture in MirrorDistortion.")
+        }
+        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        {
+            fatalError("Error creating output texture in MirrorDistortion.")
         }
         
         guard let CommandQ = CommandQueue,
