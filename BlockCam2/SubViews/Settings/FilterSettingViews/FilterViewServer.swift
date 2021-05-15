@@ -80,6 +80,20 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.Convolution.rawValue:
+                SettingsContainer
+                {
+                    ConvolutionFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.Threshold.rawValue:
+                SettingsContainer
+                {
+                    ThresholdFilter2_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+                
             case BuiltInFilters.EdgeWork.rawValue:
                 SettingsContainer
                 {
