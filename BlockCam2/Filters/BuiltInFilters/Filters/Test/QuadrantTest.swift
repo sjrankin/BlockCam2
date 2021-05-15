@@ -39,7 +39,8 @@ class QuadrantTest: BuiltInFilterProtocol
         {
             if let PixBuf = MetalFilterParent.GetPixelBufferFrom(CroppedImage)
             {
-                let Final = Filters.RunFilter(.Reflect, With: PixBuf)//, Options: Options)
+                let Final = Filters.RunFilter(With: PixBuf, .Reflect)
+//                let Final = Filters.RunFilter(.Reflect, With: PixBuf)//, Options: Options)
                 return Final!
             }
             else
