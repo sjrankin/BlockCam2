@@ -1,9 +1,8 @@
 //
 //  Threshold.swift
 //  BlockCam2
-//  Adapted from BumpCamera, 2/6/19.
 //
-//  Created by Stuart Rankin on 4/26/21.
+//  Created by Stuart Rankin on 5/13/21.
 //
 
 import Foundation
@@ -14,25 +13,13 @@ import MetalKit
 
 class Threshold: MetalFilterParent, BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Threshold
+    // MARK: - Required by BuiltInFilterProtocol.
+    
+    static var FilterType: BuiltInFilters = .ColorMap
     var NeedsInitialization: Bool = true
     
-    required override init()
-    {
-        let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
-        let KernelFunction = DefaultLibrary?.makeFunction(name: "ThresholdKernel")
-        do
-        {
-            ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
-        }
-        catch
-        {
-            print("Unable to create pipeline state: \(error.localizedDescription)")
-        }
-    }
+    // MARK: - Class variables.
     
-    var AccessLock = NSObject()
-    var ParameterBuffer: MTLBuffer! = nil
     private let MetalDevice = MTLCreateSystemDefaultDevice()
     private var ComputePipelineState: MTLComputePipelineState? = nil
     private lazy var CommandQueue: MTLCommandQueue? =
@@ -43,30 +30,49 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
     private(set) var InputFormatDescription: CMFormatDescription? = nil
     private var LocalBufferPool: CVPixelBufferPool? = nil
     var Initialized = false
+    var ParameterBuffer: MTLBuffer! = nil
+    
+    override required init()
+    {
+        print("Metal kernel function Threshold initialized")
+        let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
+        let KernelFunction = DefaultLibrary?.makeFunction(name: "ThresholdKernel")
+        do
+        {
+            ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
+        }
+        catch
+        {
+            print("Unable to create pipeline state in Threshold: \(error.localizedDescription)")
+        }
+    }
     
     func Initialize(With FormatDescription: CMFormatDescription, BufferCountHint: Int)
     {
-        Reset()
-        (LocalBufferPool, _, OutputFormatDescription) = CreateBufferPool(From: FormatDescription, BufferCountHint: BufferCountHint)
-        if LocalBufferPool == nil
+        if Initialized
         {
-            print("BufferPool nil in Threshold.")
+            return
+        }
+        
+        Reset()
+        (LocalBufferPool, _, OutputFormatDescription) = CreateBufferPool(From: FormatDescription,
+                                                                         BufferCountHint: BufferCountHint)
+        guard LocalBufferPool != nil else
+        {
+            print("LocalBufferPool is nil in ColorMap.Initialize.")
             return
         }
         InputFormatDescription = FormatDescription
-        
         Initialized = true
-        
         var MetalTextureCache: CVMetalTextureCache? = nil
-        if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, MetalDevice!, nil, &MetalTextureCache) != kCVReturnSuccess
+        guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, MetalDevice!, nil, &MetalTextureCache) == kCVReturnSuccess else
         {
-            fatalError("Unable to allocation texture cache in type(of: self).")
+            fatalError("Unable to allocate texture cache in ColorMap.")
         }
-        else
-        {
-            TextureCache = MetalTextureCache
-        }
+        TextureCache = MetalTextureCache
     }
+    
+    let AccessLock = NSObject()
     
     func Reset()
     {
@@ -79,21 +85,16 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
-    func RunFilter(_ PixelBuffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
-                   _ ColorSpace: CGColorSpace, Options: [FilterOptions : Any]) -> CVPixelBuffer
+    func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
+                   _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        objc_sync_enter(AccessLock)
-        defer{objc_sync_exit(AccessLock)}
         if !Initialized
         {
-            Debug.FatalError("Threshold not initialized.")
+            fatalError("Threshold not initialized.")
         }
-        /*
-        guard LocalBufferPool != nil else
-        {
-            return PixelBuffer.first!
-        }
-*/
+        objc_sync_enter(AccessLock)
+        defer{objc_sync_exit(AccessLock)}
+        
         let TValue = Options[.Threshold] as? Double ?? 0.5
         let TInput = Options[.ThresholdInput] as? Int ?? 0
         let ApplyIfBig = Options[.ApplyIfHigher] as? Bool ?? false
@@ -108,35 +109,48 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ThresholdParameters>.stride, options: [])
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<ThresholdParameters>.stride)
         
-        var NewPixelBuffer: CVPixelBuffer? = nil
         #if true
-        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: PixelBuffer.first!), From: PixelBuffer.first!)
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
+        var NewPixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
-        guard let OutputBuffer = NewPixelBuffer else
+        guard var OutputBuffer = NewPixelBuffer else
         {
-            Debug.FatalError("Error creating buffer pool for Threshold.")
+            Debug.FatalError("Error creation textures for Threshold.")
         }
         #else
-        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
-        guard let OutputBuffer = NewPixelBuffer else
+        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
         {
-            Debug.FatalError("Allocation failure for new pixel buffer pool in Threshold.")
+            Debug.FatalError("Error getting description of buffer in Threshold.")
+        }
+        let ImageSize = CGSize(width: Int(Format.dimensions.width), height: Int(Format.dimensions.height))
+        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
+                                                                  BufferCountHint: 3,
+                                                                  BufferSize: ImageSize) else
+        {
+            Debug.FatalError("Error creating local buffer pool in Threshold.")
+        }
+        var NewPixelBuffer: CVPixelBuffer? = nil
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &NewPixelBuffer)
+        guard var OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating textures for Threshold.")
         }
         #endif
         
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm),
-              let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm) else
         {
-            Debug.FatalError("Error creating textures in Threshold.")
+            Debug.FatalError("Error creating input texture in Threshold.")
+        }
+        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating output texture in Threshold.")
         }
         
         guard let CommandQ = CommandQueue,
               let CommandBuffer = CommandQ.makeCommandBuffer(),
               let CommandEncoder = CommandBuffer.makeComputeCommandEncoder() else
         {
-            print("Error creating Metal command queue.")
-            CVMetalTextureCacheFlush(TextureCache!, 0)
-            return PixelBuffer.first!
+            Debug.FatalError("Error creating Metal command queue.")
         }
         
         CommandEncoder.label = "Threshold Kernel"
@@ -155,12 +169,26 @@ class Threshold: MetalFilterParent, BuiltInFilterProtocol
         CommandEncoder.endEncoding()
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
-
+        
+        if Options[.Merge] as? Bool ?? false
+        {
+            print("Merging color map to original")
+            let MaskFilter = Masking1()
+            MaskFilter.Initialize(With: InputFormatDescription!, BufferCountHint: 3)
+            OutputBuffer = MaskFilter.RenderWith(PixelBuffer: Buffer, And: OutputBuffer)!
+        }
+        
         return OutputBuffer
     }
     
     /// Reset the filter's settings.
     static func ResetFilter()
     {
+        Settings.SetColor(.ColorMapColor1,
+                          Settings.SettingDefaults[.ColorMapColor1] as! UIColor)
+        Settings.SetColor(.ColorMapColor2,
+                          Settings.SettingDefaults[.ColorMapColor2] as! UIColor)
+        Settings.SetString(.ColorMapGradient,
+                           Settings.SettingDefaults[.ColorMapGradient] as! String)
     }
 }
