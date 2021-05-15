@@ -87,6 +87,8 @@ struct ColorMapFilter_View: View
                     .border(Color.black, width: 0.5)
                     .padding()
                 Spacer()
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                     Filter: .ColorMap,
                             Updated: $Updated.wrappedValue)

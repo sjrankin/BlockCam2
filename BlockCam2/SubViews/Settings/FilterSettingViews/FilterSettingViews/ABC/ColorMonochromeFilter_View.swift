@@ -48,6 +48,8 @@ struct ColorMonochromeFilter_View: View
                 .padding()
                 Spacer()
                 Spacer()
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                             Filter: .ColorMonochrome,
                             Updated: $Updated.wrappedValue)

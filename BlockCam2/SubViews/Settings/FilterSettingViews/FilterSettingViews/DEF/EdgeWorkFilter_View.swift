@@ -80,6 +80,8 @@ struct EdgeWorkFilter_View: View
                     
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .EdgeWork,
                                 Updated: $Updated.wrappedValue)

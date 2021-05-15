@@ -161,6 +161,8 @@ struct MirrorFilter_View: View
                 
                 Spacer()
                 
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                             Filter: .Mirroring2,
                             Updated: $Updated.wrappedValue)

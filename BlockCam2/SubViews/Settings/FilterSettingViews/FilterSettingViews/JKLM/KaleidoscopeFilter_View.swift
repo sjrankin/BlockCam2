@@ -154,6 +154,8 @@ struct KaleidoscopeFilter_View: View
                 }
 
                 Spacer()
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                             Filter: .Kaleidoscope,
                             Updated: $Updated.wrappedValue)

@@ -186,6 +186,8 @@ struct TriangleKaleidoscopeFilter_View: View
                     
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .TriangleKaleidoscope,
                                 Updated: $Updated.wrappedValue)

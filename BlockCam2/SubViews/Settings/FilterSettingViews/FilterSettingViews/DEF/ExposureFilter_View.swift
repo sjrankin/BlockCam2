@@ -78,6 +78,8 @@ struct ExposureFilter_View: View
                     }
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .ExposureAdjust,
                                 Updated: $Updated.wrappedValue)

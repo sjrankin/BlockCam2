@@ -78,6 +78,8 @@ struct VibranceFilter_View: View
                     }
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .Vibrance,
                                 Updated: $Updated.wrappedValue)

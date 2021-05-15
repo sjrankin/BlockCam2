@@ -120,6 +120,8 @@ struct UnsharpMaskFilter_View: View
                 }
                 Spacer()
                 Spacer()
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                             Filter: .UnsharpMask,
                             Updated: $Updated.wrappedValue)

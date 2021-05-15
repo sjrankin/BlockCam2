@@ -78,6 +78,8 @@ struct HueAdjustFilter_View: View
                     }
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .HueAdjust,
                                 Updated: $Updated.wrappedValue)

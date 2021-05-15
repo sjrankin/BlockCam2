@@ -25,6 +25,8 @@ struct NoFilter_View: View
                 Spacer()
                 Spacer()
                 
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand, 
                             Filter: BuiltInFilters(rawValue: Settings.GetString(.CurrentFilter, "Passthrough"))!,
                             Updated: true)

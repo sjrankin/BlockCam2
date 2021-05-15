@@ -78,6 +78,8 @@ struct DitherFilter_View: View
                     }
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .Dither,
                                 Updated: $Updated.wrappedValue)

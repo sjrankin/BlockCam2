@@ -173,6 +173,8 @@ struct ColorControlsFilter_View: View
                 }
                 Spacer()
                 Spacer()
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                             Filter: .ColorControls,
                             Updated: $Updated.wrappedValue)

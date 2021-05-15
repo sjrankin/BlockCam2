@@ -78,6 +78,8 @@ struct EdgesFilter_View: View
                     }
                     Spacer()
                     Spacer()
+                    Divider()
+                        .background(Color.black)
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .Edges,
                                 Updated: $Updated.wrappedValue)

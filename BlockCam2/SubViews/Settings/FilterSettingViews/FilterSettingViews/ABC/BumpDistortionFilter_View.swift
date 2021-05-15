@@ -72,6 +72,7 @@ struct BumpDistorionFilter_View: View
                         
                     }
                 }
+                Spacer()
                 HStack
                 {
                     VStack(alignment: .leading)
@@ -120,6 +121,8 @@ struct BumpDistorionFilter_View: View
                 }
                 Spacer()
                 Spacer()
+                Divider()
+                    .background(Color.black)
                 SampleImage(UICommand: $ButtonCommand,
                             Filter: .BumpDistortion,
                             Updated: $Updated.wrappedValue)
