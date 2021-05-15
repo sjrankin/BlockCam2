@@ -119,7 +119,9 @@ extension Filters
         FilterMap[.Erode] = BlockCam2.Erode()
         FilterMap[.Median] = BlockCam2.Median()
         FilterMap[.HeightField] = BlockCam2.HeightField()
-        FilterMap[.SaliencyMap] = BlockCam2.SaliencyMap()
+//        FilterMap[.SaliencyMap] = BlockCam2.SaliencyMap()
+        FilterMap[.AreaMax] = BlockCam2.MPSAreaMax()
+        FilterMap[.Convolution] = BlockCam2.MPSConvolution()
         return FilterMap
     }
     
@@ -179,7 +181,7 @@ extension Filters
         FilterMap[.SobelBlend] = BlockCam2.SobelBlend()
         FilterMap[.Edges] = BlockCam2.Edges()
         FilterMap[.EdgeWork] = BlockCam2.EdgeWork()
-        FilterMap[.Lapacian] = BlockCam2.MPSLaplacian()
+        FilterMap[.Laplacian] = BlockCam2.MPSLaplacian()
         FilterMap[.MorphologyGradient] = BlockCam2.MorphologyGradient()
         return FilterMap
     }
@@ -191,6 +193,7 @@ extension Filters
         FilterMap[.Crop2] = BlockCam2.Crop2()
         FilterMap[.Reflect] = BlockCam2.Reflect()
         FilterMap[.QuadrantTest] = BlockCam2.QuadrantTest()
+        FilterMap[.MatrixTest] = BlockCam2.Passthrough()
         return FilterMap
     }
     
@@ -378,5 +381,7 @@ enum FilterOptions: String
     case ChangeSaturation = "ChangeSaturation"
     case ChangeBrightness = "ChangeBrightness"
     case BackgroundFill = "BackgroundFill"
+    case Matrix = "Matrix"
+    case Bias = "Bias"
 }
 
