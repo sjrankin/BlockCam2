@@ -120,8 +120,8 @@ class Dilate: MetalFilterParent, BuiltInFilterProtocol
             return PixelBuffer.first!
         }
         
-        let KWidth = Options[.DilateWidth] as? Int ?? 3
-        let KHeight = Options[.DilateHeight] as? Int ?? 3 
+        let KWidth = Int(Options[.DilateWidth] as? Int ?? 3)
+        let KHeight = Int(Options[.DilateHeight] as? Int ?? 3)
         let Probe = CreateProbe(KWidth, KHeight)
         let Shader = MPSImageDilate(device: MetalDevice!, kernelWidth: KWidth, kernelHeight: KHeight, values: UnsafePointer(Probe))
         Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture, destinationTexture: OutputTexture)
