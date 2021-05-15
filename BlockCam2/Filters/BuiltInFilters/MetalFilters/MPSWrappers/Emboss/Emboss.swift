@@ -120,7 +120,7 @@ class Emboss: MetalFilterParent, BuiltInFilterProtocol
             return PixelBuffer.first!
         }
         
-        let EmbossType = Options[.EmbossType] as? Int ?? 0
+        let EmbossType = Int(Options[.EmbossType] as? Int ?? 0)
         let (EmbossKernel, Width, Height) = GetKernel(ForType: EmbossType)
         let Shader = MPSImageDilate(device: MetalDevice!, kernelWidth: Width, kernelHeight: Height, values: UnsafePointer(EmbossKernel))
         Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture, destinationTexture: OutputTexture)

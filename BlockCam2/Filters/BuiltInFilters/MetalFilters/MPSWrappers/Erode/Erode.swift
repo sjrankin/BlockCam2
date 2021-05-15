@@ -121,8 +121,8 @@ class Erode: MetalFilterParent, BuiltInFilterProtocol
             return PixelBuffer.first!
         }
         
-        let KWidth = Options[.ErodeWidth] as? Int ?? 3
-        let KHeight = Options[.ErodeHeight] as? Int ?? 3
+        let KWidth = Int(Options[.ErodeWidth] as? Int ?? 3)
+        let KHeight = Int(Options[.ErodeHeight] as? Int ?? 3)
         let Probe = CreateProbe(KWidth, KHeight)
         let Shader = MPSImageErode(device: MetalDevice!, kernelWidth: KWidth, kernelHeight: KHeight, values: UnsafePointer(Probe))
         Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture, destinationTexture: OutputTexture)
