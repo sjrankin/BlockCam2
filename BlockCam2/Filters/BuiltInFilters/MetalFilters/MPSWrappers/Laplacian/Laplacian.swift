@@ -1,5 +1,5 @@
 //
-//  Lapacian.swift
+//  Laplacian.swift
 //  BlockCam2
 //  Adapted from BumpCamera, 3/21/19.
 //
@@ -15,7 +15,7 @@ import MetalPerformanceShaders
 
 class MPSLaplacian: MetalFilterParent, BuiltInFilterProtocol
 {
-    static var FilterType: BuiltInFilters = .Lapacian
+    static var FilterType: BuiltInFilters = .Laplacian
     var NeedsInitialization: Bool = true
     
     required override init()
@@ -123,7 +123,7 @@ class MPSLaplacian: MetalFilterParent, BuiltInFilterProtocol
         }
         
         let Shader = MPSImageLaplacian(device: MetalDevice!)
-        Shader.bias = Options[.ShaderBias] as? Float ?? 0.5
+        Shader.bias = Float(Options[.ShaderBias] as? Double ?? 0.5)
         Shader.encode(commandBuffer: CommandBuffer, sourceTexture: InputTexture, destinationTexture: OutputTexture)
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
