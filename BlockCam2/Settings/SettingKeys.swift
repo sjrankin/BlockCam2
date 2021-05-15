@@ -175,4 +175,28 @@ enum SettingKeys: String, CaseIterable
     // MARK: - EdgeWork settings
     /// Double: Thickness of the edges
     case EdgeWorkThickness = "EdgeWorkThickness"
+    
+    // MARK: - Threshold filter settings
+    /// Double: Value at which high colors become active.
+    case ThresholdValue = "ThresholdValue"
+    /// Boolean: Essentially switches the low and high colors.
+    case ThresholdApplyIfGreater = "ThresholdApplyIfGreater"
+    /// Integer: The channel to use for the threshold.
+    case ThresholdInputChannel = "ThresholdInputChannel"
+    /// UIColor: The color to use for areas below the threshold
+    case ThresholdLowColor = "ThresholdLowColor"
+    /// UIColor: The color to use for areas above the threshold.
+    case ThresholdHighColor = "ThresholdHighColor"
+    
+    // MARK: - Convolution filter settings
+    /// Double: Bias value
+    case ConvolutionBias = "ConvolutionBias"
+    /// String: Kernel of doubles stored as an array.
+    case ConvolutionKernel = "Convolutionkernel"
+    /// Integer: Width of the convolution kernel.
+    case ConvolutionWidth = "ConvolutionWidth"
+    /// Integer: Height of the convolution kernel.
+    case ConvolutionHeight = "ConvolutionHeight"
+    /// Integer: Index of the pre-defined convolution kernel.
+    case ConvolutionPredefinedKernel = "ConvolutionPredefinedKernel"
 }
