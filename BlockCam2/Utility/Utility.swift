@@ -1179,7 +1179,7 @@ class Utility
                 return "Mom"
                 
             case "Sample3":
-                return "Yokai"
+                return "Yōkai"
                 
             case "Sample4":
                 return "Galaxy"
@@ -1213,7 +1213,7 @@ class Utility
                 return "Mom"
                 
             case "Sample3":
-                return "Yokai"
+                return "Yōkai"
                 
             case "Sample4":
                 return "Galaxy"
