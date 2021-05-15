@@ -115,5 +115,25 @@ extension Settings
             
             // EdgeWork filter
             .EdgeWorkThickness: 0.1,
+            
+            // Threshold filter
+            .ThresholdValue: 0.4,
+            .ThresholdApplyIfGreater: false,
+            .ThresholdInputChannel: 0,
+            .ThresholdLowColor: UIColor.black,
+            .ThresholdHighColor: UIColor.yellow,
+            
+            // Convolution filter
+            .ConvolutionBias: 0.0,
+            .ConvolutionKernel: [
+                [1.0, 0.0, 0.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0, 0.0, 0.0],
+                [0.0, 0.0, 1.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0, 1.0, 0.0],
+                [0.0, 0.0, 0.0, 0.0, 1.0],
+            ],
+            .ConvolutionWidth: 3,
+            .ConvolutionHeight: 3,
+            .ConvolutionPredefinedKernel: 0,
         ]
 }
