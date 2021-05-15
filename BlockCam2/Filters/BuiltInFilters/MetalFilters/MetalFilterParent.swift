@@ -318,7 +318,8 @@ class MetalFilterParent
     ///   - TextureSize: If not nil, contains the size of the returned texture. If nil, the returned texture
     ///                  has the same dimensions as `PixelBuffer`.
     /// - Returns: Metal texture with the contents as the pixel buffer.
-    func MakeTextureFromCVPixelBuffer(PixelBuffer: CVPixelBuffer, TextureFormat: MTLPixelFormat,
+    func MakeTextureFromCVPixelBuffer(PixelBuffer: CVPixelBuffer,
+                                      TextureFormat: MTLPixelFormat,
                                       TextureSize: CGSize? = nil) -> MTLTexture?
     {
         var Width: Int = 0
@@ -343,11 +344,22 @@ class MetalFilterParent
         // Create a Metal texture from the image buffer
         // https://docs.microsoft.com/en-us/dotnet/api/corevideo.cvreturn?view=xamarin-ios-sdk-12
         var cvTextureOut: CVMetalTexture?
-        let Result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, TextureCache, PixelBuffer, nil,
-                                                               TextureFormat, Width, Height, 0, &cvTextureOut)
+        let Result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+                                                               TextureCache,
+                                                               PixelBuffer,
+                                                               nil,
+                                                               TextureFormat,
+                                                               Width,
+                                                               Height,
+                                                               0,
+                                                               &cvTextureOut)
         if Result != kCVReturnSuccess
         {
-            fatalError("CVMetalTextureCacheCreateTextureFromImage returned \(Result)")
+            if Result == kCVReturnPixelBufferNotMetalCompatible
+            {
+                Debug.FatalError("Tried to create metal texture buffer from Texture that was not Metal compatible: \(Result)")
+            }
+            Debug.FatalError("CVMetalTextureCacheCreateTextureFromImage returned \(Result)")
         }
         
         guard let cvTexture = cvTextureOut else
@@ -373,9 +385,7 @@ class MetalFilterParent
     /// - Returns: Tuple with the following contents: (The buffer pool to use, the color space of
     ///            the buffer pool, and a description of the format of the buffer pool).
     func CreateBufferPool(From: CMFormatDescription, BufferCountHint: Int, BufferSize: CGSize? = nil) ->
-    (BufferPool: CVPixelBufferPool?,
-     ColorSpace: CGColorSpace?,
-     FormatDescription: CMFormatDescription?)
+    (BufferPool: CVPixelBufferPool?, ColorSpace: CGColorSpace?, FormatDescription: CMFormatDescription?)
     {
         let InputSubType = CMFormatDescriptionGetMediaSubType(From)
         if InputSubType != kCVPixelFormatType_32BGRA
@@ -388,17 +398,20 @@ class MetalFilterParent
         var Height: Int = 0
         if let PassedSize = BufferSize
         {
+            print("Using passed buffer size")
             Width = Int(PassedSize.width)
             Height = Int(PassedSize.height)
         }
         else
         {
+            print("Using derived buffer size")
             let InputSize = CMVideoFormatDescriptionGetDimensions(From)
             Width = Int(InputSize.width)
             Height = Int(InputSize.height)
         }
         var PixelBufferAttrs: [String: Any] =
             [
+                kCVPixelBufferMetalCompatibilityKey as String: kCFBooleanTrue,
                 kCVPixelBufferPixelFormatTypeKey as String: UInt(InputSubType),
                 kCVPixelBufferWidthKey as String: Width,
                 kCVPixelBufferHeightKey as String: Height,
@@ -437,7 +450,8 @@ class MetalFilterParent
         
         let PoolAttrs = [kCVPixelBufferPoolMinimumBufferCountKey as String: BufferCountHint]
         var CVPixBufPool: CVPixelBufferPool?
-        CVPixelBufferPoolCreate(kCFAllocatorDefault, PoolAttrs as NSDictionary?,
+        CVPixelBufferPoolCreate(kCFAllocatorDefault,
+                                PoolAttrs as NSDictionary?,
                                 PixelBufferAttrs as NSDictionary?,
                                 &CVPixBufPool)
         guard let BufferPool = CVPixBufPool else
