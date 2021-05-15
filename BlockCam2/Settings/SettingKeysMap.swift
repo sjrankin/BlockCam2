@@ -117,5 +117,19 @@ extension Settings
             
             // EdgeWork filter
             .EdgeWorkThickness: Double.self,
+            
+            /// Threshold filter
+            .ThresholdValue: Double.self,
+            .ThresholdApplyIfGreater: Bool.self,
+            .ThresholdInputChannel: Int.self,
+            .ThresholdLowColor: UIColor.self,
+            .ThresholdHighColor: UIColor.self,
+            
+            /// Convolution filter
+            .ConvolutionBias: Double.self,
+            .ConvolutionKernel: [[Double]].self,
+            .ConvolutionWidth: Int.self,
+            .ConvolutionHeight: Int.self,
+            .ConvolutionPredefinedKernel: Int.self,
         ]
 }
