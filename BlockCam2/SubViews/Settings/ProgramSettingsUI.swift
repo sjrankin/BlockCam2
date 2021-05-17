@@ -21,6 +21,12 @@ struct RunSettingView: View
             case "About":
                 AboutView()
                 
+            case "Sample Images":
+                SampleImageManager()
+                
+            case "Camera":
+                CameraSettings()
+                
             default:
                 UnexpectedView()
         }
