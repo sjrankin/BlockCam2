@@ -17,6 +17,8 @@ struct LargeSampleImage: View
     @State var Filter: BuiltInFilters
     @State var PageTitle: String
     @State var ImageName: String = "Sample1"
+    @State var EnableFilter: Bool = true
+    @State var ShowHelp: Bool = false
     
     var body: some View
     {
@@ -27,13 +29,32 @@ struct LargeSampleImage: View
             {
                 VStack(alignment: .center)
                 {
-                    Image(uiImage: Filters.RunFilter(On: ImageToView, Filter: Filter)!)
+                    Spacer()
+                    HStack
+                    {
+                        VStack
+                        {
+                            Text("Show filter")
+                                .frame(width: Geometry.size.width * 0.7,
+                                       alignment: .leading)
+                            Text("View sample with filter.")
+                                .font(.subheadline)
+                                .lineLimit(3)
+                                .foregroundColor(.gray)
+                                .frame(width: Geometry.size.width * 0.7,
+                                        alignment: .leading)
+                        }
+                    Toggle("", isOn: $EnableFilter)
+                    }
+                    .padding()
+                    
+                    Image(uiImage: Filters.RunFilter(On: ImageToView, Filter: EnableFilter ? Filter : .Passthrough)!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .background(Color.gray)
                         .border(Color.black, width: 1.0)
-                        .frame(width: Geometry.size.width * 0.9,
-                               height: Geometry.size.height * 0.8,
+                        .frame(width: Geometry.size.width * 0.95,
+                               height: Geometry.size.height * 0.75,
                                alignment: .center)
                         .gesture(
                             DragGesture(minimumDistance: 3, coordinateSpace: .local)
@@ -89,19 +110,26 @@ struct LargeSampleImage: View
                                     ]
                             )
                         }
+/*
                     #if os(iOS)
                     Text("Swipe left or right to change the sample image. Tap to reduce.")
                         .multilineTextAlignment(.center)
-                        .frame(alignment: .center)
+                        .lineLimit(3)
+                        .frame(height: 40,
+                               alignment: .center)
                         .font(.subheadline)
                         .foregroundColor(.gray)
-                        .padding()
+                        .padding(.top, -10)
+                        .padding([.trailing, .leading, .bottom])
                     Spacer()
                     #endif
+ */
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(PageTitle)
                 .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing)
+                    {
                     Button(action:
                             {
                                 self.Presentation.wrappedValue.dismiss()
@@ -109,6 +137,23 @@ struct LargeSampleImage: View
                     {
                         Text("Close")
                     }
+                    }
+                    ToolbarItem(placement: .navigationBarLeading)
+                    {
+                        Button(action:
+                                {
+                                    ShowHelp = true
+                                })
+                        {
+                            Image(systemName: "questionmark.circle.fill")
+                        }
+                    }
+                }
+                .alert(isPresented: $ShowHelp)
+                {
+                    Alert(title: Text("Help"),
+                          message: Text("Tap the image to dismiss this view. Swipe the image left or right to see other sample images. Use the toggle button to see the sample with or without the filter."),
+                          dismissButton: .default(Text("OK")))
                 }
             }
             .padding()
