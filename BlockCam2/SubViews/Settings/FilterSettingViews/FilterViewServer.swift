@@ -80,6 +80,63 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.Kuwahara.rawValue:
+                SettingsContainer
+                {
+                    KuwaharaFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.SolarizeRGB.rawValue:
+                SettingsContainer
+                {
+                    SolarizationRGBFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.SolarizeHSB.rawValue:
+                SettingsContainer
+                {
+                    SolarizationHSBFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+                
+            /*
+            case BuiltInFilters.Solarize.rawValue:
+                SettingsContainer
+                {
+                    SolarizationFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            */
+            case BuiltInFilters.ConditionalSilhouette.rawValue:
+                SettingsContainer
+                {
+                    ConditionalSilhouetteFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.ChannelMixer.rawValue:
+                SettingsContainer
+                {
+                    ChannelMixerFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.ChannelMangler.rawValue:
+                SettingsContainer
+                {
+                    ChannelManglerFilter_View(ButtonCommand: $UICommand) 
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.MetalGrayscale.rawValue:
+                SettingsContainer
+                {
+                    GrayscaleMetalFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.Convolution.rawValue:
                 SettingsContainer
                 {
