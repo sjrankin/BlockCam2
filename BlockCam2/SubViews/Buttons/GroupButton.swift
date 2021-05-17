@@ -21,11 +21,15 @@ struct GroupButton: View
                 })
         {
             Text(Name)
-                .font(.custom("Avenir-Black", size: 24.0))
+                .font(.custom("Avenir-Heavy", size: 20.0))
                 .padding(.horizontal, 5)
                 .padding(.vertical, 10)
                 .shadow(radius: 5)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
         }
+        .frame(width: 120, height: 50)
         .background(
             ZStack
             {
