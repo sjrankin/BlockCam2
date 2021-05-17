@@ -205,7 +205,13 @@ extension LiveViewController
         }
         Filters.Initialize(From: FormatDescription, Caller: "ProcessLiveViewFrame")
         let FinalPixelBuffer = VideoPixelBuffer
-        MetalView!.pixelBuffer = Filters.RunFilter(With: FinalPixelBuffer)
+        if let LastFilter = Filters.LastBuiltInFilterUsed
+        {
+            if Filters.IsRealTime(LastFilter)
+            {
+                MetalView!.pixelBuffer = Filters.RunFilter(With: FinalPixelBuffer)
+            }
+        }
         PreviousFrame = VideoPixelBuffer
         OperationQueue.main.addOperation
         {
