@@ -19,9 +19,9 @@ struct SettingsView: View
             Geometry in
             NavigationView
             {
-                LazyHStack(alignment: .top)
+                HStack(alignment: .top)
                 {
-                    LazyVStack
+                    VStack
                     {
                         Toggle(isOn: self.$Storage.SaveOriginalImage)
                         {
@@ -33,7 +33,9 @@ struct SettingsView: View
                                     .foregroundColor(.gray)
                             }
                         }
-                        .frame(width: Geometry.size.width * 0.85)
+                        
+                        Divider()
+                            .background(Color.black)
                         
                         Toggle(isOn: self.$Storage.ShowAudioWaveform)
                         {
@@ -45,16 +47,12 @@ struct SettingsView: View
                                     .foregroundColor(.gray)
                             }
                         }
-                        .frame(width: Geometry.size.width * 0.85)
                         
                         Spacer()
                     }
                 }
-                .padding([.leading, .trailing], -130)
+                .padding()
             }
-            .frame(width: Geometry.size.width,
-                   height: Geometry.size.height,
-                   alignment: .top)
             .navigationBarTitle(Text("Program Settings"))
         }
     }
