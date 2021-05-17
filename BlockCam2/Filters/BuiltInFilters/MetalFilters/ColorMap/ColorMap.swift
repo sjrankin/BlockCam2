@@ -101,7 +101,6 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
                                                   options: [])
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<ColorMapParameters>.stride)
         
-        #if true
         super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
         var NewPixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
@@ -109,25 +108,6 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
         {
             fatalError("Error creation textures for ColorMap.")
         }
-        #else
-        guard let Format = FilterHelper.GetFormatDescription(From: Buffer.first!) else
-        {
-            fatalError("Error getting description of buffer in ColorMap.")
-        }
-        let ImageSize = CGSize(width: Int(Format.dimensions.width), height: Int(Format.dimensions.height))
-        guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                  BufferCountHint: 3,
-                                                                  BufferSize: ImageSize) else
-        {
-            fatalError("Error creating local buffer pool in ColorMap.")
-        }
-        var NewPixelBuffer: CVPixelBuffer? = nil
-        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool, &NewPixelBuffer)
-        guard var OutputBuffer = NewPixelBuffer else
-        {
-            fatalError("Error creating textures for ColorMap.")
-        }
-        #endif
 
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm),
               let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
@@ -139,7 +119,7 @@ class ColorMap: MetalFilterParent, BuiltInFilterProtocol
               let CommandBuffer = CommandQ.makeCommandBuffer(),
               let CommandEncoder = CommandBuffer.makeComputeCommandEncoder() else
         {
-            fatalError("Error creating Metal command queue.")
+            Debug.FatalError("Error creating Metal command queue.")
         }
         
         var Grdnt: String = ""
