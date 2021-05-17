@@ -69,3 +69,29 @@ struct FilterView: View
         .transition(.slide)
     }
 }
+
+struct FilterView_Preview: PreviewProvider
+{
+    @State static var Hidden: Bool = false
+    @State static var FilterButton: String = ""
+    @State static var GroupButton: String = ""
+    
+    static var previews: some View
+    {
+        VStack
+        {
+            Button(Hidden ? "Show filters" : "Hide filters")
+            {
+                Hidden.toggle()
+            }
+                .padding()
+            FilterView(Width: 500,
+                       Height: 1200,
+                       ToolHeight: 150,
+                       BottomHeight: 64,
+                       ToggleHidden: $Hidden,
+                       SelectedFilter: $FilterButton,
+                       SelectedGroup: $GroupButton)
+        }
+    }
+}
