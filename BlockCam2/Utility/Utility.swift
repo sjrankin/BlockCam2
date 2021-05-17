@@ -1037,8 +1037,6 @@ class Utility
         return CaseList
     }
     
-   
-    
     /// Returns a geographical coordinate as a pretty string.
     /// - Parameter Latitude: The latitude of the coordinate.
     /// - Parameter Longitude: The longitude of the coordinate.
@@ -1163,7 +1161,7 @@ class Utility
     // MARK: - Sample image handling.
     
     /// Current number of sample images.
-    public static var MaxSamples: Int = 7
+    public static var MaxSamples: Int = 8
     
     /// Returns a nice sample name for the current sample image.
     /// - Returns: Nice sample name for the current sample image. If the sample
@@ -1191,6 +1189,9 @@ class Utility
                 return "Apollo 17"
                 
             case "Sample7":
+                return "MSL Gale Crater"
+                
+            case "Sample8":
                 return "Grid"
                 
             default:
@@ -1225,6 +1226,9 @@ class Utility
                 return "Apollo 17"
                 
             case "Sample7":
+                return "MSL Gale Crater"
+                
+            case "Sample8":
                 return "Grid"
                 
             default:
