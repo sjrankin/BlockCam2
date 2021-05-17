@@ -42,6 +42,15 @@ extension LiveViewController
         ProcessingQueue.async
         {
             Filters.Initialize(From: PhotoFormat!, Caller: "photoOutput")
+            guard let ImageBuffer = Filters.RunFilter(With: PhotoPixelBuffer) else
+            {
+                Debug.FatalError("Error returned from RunFilter.")
+            }
+            let CImg = CIImage(cvImageBuffer: ImageBuffer)
+            let Context = CIContext(options: nil)
+            let CGImg = Context.createCGImage(CImg, from: CImg.extent)!
+            ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
+            /*
             if let ImageBuffer = Filters.RunFilter(With: PhotoPixelBuffer)
             {
                 let CImg = CIImage(cvImageBuffer: ImageBuffer)
@@ -49,7 +58,7 @@ extension LiveViewController
                 let CGImg = Context.createCGImage(CImg, from: CImg.extent)!
                 ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
             }
-            
+            */
             PHPhotoLibrary.requestAuthorization
             {
                 Status in
@@ -60,6 +69,24 @@ extension LiveViewController
                             let CreationRequest = PHAssetCreationRequest.forAsset()
                             let ImageData = ImageToSave.jpegData(compressionQuality: 1.0)!
                             CreationRequest.addResource(with: .photo, data: ImageData, options: nil)
+                            if Settings.GetBool(.SaveOriginalImage) || Settings.GetBool(.UseLatestBlockCamImage)
+                            {
+                                let OImg = CIImage(cvImageBuffer: ImageBuffer)
+                                let OContext = CIContext(options: nil)
+                                let OCGImage =  OContext.createCGImage(OImg, from: OImg.extent)!
+                                let OriginalImage = UIImage(cgImage: OCGImage)
+                                let OriginalData = OriginalImage.jpegData(compressionQuality: 1.0)!
+                                if Settings.GetBool(.SaveOriginalImage)
+                                {
+                                let OriginalRequest = PHAssetCreationRequest.forAsset()
+                                OriginalRequest.addResource(with: .photo, data: OriginalData, options: nil)
+                                }
+                                if Settings.GetBool(.UseLatestBlockCamImage)
+                                {
+                                    FileIO.SaveImage(OriginalImage, WithName: "LastBlockCamImage.jpg",
+                                                     Directory: FileIO.LastImageDirectory)
+                                }
+                            }
                             #if false
                             let SaveDuration = CACurrentMediaTime() - Start
                             if SaveDuration < 2.0
