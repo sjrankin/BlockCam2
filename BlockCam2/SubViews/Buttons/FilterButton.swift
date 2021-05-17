@@ -26,12 +26,16 @@ struct FilterButton: View
                 })
         {
             Text(Name)
-                .font(.custom("Avenir-Heavy", size: 20.0))
+                .font(.custom("Avenir-Medium", size: 18.0))
                 .foregroundColor(.black)
                 .padding(.horizontal, 3)
                 .padding(.vertical, 10)
                 .shadow(radius: 5)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
         }
+        .frame(width: 110, height: 50)
         .foregroundColor(.black)
         .background(
             ZStack
