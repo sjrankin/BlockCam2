@@ -17,16 +17,23 @@ enum SettingKeys: String, CaseIterable
     case InitializationFlag = "InitializationFlag"
     case InstanceID = "InstanceID"
     
-    // MARK: - User interface settings.
-    
+    // MARK: - Audio settings.
     /// Boolean: If true, audio waveforms are shown overlayed the image.
     case ShowAudioWaveform = "ShowAudioWaveform"
+    
+    // MARK: - Camera and image general settings.
     /// Boolean: If true, the original image is saved along with the modified image.
     case SaveOriginalImage = "SaveOriginalImage"
-    /// Integer: Index of the sample image.
-    case SampleImageIndex = "SampleImageIndex"
     /// Integer: Index of the input source (0 = camera, 1 = photo album).
     case InputSourceIndex = "InputSourceIndex"
+    
+    // MARK: - Sample image settings
+    /// Integer: Index of the sample image.
+    case SampleImageIndex = "SampleImageIndex"
+    /// Boolean: Use the latest BlockCam image as a sample image.
+    case UseLatestBlockCamImage = "UseLatestBlockCamImage"
+    /// Boolean: Use the latest taken image in the photo album as a sample image.
+    case UseMostRecentImage = "UseMostRecentImage"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.
@@ -199,4 +206,134 @@ enum SettingKeys: String, CaseIterable
     case ConvolutionHeight = "ConvolutionHeight"
     /// Integer: Index of the pre-defined convolution kernel.
     case ConvolutionPredefinedKernel = "ConvolutionPredefinedKernel"
+
+    // MARK: - Metal grayscale filter
+    /// Integer: Command ID
+    case GrayscaleMetalCommand = "GrayscaleMetalCommand"
+    /// Double: Red channel multiplier.
+    case GrayscaleRedMultiplier = "GrayscaleRedMultiplier"
+    /// Double: Green channel multiplier.
+    case GrayscaleGreenMultiplier = "GrayscaleGreenMultiplier"
+    /// Double: Blue channel multiplier.
+    case GrayscaleBlueMultiplier = "GrayscelBlueMultiplier"
+    
+    // MARK: - Metal color inverter
+    /// Integer: Which color inversion method to use.
+    case ColorInverterColorSpace = "ColorInverterColorSpace"
+    /// Boolean: Invert channel 1.
+    case ColorInverterInvertChannel1 = "ColorInverterInvertChannel1"
+    /// Boolean: Invert channel 2.
+    case ColorInverterInvertChannel2 = "ColorInverterInvertChannel2"
+    /// Boolean: Invert channel 3.
+    case ColorInverterInvertChannel3 = "ColorInverterInvertChannel3"
+    /// Boolean: Invert channel 4.
+    case ColorInverterInvertChannel4 = "ColorInverterInvertChannel4"
+    /// Boolean: Enable channel 1 threshold.
+    case ColorInverterEnableChannel1Threshold = "ColorInverterEnableChannel1Threshold"
+    /// Boolean: Enable channel 2 threshold.
+    case ColorInverterEnableChannel2Threshold = "ColorInverterEnableChannel2Threshold"
+    /// Boolean: Enable channel 3 threshold.
+    case ColorInverterEnableChannel3Threshold = "ColorInverterEnableChannel3Threshold"
+    /// Boolean: Enable channel 4 threshold.
+    case ColorInverterEnableChannel4Threshold = "ColorInverterEnableChannel4Threshold"
+    /// Double: Threshold level for channel 1.
+    case ColorInverterChannel1Threshold = "ColorInverterChannel1Threshold"
+    /// Double: Threshold level for channel 2.
+    case ColorInverterChannel2Threshold = "ColorInverterChannel2Threshold"
+    /// Double: Threshold level for channel 3.
+    case ColorInverterChannel3Threshold = "ColorInverterChannel3Threshold"
+    /// Double: Threshold level for channel 4.
+    case ColorInverterChannel4Threshold = "ColorInverterChannel4Threshold"
+    /// Boolean: Invert channel 1 if the threshold value is greater.
+    case ColorInverterInvertChannel1IfGreater = "ColorInverterInvertChannel1IfGreater"
+    /// Boolean: Invert channel 2 if the threshold value is greater.
+    case ColorInverterInvertChannel2IfGreater = "ColorInverterInvertChannel2IfGreater"
+    /// Boolean: Invert channel 3 if the threshold value is greater.
+    case ColorInverterInvertChannel3IfGreater = "ColorInverterInvertChannel3IfGreater"
+    /// Boolean: Invert channel 4 if the threshold value is greater.
+    case ColorInverterInvertChannel4IfGreater = "ColorInverterInvertChannel4IfGreater"
+    /// Boolean: Determines if alpha is inverted.
+    case ColorInverterInvertAlpha = "ColorInverterInvertAlpha"
+    /// Boolean: Threshold for alpha processing.
+    case ColorInverterEnableAlphaThreshold = "ColorInverterEnableAlphaThreshold"
+    /// Boolean: Alpha threshold value.
+    case ColorInverterAlphaThreshold = "ColorInverterAlphaThreshold"
+    /// Boolean: Reverses alpha inversion.
+    case ColorInverterInvertAlphaIfGreater = "ColorInverterInvertAlphaIfGreater"
+
+    // MARK: - Conditional silhouette
+    /// Integer: Silhouette trigger.
+    case ConditionalSilhouetteTrigger = "ConditionalSilhouetteTrigger"
+    /// Double: Threshold for hue.
+    case ConditionalSilhouetteHueThreshold = "ConditionalSilhouetteHueThreshold"
+    /// Double: Range for hue.
+    case ConditionalSilhouetteHueRange = "ConditionalSilhouetteHueRange"
+    /// Double: Threshold for saturation.
+    case ConditionalSilhouetteSatThreshold = "ConditionalSilhouetteSatThreshold"
+    /// Double: Range for saturation.
+    case ConditionalSilhouetteSatRange = "ConditionalSilhouetteSatRange"
+    /// Double: Threshold for brightness.
+    case ConditionalSilhouetteBriThreshold = "ConditionalSilhouetteBriThreshold"
+    /// Double: Range for brightness.
+    case ConditionalSilhouetteBriRange = "ConditionalSilhouetteBriRange"
+    /// Boolean: Switches threshold calculation.
+    case ConditionalSilhouetteGreaterThan = "ConditionalSilhouetteGreaterThan"
+    /// UIColor: Color to use for the silhouette.
+    case ConditionalSilhouetteColor = "ConditionalSilhouetteColor"
+
+    // MARK: - Channel mangler
+    /// Integer: Operation to perform to mangle channels.
+    case ChannelManglerOperation = "ChannelManglerOperation"
+    
+    // MARK: - Channel mixer
+    /// Integer: Channel 1 input source
+    case ChannelMixerChannel1 = "ChannelMixerChannel1"
+    /// Integer: Channel 2 input source
+    case ChannelMixerChannel2 = "ChannelMixerChannel2"
+    /// Integer: Channel 3 input source
+    case ChannelMixerChannel3 = "ChannelMixerChannel3"
+    /// Boolean: Invert channel 1.
+    case ChannelMixerInvertChannel1 = "ChannelMixerInvertChannel1"
+    /// Boolean: Invert channel 2.
+    case ChannelMixerInvertChannel2 = "ChannelMixerInvertChannel2"
+    /// Boolean: Invert channel 3.
+    case ChannelMixerInvertChannel3 = "ChannelMixerInvertChannel3"
+    
+    // MARK: - Bayer decoding
+    /// Integer: Order of the channels.
+    case BayerDecodeOrder = "BayerDecodeOrder"
+    /// Integer: Decoding method.
+    case BayerDecodeMethod = "BayerDecodeMethod"
+    
+    // MARK: - Solarization
+    /// Integer: Determines how to solarize the image.
+    case SolarizeHow = "SolarizeHow"
+    /// Double: Solarization threshold low value.
+    case SolarizeThresholdLow = "SolarizeThresholdLow"
+    /// Double: Solarization threshold high value.
+    case SolarizeThresholdHigh = "SolarizeThresholdHigh"
+    /// Boolean: Determines where solarization occurs.
+    case SolarizeIfGreater = "SolarizeIfGreater"
+    /// Double: Low range value for solarization.
+    case SolarizeLowHue = "SolarizeLowHue"
+    /// Double: High range value for solarization.
+    case SolarizeHighHue = "SolarizeHighHue"
+    /// Double: Brightness low threshold.
+    case SolarizeBrightnessThresholdLow = "SolarizeBrightnessThresholdLow"
+    /// Double: Brightness high threshold.
+    case SolarizeBrightnessThresholdHigh = "SolarizeBrightnessThresholdHigh"
+    /// Double: Saturation low threshold.
+    case SolarizeSaturationThresholdLow = "SolarizeSaturationThresholdLow"
+    /// Double: Saturation high threshold.
+    case SolarizeSaturationThresholdHigh = "SolarizeSaturationThresholdHigh"
+    /// Double: Red channel threshold.
+    case SolarizeRedThreshold = "SolarizeRedThreshold"
+    /// Double: Green channel threshold.
+    case SolarizeGreenThreshold = "SolarizeGreenThreshold"
+    /// Double: Blue channel threshold.
+    case SolarizeBlueThreshold = "SolarizeBlueThreshold"
+    
+    // MARK: - Kuwahara
+    /// Double: Radius of Kuwahara effect
+    case KuwaharaRadius = "KuwaharaRadius"
 }
