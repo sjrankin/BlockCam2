@@ -15,6 +15,9 @@ class FileIO
     /// Name of the directory where user sample images (for viewing filter settings) are stored.
     static let SampleDirectory = "/UserSample"
     
+    /// Name of the directory that holds the last image taken by BlockCam.
+    static let LastImageDirectory = "/LastImage"
+    
     /// Name of the directory where scratch images are saved (for the purposes of appending meta data before
     /// being moved to the photo roll).
     static let ScratchDirectory = "/Scratch"
