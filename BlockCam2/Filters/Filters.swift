@@ -166,6 +166,112 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .Kuwahara:
+                Options[.Radius] = Settings.GetDouble(.KuwaharaRadius,
+                                                      Settings.SettingDefaults[.KuwaharaRadius] as! Double)
+            
+            case .SolarizeRGB:
+                Options[.IntCommand] = Settings.GetInt(.SolarizeHow)
+                Options[.IsGreater] = Settings.GetBool(.SolarizeIfGreater)
+                switch Settings.GetInt(.SolarizeHow)
+                {
+                    case 0:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeThresholdHigh)
+                        
+                    case 1:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeRedThreshold)
+                        
+                    case 2:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeGreenThreshold)
+                        
+                    case 3:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeBlueThreshold)
+                        
+                    default:
+                        break
+                }
+            
+            case .SolarizeHSB:
+                Options[.IntCommand] = Settings.GetInt(.SolarizeHow)
+                Options[.IsGreater] = Settings.GetBool(.SolarizeIfGreater)
+                switch Settings.GetInt(.SolarizeHow)
+                {
+                    case 0:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeThresholdHigh)
+                        
+                    case 1:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeHighHue)
+                        
+                    case 2:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeSaturationThresholdHigh)
+                        
+                    case 3:
+                        Options[.Threshold] = Settings.GetDouble(.SolarizeBrightnessThresholdHigh)
+                        
+                    default:
+                        break
+                }
+            
+            case .Solarize:
+                Options[.IntCommand] = Settings.GetInt(.SolarizeHow)
+                Options[.ThresholdAllLow] = Settings.GetDouble(.SolarizeThresholdLow,
+                                                               Settings.SettingDefaults[.SolarizeThresholdLow] as! Double)
+                Options[.ThresholdAllHigh] = Settings.GetDouble(.SolarizeThresholdHigh,
+                                                               Settings.SettingDefaults[.SolarizeThresholdHigh] as! Double)
+                Options[.LowHue] = Settings.GetDouble(.SolarizeLowHue,
+                                                               Settings.SettingDefaults[.SolarizeLowHue] as! Double)
+                Options[.HighHue] = Settings.GetDouble(.SolarizeHighHue,
+                                                                Settings.SettingDefaults[.SolarizeHighHue] as! Double)
+                Options[.BrightnessThresholdLow] = Settings.GetDouble(.SolarizeBrightnessThresholdLow,
+                                                      Settings.SettingDefaults[.SolarizeBrightnessThresholdLow] as! Double)
+                Options[.BrightnessThresholdHigh] = Settings.GetDouble(.SolarizeBrightnessThresholdHigh,
+                                                       Settings.SettingDefaults[.SolarizeBrightnessThresholdHigh] as! Double)
+                Options[.SaturationThresholdLow] = Settings.GetDouble(.SolarizeSaturationThresholdLow,
+                                                                      Settings.SettingDefaults[.SolarizeSaturationThresholdLow] as! Double)
+                Options[.SaturationThresholdHigh] = Settings.GetDouble(.SolarizeSaturationThresholdHigh,
+                                                                       Settings.SettingDefaults[.SolarizeSaturationThresholdHigh] as! Double)
+                Options[.IsGreater] = Settings.GetBool(.SolarizeIfGreater)
+            
+            case .BayerDecode:
+                Options[.Order] = Settings.GetInt(.BayerDecodeOrder)
+                Options[.Method] = Settings.GetInt(.BayerDecodeMethod)
+            
+            case .ConditionalSilhouette:
+                Options[.CSTrigger] = Settings.GetInt(.ConditionalSilhouetteTrigger)
+                Options[.CSColor] = Settings.GetColor(.ConditionalSilhouetteColor, UIColor.black)
+                Options[.CSHueThreshold] = Settings.GetDouble(.ConditionalSilhouetteHueThreshold,
+                                                              Settings.SettingDefaults[.ConditionalSilhouetteHueThreshold] as! Double)
+                Options[.CSHueRange] = Settings.GetDouble(.ConditionalSilhouetteHueRange,
+                                                              Settings.SettingDefaults[.ConditionalSilhouetteHueRange] as! Double)
+                Options[.CSSatThreshold] = Settings.GetDouble(.ConditionalSilhouetteSatThreshold,
+                                                              Settings.SettingDefaults[.ConditionalSilhouetteSatThreshold] as! Double)
+                Options[.CSSatRange] = Settings.GetDouble(.ConditionalSilhouetteSatRange,
+                                                          Settings.SettingDefaults[.ConditionalSilhouetteSatRange] as! Double)
+                Options[.CSBriThreshold] = Settings.GetDouble(.ConditionalSilhouetteBriThreshold,
+                                                              Settings.SettingDefaults[.ConditionalSilhouetteBriThreshold] as! Double)
+                Options[.CSBriRange] = Settings.GetDouble(.ConditionalSilhouetteBriRange,
+                                                          Settings.SettingDefaults[.ConditionalSilhouetteBriRange] as! Double)
+            
+            case .ChannelMixer:
+                Options[.Channel1] = Settings.GetInt(.ChannelMixerChannel1)
+                Options[.Channel2] = Settings.GetInt(.ChannelMixerChannel2)
+                Options[.Channel3] = Settings.GetInt(.ChannelMixerChannel3)
+                Options[.InvertChannel1] = Settings.GetBool(.ChannelMixerInvertChannel1)
+                Options[.InvertChannel2] = Settings.GetBool(.ChannelMixerInvertChannel2)
+                Options[.InvertChannel3] = Settings.GetBool(.ChannelMixerInvertChannel3)
+            
+            case .ChannelMangler:
+                Options[.IntCommand] = Settings.GetInt(.ChannelManglerOperation)
+            
+            case .MetalGrayscale:
+                Options[.IntCommand] = Settings.GetInt(.GrayscaleMetalCommand)
+                Options[.RedMultiplier] = Settings.GetDouble(.GrayscaleRedMultiplier,
+                                                             Settings.SettingDefaults[.GrayscaleRedMultiplier] as! Double)
+                Options[.GreenMultiplier] = Settings.GetDouble(.GrayscaleGreenMultiplier,
+                                                             Settings.SettingDefaults[.GrayscaleGreenMultiplier] as! Double)
+                Options[.BlueMultiplier] = Settings.GetDouble(.GrayscaleBlueMultiplier,
+                                                             Settings.SettingDefaults[.GrayscaleBlueMultiplier] as! Double)
+            
             case .Convolution:
                 Options[.Bias] = Settings.GetDouble(.ConvolutionBias,
                                                     Settings.SettingDefaults[.ConvolutionBias] as! Double)
@@ -296,6 +402,18 @@ class Filters
         return Options
     }
     
+    /// List of filters that are too slow to run in real-time and so are not available in live view.
+    public static let NonRealTimeFilters = [BuiltInFilters.Kuwahara]
+    
+    /// Determines if the passed filter is real-time or not.
+    /// - Note: Real-time filters are sufficiently performant that they can be used in live views.
+    /// - Parameter Filter: The filter to determine fitness for live view.
+    /// - Returns: True if the filter can be used for live views, false if not.
+    public static func IsRealTime(_ Filter: BuiltInFilters) -> Bool
+    {
+        return !NonRealTimeFilters.contains(Filter)
+    }
+    
     public static func BufferToUIImage(_ Buffer: CVPixelBuffer) -> UIImage?
     {
         let CImg = CIImage(cvImageBuffer: Buffer)
@@ -334,7 +452,6 @@ class Filters
             }
             Context.render(CImg, to: ActualBuffer)
             
-//            if let NewBuffer = RunFilter(Filter, With: ActualBuffer)
             if let NewBuffer = RunFilter(With: ActualBuffer, Filter)
             {
                 let FinalImage = UIImage(Buffer: NewBuffer)
@@ -347,6 +464,25 @@ class Filters
             }
         }
         return nil
+    }
+    
+    /// Run a built-in filter on the passed image.
+    /// - Parameter On: The image on which to run the filter.
+    /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
+    ///                     filter will be used.
+    /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
+    ///                                    nil is returned on error.
+    /// - Parameter Block: Trailing closure that is called (if provided) after processing is complete. The
+    ///                    boolean value passed to the close will be true on success, false on failure.
+    /// - Returns: New and filtered `UIImage` on success, nil on error.
+    public static func RunFilter(On Image: UIImage,
+                                 Filter: BuiltInFilters? = nil,
+                                 ReturnOriginalOnError: Bool = true,
+                                 Block: ((Bool) -> ())? = nil) -> UIImage?
+    {
+        let Results = RunFilter(On: Image, Filter: Filter, ReturnOriginalOnError: ReturnOriginalOnError)
+        Block?(Results == nil ? false : true)
+        return Results
     }
 
     /// Run a built-in filter on the passed buffer.
@@ -410,6 +546,19 @@ class Filters
         return nil
     }
     
+    /// Run a built-in filter on the passed buffer.
+    /// - Parameter With: The buffer to filter.
+    /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
+    ///                     prior to this call, `.Passthrough` is used.
+    /// - Returns: Filtered data according to `Filter`. Nil on error.
+    public static func RunFilter(With Buffer: CVPixelBuffer, _ Filter: BuiltInFilters? = nil,
+                                 Block: ((Bool) -> ())?) -> CVPixelBuffer?
+    {
+        let Result = RunFilter(With: Buffer, Filter)
+        Block?(Result == nil ? false : true)
+        return Result
+    }
+    
     /// Sets the default filter.
     /// - Parameter NewFilter: Filter to use as the default filter.
     public static func SetFilter(_ NewFilter: BuiltInFilters)
@@ -438,6 +587,7 @@ class Filters
             .Edges: 0xfae6fa,
             .MultiFrame: 0xea71c6,
             .Test: 0xffe0d0,
+            .NonLiveView: 0xa070d0
         ]
 }
 
@@ -459,6 +609,7 @@ enum FilterGroups: String, CaseIterable
     case Edges = "Edges"
     case MultiFrame = "Frames"
     case Test = "Test/Debug"
+    case NonLiveView = "Non-Live View"
 }
 
 /// Individual filters.
@@ -489,9 +640,9 @@ enum BuiltInFilters: String, CaseIterable
     case Vibrance = "Vibrance "
     case XRay = "X-Ray"
     case Comic = "Comic"
-    case TriangleKaleidoscope = "Triangle Kaleidoscope"
-    case Kaleidoscope = "Kaleidoscope"
-    case ColorMonochrome = "Color Monochrome"
+    case TriangleKaleidoscope = "Triangle Kaleido."
+    case Kaleidoscope = "Kaleido-scope"
+    case ColorMonochrome = "Color Mono"
     case MaximumComponent = "Maximum"
     case MinimumComponent = "Minimum"
     case HistogramDisplay = "Histogram"
@@ -521,6 +672,7 @@ enum BuiltInFilters: String, CaseIterable
     case BumpDistortion = "Bump"
     case AreaHistogram = "Area Histogram"
     case ColorInvert = "Invert"
+    case ColorInvert2 = "Invert 2"
     case GrayscaleInvert = "B/W Invert"
     case GaussianBlur = "Gaussian"
     case MedianFilter = "Median Old"
@@ -556,6 +708,15 @@ enum BuiltInFilters: String, CaseIterable
     case HighColor = "High Color"
     case AreaMax = "Area Max"
     case Convolution = "Convolution"
+    case MetalGrayscale = "Grayscale 2"
+    case ChannelMangler = "Channels"
+    case ConditionalSilhouette = "Conditional Silhouette"
+    case ChannelMixer = "Channel Mixer"
+    case BayerDecode = "Bayer Decode"
+    case Solarize = "Solarize"
+    case SolarizeHSB = "Solarize HSB"
+    case SolarizeRGB = "Solarize RGB"
+    case Kuwahara = "Kuwahara"
     
     //Internal filters
     case Crop = "Crop"
