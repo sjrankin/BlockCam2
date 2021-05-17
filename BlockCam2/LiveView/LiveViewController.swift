@@ -89,18 +89,23 @@ class LiveViewController: UIViewController,
     }
     
     /// Initialize the file structure.
-    /// - Note: Two directories are required:
+    /// - Note: The following directories are required:
     ///     1. A scratch directory for image processing.
     ///     2. A sample directory for on-boarding.
+    ///     3. Directory for last image taken.
     func InitializeFileStructure()
     {
         if !FileIO.CreateIfDoesNotExist(DirectoryName: FileIO.ScratchDirectory)
         {
-            fatalError("Error creating \(FileIO.ScratchDirectory)")
+            Debug.FatalError("Error creating \(FileIO.ScratchDirectory)")
         }
         if !FileIO.CreateIfDoesNotExist(DirectoryName: FileIO.SampleDirectory)
         {
-            fatalError("Error creating \(FileIO.SampleDirectory)")
+            Debug.FatalError("Error creating \(FileIO.SampleDirectory)")
+        }
+        if !FileIO.CreateIfDoesNotExist(DirectoryName: FileIO.LastImageDirectory)
+        {
+            Debug.FatalError("Error creating \(FileIO.LastImageDirectory)")
         }
     }
     
