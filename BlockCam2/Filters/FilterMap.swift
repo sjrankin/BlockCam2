@@ -54,8 +54,10 @@ extension Filters
         FilterMap[.ColorMonochrome] = BlockCam2.ColorMonochrome()
         FilterMap[.LinearTosRGB] = BlockCam2.LinearTosRGB()
         FilterMap[.ColorInvert] = BlockCam2.ColorInvert()
+        FilterMap[.ColorInvert2] = BlockCam2.ColorInverter()
         FilterMap[.ColorMap] = BlockCam2.ColorMap()
         FilterMap[.Threshold] = BlockCam2.Threshold()
+        FilterMap[.BayerDecode] = BlockCam2.BayerDecode()
         return FilterMap
     }
     
@@ -93,6 +95,7 @@ extension Filters
         FilterMap[.MaximumComponent] = BlockCam2.MaximumComponent()
         FilterMap[.MinimumComponent] = BlockCam2.MinimumComponent()
         FilterMap[.GrayscaleInvert] = BlockCam2.GrayscaleInvert()
+        FilterMap[.MetalGrayscale] = BlockCam2.GrayscaleAdjust()
         return FilterMap
     }
     
@@ -142,6 +145,12 @@ extension Filters
         FilterMap[.ThermalEffect] = BlockCam2.Thermal()
         FilterMap[.Emboss] = BlockCam2.Emboss()
         FilterMap[.Dither] = BlockCam2.Dither()
+        FilterMap[.ConditionalSilhouette] = BlockCam2.ConditionalSilhouette()
+        FilterMap[.ChannelMangler] = BlockCam2.ChannelMangler()
+        FilterMap[.ChannelMixer] = BlockCam2.ChannelMixer()
+        //FilterMap[.Solarize] = BlockCam2.Solarize()
+        FilterMap[.SolarizeHSB] = BlockCam2.SolarizeHSB()
+        FilterMap[.SolarizeRGB] = BlockCam2.SolarizeRGB()
         return FilterMap
     }
     
@@ -183,6 +192,13 @@ extension Filters
         FilterMap[.EdgeWork] = BlockCam2.EdgeWork()
         FilterMap[.Laplacian] = BlockCam2.MPSLaplacian()
         FilterMap[.MorphologyGradient] = BlockCam2.MorphologyGradient()
+        return FilterMap
+    }
+    
+    private static func MakeNonLiveFilters() -> [BuiltInFilters: BuiltInFilterProtocol]?
+    {
+        var FilterMap = [BuiltInFilters: BuiltInFilterProtocol]()
+        FilterMap[.Kuwahara] = BlockCam2.Kuwahara()
         return FilterMap
     }
     
@@ -250,6 +266,9 @@ extension Filters
                     
                 case .Edges:
                     FilterData = MakeEdgeFilters()
+                    
+                case .NonLiveView:
+                    FilterData = MakeNonLiveFilters()
                     
                 case .Test:
                     FilterData = MakeTestFilters()
@@ -383,5 +402,56 @@ enum FilterOptions: String
     case BackgroundFill = "BackgroundFill"
     case Matrix = "Matrix"
     case Bias = "Bias"
+    case IntCommand = "IntCommand"
+    case RedMultiplier = "RedMultiplier"
+    case GreenMultiplier = "GreenMultiplier"
+    case BlueMultiplier = "BlueMultiplier"
+    case CIColorSpace = "CIColorSpace"
+    case CIInvert1 = "CIInvert1"
+    case CIInvert2 = "CIInvert2"
+    case CIInvert3 = "CIInvert3"
+    case CIInvert4 = "CIInvert4"
+    case CIEnableThreshold1 = "CIEnableThreshold1"
+    case CIEnableThreshold2 = "CIEnableThreshold2"
+    case CIEnableThreshold3 = "CIEnableThreshold3"
+    case CIEnableThreshold4 = "CIEnableThreshold4"
+    case CIThreshold1 = "CIThreshold1"
+    case CIThreshold2 = "CIThreshold2"
+    case CIThreshold3 = "CIThreshold3"
+    case CIThreshold4 = "CIThreshold4"
+    case CIInvert1IfGreater = "CIInvert1IfGreater"
+    case CIInvert2IfGreater = "CIInvert2IfGreater"
+    case CIInvert3IfGreater = "CIInvert3IfGreater"
+    case CIInvert4IfGreater = "CIInvert4IfGreater"
+    case CIInvertAlpha = "CIInvertAlpha"
+    case CIInvertAlphaThreshold = "CIInvertAlphaThreshold"
+    case CIAlphaThreshold = "CIAlphaThreshold"
+    case CIAlphaInvertIfGreater = "CIAlphaInvertIfGreater"
+    case CSTrigger = "CSTrigger"
+    case CSHueThreshold = "CSHueThreshold"
+    case CSHueRange = "CSHueRange"
+    case CSSatThreshold = "CSSatThreshold"
+    case CSSatRange = "CSSatRange"
+    case CSBriThreshold = "CSBriThreshold"
+    case CSBriRange = "CSBriRange"
+    case CSGreaterThan = "CSGreaterThan"
+    case CSColor = "CSColor"
+    case Channel1 = "Channel1"
+    case Channel2 = "Channel2"
+    case Channel3 = "Channel3"
+    case InvertChannel1 = "InvertChannel1"
+    case InvertChannel2 = "InvertChannel2"
+    case InvertChannel3 = "InvertChannel3"
+    case Order = "Order"
+    case Method = "Method"
+    case ThresholdAllLow = "ThresholdAllLow"
+    case ThresholdAllHigh = "ThresholdAllHigh"
+    case LowHue = "LowHue"
+    case HighHue = "HighHue"
+    case BrightnessThresholdLow = "BrightnessThresholdLow"
+    case BrightnessThresholdHigh = "BrightnessThresholdHigh"
+    case SaturationThresholdLow = "SaturationThreshold"
+    case SaturationThresholdHigh = "SaturationThresholdHigh"
+    case IsGreater = "IsGreater"
 }
 
