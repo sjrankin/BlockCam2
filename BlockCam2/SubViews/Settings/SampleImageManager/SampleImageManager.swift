@@ -19,7 +19,7 @@ struct RunSampleImageSettingView: View
                 BuiltInSampleImageManager()
                 
             case "Your images":
-                UnexpectedView()
+                UserSampleManager()
                 
             case "Other options":
                 OtherSampleImageOptions()
