@@ -13,7 +13,7 @@ struct SlowSampleImage: View
     @Binding var UICommand: String
     @State var OnLongPress: Bool = false
     @State var ShowLargePreview: Bool = false
-    @State var ImageName: String = Utility.GetSampleImageName()
+    @State var ImageName: String = SampleImages.GetSampleImageName()
     @State var Filter: BuiltInFilters
     var EnableImageChange: Bool = true
     @State var Updated: Bool
@@ -23,7 +23,7 @@ struct SlowSampleImage: View
     {
         VStack
         {
-            Text(Utility.GetCurrentSampleImageName(From: $ImageName.wrappedValue))
+            Text(SampleImages.GetCurrentSampleImageName(From: $ImageName.wrappedValue))
                 .frame(alignment: .center)
                 .font(.subheadline)
                 .foregroundColor(.gray)
@@ -50,7 +50,7 @@ struct SlowSampleImage: View
                                     //swiped left
                                     if EnableImageChange
                                     {
-                                        ImageName = Utility.IncrementSampleImageName()
+                                        ImageName = SampleImages.IncrementSampleImageName()
                                     }
                                 }
                                 if value.translation.width > 0
@@ -58,7 +58,7 @@ struct SlowSampleImage: View
                                     //swiped right
                                     if EnableImageChange
                                     {
-                                        ImageName = Utility.DecrementSampleImageName()
+                                        ImageName = SampleImages.DecrementSampleImageName()
                                     }
                                 }
                             })
