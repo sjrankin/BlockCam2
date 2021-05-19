@@ -32,7 +32,6 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     {
         if !UICommand.isEmpty
         {
-            print("UI control: \(UICommand)")
             uiViewController.ButtonPressed(UICommand)
             DispatchQueue.main.async
             {
