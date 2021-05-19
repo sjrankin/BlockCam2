@@ -13,16 +13,17 @@ struct SampleImage: View
     @Binding var UICommand: String
     @State var OnLongPress: Bool = false
     @State var ShowLargePreview: Bool = false
-    @State var ImageName: String = Utility.GetSampleImageName()
+    @State var ImageName: String = SampleImages.GetSampleImageName()
     @State var Filter: BuiltInFilters
     var EnableImageChange: Bool = true
     @State var Updated: Bool
+    @State var ShowAttribution: Bool = false
     
     var body: some View
     {
         VStack
         {
-            Text(Utility.GetCurrentSampleImageName(From: $ImageName.wrappedValue))
+            Text(SampleImages.GetCurrentSampleImageName(From: $ImageName.wrappedValue))
                 .frame(alignment: .center)
                 .font(.subheadline)
                 .foregroundColor(.gray)
@@ -44,7 +45,7 @@ struct SampleImage: View
                                     //swiped left
                                     if EnableImageChange
                                     {
-                                        ImageName = Utility.IncrementSampleImageName()
+                                        ImageName = SampleImages.IncrementSampleImageName()
                                     }
                                 }
                                 if value.translation.width > 0
@@ -52,7 +53,7 @@ struct SampleImage: View
                                     //swiped right
                                     if EnableImageChange
                                     {
-                                        ImageName = Utility.DecrementSampleImageName()
+                                        ImageName = SampleImages.DecrementSampleImageName()
                                     }
                                 }
                             })
@@ -101,13 +102,32 @@ struct SampleImage: View
                     )
                 }
             #if os(iOS)
+            HStack
+            {
             Text("Swipe left or right to change the sample image. Double tap to enlarge.")
                 .multilineTextAlignment(.center)
                 .frame(alignment: .center)
                 .font(.subheadline)
                 .foregroundColor(.gray)
                 .padding()
+                
+                Button(action:
+                        {
+                            ShowAttribution.toggle()
+                        })
+                {
+                    Image(systemName: "info.circle")
+                        .frame(width: 32, height: 32, alignment: .trailing)
+                        .padding()
+                }
+            }
             #endif
+        }
+        .alert(isPresented: $ShowAttribution)
+        {
+            Alert(title: Text("Attribution"),
+                  message: Text(SampleImages.CurrentSample.Attribution),
+                  dismissButton: .default(Text("OK")))
         }
     }
 }
