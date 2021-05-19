@@ -18,6 +18,8 @@ struct SolarizationRGBFilter_View: View
     @State var ChannelThreshold: Double = 0.5
     @State var ChannelThresholdString: String = "0.5"
     @State var SolarizeIfGreater = Settings.GetBool(.SolarizeIfGreater)
+    @State var OnlyChannel: Bool = Settings.GetBool(.SolarizeOnlyChannel)
+    @State var AllChannels: Bool = true
     
     var body: some View
     {
@@ -52,25 +54,30 @@ struct SolarizationRGBFilter_View: View
                                 ChannelName = "All Channels"
                                 ChannelThreshold = Settings.GetDouble(.SolarizeThresholdHigh).RoundedTo(2)
                                 ChannelThresholdString = Settings.GetDouble(.SolarizeThresholdHigh).RoundedTo(2, PadTo: 2)
+                                AllChannels = true
                                 
                             case 1:
                                 ChannelName = "Red"
                                 ChannelThreshold = (Settings.GetDouble(.SolarizeRedThreshold) * 360.0).RoundedTo(2)
                                 ChannelThresholdString = Settings.GetDouble(.SolarizeRedThreshold).RoundedTo(2, PadTo: 2)
+                                AllChannels = false
                                 
                             case 2:
                                 ChannelName = "Green"
                                 ChannelThreshold = Settings.GetDouble(.SolarizeGreenThreshold).RoundedTo(2)
                                 ChannelThresholdString = Settings.GetDouble(.SolarizeGreenThreshold).RoundedTo(2, PadTo: 2)
+                                AllChannels = false
                                 
                             case 3:
                                 ChannelName = "Blue"
                                 ChannelThreshold = Settings.GetDouble(.SolarizeBlueThreshold).RoundedTo(2)
                                 ChannelThresholdString = Settings.GetDouble(.SolarizeBlueThreshold).RoundedTo(2, PadTo: 2)
+                                AllChannels = false
                                 
                             default:
                                 break
                         }
+                        Updated.toggle()
                     }
                     .padding()
                     Divider()
@@ -126,7 +133,7 @@ struct SolarizationRGBFilter_View: View
                                     .multilineTextAlignment(.trailing)
                             }
                             
-                            VStack
+                            VStack(alignment: .leading)
                             {
                                 HStack
                                 {
@@ -139,6 +146,8 @@ struct SolarizationRGBFilter_View: View
                                             {
                                                 NewValue in
                                                 self.SolarizeIfGreater = NewValue
+                                                Settings.SetBool(.SolarizeIfGreater, SolarizeIfGreater)
+                                                Updated.toggle()
                                             }
                                     ))
                                 }
@@ -149,6 +158,38 @@ struct SolarizationRGBFilter_View: View
                         Spacer()
                         
                     }
+                    Divider()
+                        .background(Color.black)
+                    HStack
+                    {
+                        VStack
+                        {
+                            Text("Solarize only Channel")
+                                .font(.headline)
+                                .frame(width: Geometry.size.width * 0.7,
+                                       alignment: .leading)
+                            Text("If enabled, only the selected channel will be solarized. Otherwise all channels will be solarized.")
+                                .font(.subheadline)
+                                .frame(width: Geometry.size.width * 0.7)
+                        }
+
+                        Toggle("", isOn: Binding(
+                            get:
+                                {
+                                    self.OnlyChannel
+                                },
+                            set:
+                                {
+                                    NewValue in
+                                    self.OnlyChannel = NewValue
+                                    Settings.SetBool(.SolarizeOnlyChannel, OnlyChannel)
+                                    Updated.toggle()
+                                }
+                        ))
+                        .disabled($AllChannels.wrappedValue)
+   
+                    }
+                    .padding()
                     Spacer()
                     Divider()
                         .background(Color.black)
