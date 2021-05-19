@@ -15,6 +15,7 @@ struct SolarizeRGBParameters
     uint SolarizeHow;
     float Threshold;
     bool SolarizeIfGreater;
+    bool SolarizeOnlyChannel;
 };
 
 kernel void SolarizeRGB(texture2d<float, access::read> InTexture [[texture(0)]],
@@ -54,75 +55,114 @@ kernel void SolarizeRGB(texture2d<float, access::read> InTexture [[texture(0)]],
             if (Solarize.SolarizeIfGreater)
                 {
                 //Solarize if the pixel's red is in the range.
-                if ((InColor.r >= Solarize.Threshold) && (InColor.r <= Solarize.Threshold))
+                if (InColor.r < Solarize.Threshold)
                     {
-                    Red = 1.0 - Red;
-                    Green = 1.0 - Green;
-                    Blue = 1.0 - Blue;
+                    if (Solarize.SolarizeOnlyChannel)
+                        {
+                        Red = 1.0 - Red;
+                        }
+                    else
+                        {
+                        Red = 1.0 - Red;
+                        Green = 1.0 - Green;
+                        Blue = 1.0 - Blue;
+                        }
                     }
                 }
             else
                 {
                 //Solarize if the pixel's red is out of the range.
-                if ((InColor.r >= Solarize.Threshold) && (InColor.r <= Solarize.Threshold))
+                if (InColor.r > Solarize.Threshold)
                     {
+                    if (Solarize.SolarizeOnlyChannel)
+                        {
+                        Red = 1.0 - Red;
+                        }
+                    else
+                        {
+                        Red = 1.0 - Red;
+                        Green = 1.0 - Green;
+                        Blue = 1.0 - Blue;
+                        }
+                    }
+                }
+                break;
+                
+                case 2:
+                if (Solarize.SolarizeIfGreater)
+                    {
+                    //Solarize if the pixel's green is less than the saturation threshold.
+                    if (InColor.g < Solarize.Threshold)
+                        {
+                        if (Solarize.SolarizeOnlyChannel)
+                            {
+                            Green = 1.0 - Green;
+                            }
+                        else
+                            {
+                            Red = 1.0 - Red;
+                            Green = 1.0 - Green;
+                            Blue = 1.0 - Blue;
+                            }
+                        }
                     }
                 else
                     {
-                    Red = 1.0 - Red;
-                    Green = 1.0 - Green;
-                    Blue = 1.0 - Blue;
+                    //Solarize if the pixel's green is greater than the saturation threshold.
+                    if (InColor.g > Solarize.Threshold)
+                        {
+                        if (Solarize.SolarizeOnlyChannel)
+                            {
+                            Green = 1.0 - Green;
+                            }
+                        else
+                            {
+                            Red = 1.0 - Red;
+                            Green = 1.0 - Green;
+                            Blue = 1.0 - Blue;
+                            }
+                        }
                     }
+                break;
+                
+                case 3:
+                if (Solarize.SolarizeIfGreater)
+                    {
+                    //Solarize if the pixel's blue is less than the brightness threshold.
+                    if (InColor.b < Solarize.Threshold)
+                        {
+                        if (Solarize.SolarizeOnlyChannel)
+                            {
+                            Blue = 1.0 - Blue;
+                            }
+                        else
+                            {
+                            Red = 1.0 - Red;
+                            Green = 1.0 - Green;
+                            Blue = 1.0 - Blue;
+                            }
+                        }
+                    }
+                else
+                    {
+                    //Solarize if the pixel's blue is greater than the brightness threshold.
+                    if (InColor.b > Solarize.Threshold)
+                        {
+                        if (Solarize.SolarizeOnlyChannel)
+                            {
+                            Blue = 1.0 - Blue;
+                            }
+                        else
+                            {
+                            Red = 1.0 - Red;
+                            Green = 1.0 - Green;
+                            Blue = 1.0 - Blue;
+                            }
+                        }
+                    }
+                break;
                 }
-            break;
             
-            case 2:
-            if (Solarize.SolarizeIfGreater)
-                {
-                //Solarize if the pixel's green is less than the saturation threshold.
-                if (InColor.g < Solarize.Threshold)
-                    {
-                    Red = 1.0 - Red;
-                    Green = 1.0 - Green;
-                    Blue = 1.0 - Blue;
-                    }
-                }
-            else
-                {
-                //Solarize if the pixel's green is greater than the saturation threshold.
-                if (InColor.g > Solarize.Threshold)
-                    {
-                    Red = 1.0 - Red;
-                    Green = 1.0 - Green;
-                    Blue = 1.0 - Blue;
-                    }
-                }
-            break;
-            
-            case 3:
-            if (Solarize.SolarizeIfGreater)
-                {
-                //Solarize if the pixel's blue is less than the brightness threshold.
-                if (InColor.b < Solarize.Threshold)
-                    {
-                    Red = 1.0 - Red;
-                    Green = 1.0 - Green;
-                    Blue = 1.0 - Blue;
-                    }
-                }
-            else
-                {
-                //Solarize if the pixel's blue is greater than the brightness threshold.
-                if (InColor.b > Solarize.Threshold)
-                    {
-                    Red = 1.0 - Red;
-                    Green = 1.0 - Green;
-                    Blue = 1.0 - Blue;
-                    }
-                }
-            break;
+            float4 OutColor = float4(Red, Green, Blue, 1.0);
+            OutTexture.write(OutColor, gid);
         }
-    
-    float4 OutColor = float4(Red, Green, Blue, 1.0);
-    OutTexture.write(OutColor, gid);
-}
