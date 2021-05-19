@@ -19,6 +19,7 @@ struct LargeSampleImage: View
     @State var ImageName: String = "Sample1"
     @State var EnableFilter: Bool = true
     @State var ShowHelp: Bool = false
+    @State var ShowAttribution: Bool = false
     
     var body: some View
     {
@@ -64,13 +65,13 @@ struct LargeSampleImage: View
                                         if value.translation.width < 0
                                         {
                                             //swiped left
-                                            ImageName = Utility.IncrementSampleImageName()
+                                            ImageName = SampleImages.IncrementSampleImageName()
                                             ImageToView = UIImage(named: ImageName)!
                                         }
                                         if value.translation.width > 0
                                         {
                                             //swiped right
-                                            ImageName = Utility.IncrementSampleImageName()
+                                            ImageName = SampleImages.IncrementSampleImageName()
                                             ImageToView = UIImage(named: ImageName)!
                                         }
                                     })
@@ -106,24 +107,14 @@ struct LargeSampleImage: View
                                         .default(Text("Save Filtered"))
                                         {
                                             self.UICommand = UICommands.SaveFilteredSample.rawValue
+                                        },
+                                        .default(Text("Show Attribution"))
+                                        {
+                                            ShowAttribution.toggle()
                                         }
                                     ]
                             )
                         }
-/*
-                    #if os(iOS)
-                    Text("Swipe left or right to change the sample image. Tap to reduce.")
-                        .multilineTextAlignment(.center)
-                        .lineLimit(3)
-                        .frame(height: 40,
-                               alignment: .center)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                        .padding(.top, -10)
-                        .padding([.trailing, .leading, .bottom])
-                    Spacer()
-                    #endif
- */
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(PageTitle)
@@ -153,6 +144,12 @@ struct LargeSampleImage: View
                 {
                     Alert(title: Text("Help"),
                           message: Text("Tap the image to dismiss this view. Swipe the image left or right to see other sample images. Use the toggle button to see the sample with or without the filter."),
+                          dismissButton: .default(Text("OK")))
+                }
+                .alert(isPresented: $ShowAttribution)
+                {
+                    Alert(title: Text("Attribution"),
+                          message: Text(SampleImages.CurrentSample.Attribution),
                           dismissButton: .default(Text("OK")))
                 }
             }
