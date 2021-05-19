@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "ndl Hashiguchi_Goyo_-_Woman_in_Blue_Combing_Her_Hair_-_Walters_95880.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
