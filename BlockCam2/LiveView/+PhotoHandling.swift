@@ -71,19 +71,19 @@ extension LiveViewController
                             CreationRequest.addResource(with: .photo, data: ImageData, options: nil)
                             if Settings.GetBool(.SaveOriginalImage) || Settings.GetBool(.UseLatestBlockCamImage)
                             {
-                                let OImg = CIImage(cvImageBuffer: ImageBuffer)
+                                let OImg = CIImage(cvImageBuffer: PhotoPixelBuffer)
                                 let OContext = CIContext(options: nil)
                                 let OCGImage =  OContext.createCGImage(OImg, from: OImg.extent)!
-                                let OriginalImage = UIImage(cgImage: OCGImage)
+                                let OriginalImage = UIImage(cgImage: OCGImage).RotateImage(By: 90.0 * Double.pi / 180.0)
                                 let OriginalData = OriginalImage.jpegData(compressionQuality: 1.0)!
                                 if Settings.GetBool(.SaveOriginalImage)
                                 {
-                                let OriginalRequest = PHAssetCreationRequest.forAsset()
-                                OriginalRequest.addResource(with: .photo, data: OriginalData, options: nil)
+                                    let OriginalRequest = PHAssetCreationRequest.forAsset()
+                                    OriginalRequest.addResource(with: .photo, data: OriginalData, options: nil)
                                 }
                                 if Settings.GetBool(.UseLatestBlockCamImage)
                                 {
-                                    FileIO.SaveImage(OriginalImage, WithName: "LastBlockCamImage.jpg",
+                                    FileIO.SaveImage(OriginalImage, WithName: "LastBlockCamImage.jpg", 
                                                      Directory: FileIO.LastImageDirectory)
                                 }
                             }
