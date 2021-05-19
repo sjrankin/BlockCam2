@@ -15,6 +15,7 @@ struct BultInImageTableEntryView: View
     @State var OverallWidth: CGFloat
     @State var ImageIsEnabled: Bool
     @State var CanDisable: Bool = true
+    @State var ImageTapped: Bool = false
     @ObservedObject var BinaryValue = ToggleBinaryModel()
     
     var body: some View
@@ -40,9 +41,14 @@ struct BultInImageTableEntryView: View
                     print("\(ImageName) changed")
                 }
         }
-        .frame(width: OverallWidth * 0.9,
+        .frame(width: OverallWidth * 0.95,
                alignment: .leading)
+        .background(ImageTapped ? Color(UIColor.systemTeal) : Color.white)
         .padding([.leading, .trailing])
+        .onTapGesture
+        {
+            ImageTapped.toggle()
+        }
     }
 }
 
@@ -55,6 +61,15 @@ class ToggleBinaryModel: ObservableObject
             print("Switch changed to \(IsOn)")
         }
     }
+}
+
+struct SampleImageDescriptor
+{
+    var id: String
+    var InternalName: String
+    var DescriptiveName: String
+    var Source: String
+    var IsEnabled: Bool
 }
 
 struct BultInImageTableEntryView_Preview: PreviewProvider
