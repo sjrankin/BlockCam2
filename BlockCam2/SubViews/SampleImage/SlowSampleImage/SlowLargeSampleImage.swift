@@ -67,13 +67,13 @@ struct SlowLargeSampleImage: View
                                         if value.translation.width < 0
                                         {
                                             //swiped left
-                                            ImageName = Utility.IncrementSampleImageName()
+                                            ImageName = SampleImages.IncrementSampleImageName()
                                             ImageToView = UIImage(named: ImageName)!
                                         }
                                         if value.translation.width > 0
                                         {
                                             //swiped right
-                                            ImageName = Utility.IncrementSampleImageName()
+                                            ImageName = SampleImages.IncrementSampleImageName()
                                             ImageToView = UIImage(named: ImageName)!
                                         }
                                     })
