@@ -34,6 +34,8 @@ class LiveViewController: UIViewController,
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        SampleImages.Initialize()
+        SampleImages.GetRecentAlbumImage()
         Settings.Initialize()
         Settings.AddSubscriber(self)
         InitializeFileStructure()
