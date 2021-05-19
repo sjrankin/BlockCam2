@@ -166,6 +166,17 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .MetalPixellate:
+                Options[.Width] = Settings.GetInt(.MetalPixWidth, IfZero: 24)
+                Options[.Height] = Settings.GetInt(.MetalPixHeight, IfZero: 24)
+                Options[.ColorDetermination] = Settings.GetInt(.MetalPixColorDetermination)
+                Options[.Highlight] = Settings.GetInt(.MetalPixHighlightPixel)
+                Options[.Merge] = Settings.GetBool(.MetalPixMergeImage)
+                Options[.By] = 0
+                Options[.IsGreater] = false
+                Options[.HAction] = 0
+                Options[.IntCommand] = 0
+            
             case .Kuwahara:
                 Options[.Radius] = Settings.GetDouble(.KuwaharaRadius,
                                                       Settings.SettingDefaults[.KuwaharaRadius] as! Double)
@@ -173,6 +184,7 @@ class Filters
             case .SolarizeRGB:
                 Options[.IntCommand] = Settings.GetInt(.SolarizeHow)
                 Options[.IsGreater] = Settings.GetBool(.SolarizeIfGreater)
+                Options[.OnlyChannel] = Settings.GetBool(.SolarizeOnlyChannel)
                 switch Settings.GetInt(.SolarizeHow)
                 {
                     case 0:
@@ -717,6 +729,7 @@ enum BuiltInFilters: String, CaseIterable
     case SolarizeHSB = "Solarize HSB"
     case SolarizeRGB = "Solarize RGB"
     case Kuwahara = "Kuwahara"
+    case MetalPixellate = "Metal Pixellate"
     
     //Internal filters
     case Crop = "Crop"
