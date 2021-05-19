@@ -13,4 +13,5 @@ struct SolarizeRGBParameters
     let SolarizeHow: simd_uint1
     let Threshold: simd_float1
     let SolarizeIfGreater: simd_bool
+    let OnlyChannel: simd_bool
 }
