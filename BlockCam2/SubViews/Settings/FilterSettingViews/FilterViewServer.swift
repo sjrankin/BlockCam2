@@ -80,6 +80,13 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.MetalPixellate.rawValue:
+                SettingsContainer
+                {
+                    MetalPixellateFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.Kuwahara.rawValue:
                 SettingsContainer
                 {
