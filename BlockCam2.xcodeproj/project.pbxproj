@@ -206,6 +206,14 @@
 		17A6126D263E9E4600B9BB1F /* QuadrantTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A6126C263E9E4600B9BB1F /* QuadrantTest.swift */; };
 		17AD33912641693F008C26CE /* SettingDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AD33902641693F008C26CE /* SettingDefaults.swift */; };
 		17B6AFA3264F6738009C5AF3 /* ConvolutionFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B6AFA2264F6738009C5AF3 /* ConvolutionFilter_View.swift */; };
+		17BAA8B126534E5C006A5055 /* UserSampleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8B026534E5C006A5055 /* UserSampleManager.swift */; };
+		17BAA8B3265360E1006A5055 /* UserImageTableEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8B2265360E1006A5055 /* UserImageTableEntry.swift */; };
+		17BAA8B526549C0D006A5055 /* SampleImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8B426549C0D006A5055 /* SampleImages.swift */; };
+		17BAA8B72654BAD6006A5055 /* BuiltInImageTableEntryView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8B62654BAD6006A5055 /* BuiltInImageTableEntryView2.swift */; };
+		17BAA8BA2655074B006A5055 /* MetalPixellate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8B92655074B006A5055 /* MetalPixellate.swift */; };
+		17BAA8BD265507BE006A5055 /* MetalPixellate.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8BC265507BE006A5055 /* MetalPixellate.metal */; };
+		17BAA8BF2655082C006A5055 /* BlockInfoParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8BE2655082C006A5055 /* BlockInfoParameters.swift */; };
+		17BAA8C126553434006A5055 /* MetalPixellateFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8C026553434006A5055 /* MetalPixellateFilter_View.swift */; };
 		17BF7C712633D4BA00181FA1 /* FilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BF7C702633D4BA00181FA1 /* FilterData.swift */; };
 		17BF7C732633DE1E00181FA1 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BF7C722633DE1E00181FA1 /* UIColor.swift */; };
 		17BF7C752633E4B200181FA1 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BF7C742633E4B200181FA1 /* FilterView.swift */; };
@@ -489,6 +497,14 @@
 		17A6126C263E9E4600B9BB1F /* QuadrantTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadrantTest.swift; sourceTree = "<group>"; };
 		17AD33902641693F008C26CE /* SettingDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDefaults.swift; sourceTree = "<group>"; };
 		17B6AFA2264F6738009C5AF3 /* ConvolutionFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvolutionFilter_View.swift; sourceTree = "<group>"; };
+		17BAA8B026534E5C006A5055 /* UserSampleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleManager.swift; sourceTree = "<group>"; };
+		17BAA8B2265360E1006A5055 /* UserImageTableEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageTableEntry.swift; sourceTree = "<group>"; };
+		17BAA8B426549C0D006A5055 /* SampleImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImages.swift; sourceTree = "<group>"; };
+		17BAA8B62654BAD6006A5055 /* BuiltInImageTableEntryView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuiltInImageTableEntryView2.swift; sourceTree = "<group>"; };
+		17BAA8B92655074B006A5055 /* MetalPixellate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalPixellate.swift; sourceTree = "<group>"; };
+		17BAA8BC265507BE006A5055 /* MetalPixellate.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalPixellate.metal; sourceTree = "<group>"; };
+		17BAA8BE2655082C006A5055 /* BlockInfoParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfoParameters.swift; sourceTree = "<group>"; };
+		17BAA8C026553434006A5055 /* MetalPixellateFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalPixellateFilter_View.swift; sourceTree = "<group>"; };
 		17BF7C702633D4BA00181FA1 /* FilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterData.swift; sourceTree = "<group>"; };
 		17BF7C722633DE1E00181FA1 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		17BF7C742633E4B200181FA1 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
@@ -657,6 +673,7 @@
 		172ABC9E263649BD00AE53D1 /* MetalFilters */ = {
 			isa = PBXGroup;
 			children = (
+				17BAA8B82655072E006A5055 /* MetalPixellate */,
 				172ABCA926364DDD00AE53D1 /* MetalFilterParent.swift */,
 				17DCDF722650D64300DAB1C6 /* BayerDecode */,
 				17A3F042264FA823002E234C /* ChannelMangler */,
@@ -1239,10 +1256,13 @@
 		1796E701265234BF00B130CF /* SampleImageManager */ = {
 			isa = PBXGroup;
 			children = (
-				17D629C426524DDE0013C3D9 /* SampleImageManager.swift */,
-				1796E702265234D200B130CF /* BuiltInSampleImageManager.swift */,
 				1796E704265237C600B130CF /* BuiltInImageTableEntryView.swift */,
+				17BAA8B62654BAD6006A5055 /* BuiltInImageTableEntryView2.swift */,
+				1796E702265234D200B130CF /* BuiltInSampleImageManager.swift */,
 				17D629C626525A090013C3D9 /* OtherSampleImageOptions.swift */,
+				17D629C426524DDE0013C3D9 /* SampleImageManager.swift */,
+				17BAA8B2265360E1006A5055 /* UserImageTableEntry.swift */,
+				17BAA8B026534E5C006A5055 /* UserSampleManager.swift */,
 			);
 			path = SampleImageManager;
 			sourceTree = "<group>";
@@ -1255,6 +1275,7 @@
 				179721FB262E93E5004B7134 /* FileIO.swift */,
 				172ABCAB263653CC00AE53D1 /* GradientManager.swift */,
 				1764BF1C263941B5001644E3 /* Queue.swift */,
+				17BAA8B426549C0D006A5055 /* SampleImages.swift */,
 				1764BF1A26394150001644E3 /* Stack.swift */,
 				176FE2912637C58200650060 /* Utility.swift */,
 			);
@@ -1376,6 +1397,24 @@
 			path = Test;
 			sourceTree = "<group>";
 		};
+		17BAA8B82655072E006A5055 /* MetalPixellate */ = {
+			isa = PBXGroup;
+			children = (
+				17BAA8B92655074B006A5055 /* MetalPixellate.swift */,
+				17BAA8BB265507A7006A5055 /* Kernel */,
+			);
+			path = MetalPixellate;
+			sourceTree = "<group>";
+		};
+		17BAA8BB265507A7006A5055 /* Kernel */ = {
+			isa = PBXGroup;
+			children = (
+				17BAA8BC265507BE006A5055 /* MetalPixellate.metal */,
+				17BAA8BE2655082C006A5055 /* BlockInfoParameters.swift */,
+			);
+			path = Kernel;
+			sourceTree = "<group>";
+		};
 		17BF7C762633E5A900181FA1 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -1485,6 +1524,7 @@
 				17602414263BC051006A3DE2 /* KaleidoscopeFilter_View.swift */,
 				1796E6F826521BFC00B130CF /* KuwaharaFilter_View.swift */,
 				179DD4E3263CE813007A12FA /* MirrorFilter_View.swift */,
+				17BAA8C026553434006A5055 /* MetalPixellateFilter_View.swift */,
 			);
 			path = JKLM;
 			sourceTree = "<group>";
@@ -1665,12 +1705,14 @@
 				172ABCDD2636853D00AE53D1 /* Erode.swift in Sources */,
 				172ABCE726368D2A00AE53D1 /* Dither.swift in Sources */,
 				17BF7C752633E4B200181FA1 /* FilterView.swift in Sources */,
+				17BAA8BF2655082C006A5055 /* BlockInfoParameters.swift in Sources */,
 				17602410263B9B3C006A3DE2 /* FilterViewServer.swift in Sources */,
 				17A61263263E6C2800B9BB1F /* Reflect.swift in Sources */,
 				17F70A2326341C9600BCC3CF /* ThermalEffect.swift in Sources */,
 				179DD4E4263CE813007A12FA /* MirrorFilter_View.swift in Sources */,
 				172C8E3E263549740096C331 /* CircleAndLines.swift in Sources */,
 				17DCDF7D26513A2300DAB1C6 /* Solarize.swift in Sources */,
+				17BAA8B526549C0D006A5055 /* SampleImages.swift in Sources */,
 				17F033F8264386E400F83556 /* ColorControlsFilter_View.swift in Sources */,
 				17606B932649134D0050EFCF /* ImagePicker.swift in Sources */,
 				17F70A192634153B00BCC3CF /* CircleSplashDistortion.swift in Sources */,
@@ -1796,6 +1838,7 @@
 				17A3F03F264FA7BB002E234C /* SilhouetteParameters.swift in Sources */,
 				172ABCAC263653CC00AE53D1 /* GradientManager.swift in Sources */,
 				172ABCE526368C7900AE53D1 /* Otsu.swift in Sources */,
+				17BAA8B126534E5C006A5055 /* UserSampleManager.swift in Sources */,
 				172ABCE32636890F00AE53D1 /* Median.swift in Sources */,
 				17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */,
 				17F8C784262C307C00DB7D51 /* Mixer.metal in Sources */,
@@ -1848,6 +1891,7 @@
 				172ABCAA26364DDD00AE53D1 /* MetalFilterParent.swift in Sources */,
 				1796E6F126520B9C00B130CF /* SolarizationRGBFilter_View.swift in Sources */,
 				17DCDF7F26513A3D00DAB1C6 /* SolarizeParameters.swift in Sources */,
+				17BAA8B3265360E1006A5055 /* UserImageTableEntry.swift in Sources */,
 				17F70A1F263417B900BCC3CF /* LightTunnel.swift in Sources */,
 				1796E6FB26522B8E00B130CF /* SlowFilterProtocol.swift in Sources */,
 				17A6125C263E639B00B9BB1F /* CropParameters.swift in Sources */,
@@ -1892,6 +1936,7 @@
 				1764BF0D2639322E001644E3 /* ImageAbsoluteDelta.metal in Sources */,
 				17602419263BEA5A006A3DE2 /* TriangleKaleidoscopeFilter_View.swift in Sources */,
 				17416C0D2650969D00A1B2C0 /* ChannelSwizzleParameters.swift in Sources */,
+				17BAA8B72654BAD6006A5055 /* BuiltInImageTableEntryView2.swift in Sources */,
 				17688E80262BF36E00D1523A /* AudioProcessor.swift in Sources */,
 				17F70A15263413C100BCC3CF /* AreaHistogram.swift in Sources */,
 				175B1662264E66B6002927A7 /* +Matrix.swift in Sources */,
@@ -1916,10 +1961,13 @@
 				176FE28A2637C45C00650060 /* +Int.swift in Sources */,
 				172ABCA826364C3100AE53D1 /* ColorMap.swift in Sources */,
 				17EC9999262FE4AE007FCF00 /* LineOverlay.swift in Sources */,
+				17BAA8C126553434006A5055 /* MetalPixellateFilter_View.swift in Sources */,
 				177CF3FB264CA59800A1C77D /* ThresholdFilter2_View.swift in Sources */,
 				174AE030264285A200105425 /* CMSampleBuffer.swift in Sources */,
+				17BAA8BD265507BE006A5055 /* MetalPixellate.metal in Sources */,
 				173B2251262835480075EB71 /* Viewer3D.swift in Sources */,
 				17EC997D262FDFF5007FCF00 /* FilterMap.swift in Sources */,
+				17BAA8BA2655074B006A5055 /* MetalPixellate.swift in Sources */,
 				17EC998F262FE39C007FCF00 /* HueAdjust.swift in Sources */,
 				176FE27D2637C32A00650060 /* SettingKeysMap.swift in Sources */,
 				17F033FE26438EE700F83556 /* HSB.metal in Sources */,
