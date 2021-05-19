@@ -12,6 +12,7 @@ struct OtherSampleImageOptions: View
     @Environment(\.presentationMode) var presentionMode: Binding<PresentationMode>
     @State var UseLatestBlockCamImage: Bool = Settings.GetBool(.UseLatestBlockCamImage)
     @State var UseMostRecentImage: Bool = Settings.GetBool(.UseLatestBlockCamImage)
+    @State var OnlyUserSamples: Bool = Settings.GetBool(.ShowUserSamplesOnlyIfAvailable)
     @State var ShowPrivacyAlert: Bool = false
     
     func EnableLastTaken()
@@ -41,12 +42,12 @@ struct OtherSampleImageOptions: View
                     {
                         Text("Latest BlockCam Image")
                             .font(.headline)
-                            .frame(width: Geometry.size.width * 0.65,
+                            .frame(width: Geometry.size.width * 0.7,
                                    alignment: .leading)
                         Text("Use the most recently taken image with BlockCam - BlockCam will cache the most recently taken image")
                             .font(.subheadline)
                             .foregroundColor(.gray)
-                            .frame(width: Geometry.size.width * 0.65,
+                            .frame(width: Geometry.size.width * 0.7,
                                    alignment: .leading)
                     }
                     Toggle("", isOn: $UseLatestBlockCamImage)
@@ -72,12 +73,12 @@ struct OtherSampleImageOptions: View
                     {
                         Text("Last Taken")
                             .font(.headline)
-                            .frame(width: Geometry.size.width * 0.65,
+                            .frame(width: Geometry.size.width * 0.7,
                                    alignment: .leading)
-                        Text("Use the most recently taken image with with your device")
+                        Text("Use the most recently taken image with with your device. The image is always retrieved when you start the program and used only with your permission. BlockCam does not store the image or use it for any purpose other than as a sample image.")
                             .font(.subheadline)
                             .foregroundColor(.gray)
-                            .frame(width: Geometry.size.width * 0.65,
+                            .frame(width: Geometry.size.width * 0.7,
                                    alignment: .leading)
                     }
                     Toggle("", isOn: $UseMostRecentImage)
@@ -98,6 +99,33 @@ struct OtherSampleImageOptions: View
                                     Text("OK"),
                                     action: EnableLastTaken
                                   ))
+                        }
+                }
+                
+                Divider()
+                    .background(Color.black)
+                
+                HStack
+                {
+                    VStack
+                    {
+                        Text("Only User Samples")
+                            .font(.headline)
+                            .frame(width: Geometry.size.width * 0.7,
+                                   alignment: .leading)
+                        Text("Use only your user sample images, not the built-in samples. Has no effect if no user samples are available.")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .frame(width: Geometry.size.width * 0.7,
+                                   alignment: .leading)
+                    }
+                    Toggle("", isOn: $OnlyUserSamples)
+                        .frame(width: Geometry.size.width * 0.2)
+                        .onChange(of: OnlyUserSamples)
+                        {
+                            NewValue in
+                            OnlyUserSamples = NewValue
+                            Settings.SetBool(.ShowUserSamplesOnlyIfAvailable, OnlyUserSamples)
                         }
                 }
                 
