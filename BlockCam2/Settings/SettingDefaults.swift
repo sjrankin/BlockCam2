@@ -27,6 +27,7 @@ extension Settings
             .SampleImageIndex: 0,
             .UseLatestBlockCamImage: false,
             .UseMostRecentImage: false,
+            .ShowUserSamplesOnlyIfAvailable: false,
             
             // MARK: - Filter settings.
             .CurrentFilter: "",
@@ -211,8 +212,16 @@ extension Settings
             .SolarizeRedThreshold: 0.5,
             .SolarizeGreenThreshold: 0.5,
             .SolarizeBlueThreshold: 0.5,
+            .SolarizeOnlyChannel: false,
             
             // MARK: - Kuwahara
             .KuwaharaRadius: 0.1,
+            
+            // MARK: - Metal pixellate
+            .MetalPixWidth: 24,
+            .MetalPixHeight: 24,
+            .MetalPixColorDetermination: 0,
+            .MetalPixMergeImage: false,
+            .MetalPixHighlightPixel: 3,
         ]
 }

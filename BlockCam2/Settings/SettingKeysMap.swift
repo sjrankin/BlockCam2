@@ -29,6 +29,7 @@ extension Settings
             .SampleImageIndex: Int.self,
             .UseLatestBlockCamImage: Bool.self,
             .UseMostRecentImage: Bool.self,
+            .ShowUserSamplesOnlyIfAvailable: Bool.self,
             
             // MARK: - Filter settings.
             .CurrentFilter: String.self,
@@ -207,8 +208,16 @@ extension Settings
             .SolarizeRedThreshold: Double.self,
             .SolarizeGreenThreshold: Double.self,
             .SolarizeBlueThreshold: Double.self,
+            .SolarizeOnlyChannel: Bool.self,
             
             // MARK: - Kuwahara
             .KuwaharaRadius: Double.self,
+            
+            // MARK: - Metal pixellate
+            .MetalPixWidth: Int.self,
+            .MetalPixHeight: Int.self,
+            .MetalPixColorDetermination: Int.self,
+            .MetalPixMergeImage: Bool.self,
+            .MetalPixHighlightPixel: Int.self,
         ]
 }

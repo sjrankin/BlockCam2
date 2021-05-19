@@ -34,6 +34,8 @@ enum SettingKeys: String, CaseIterable
     case UseLatestBlockCamImage = "UseLatestBlockCamImage"
     /// Boolean: Use the latest taken image in the photo album as a sample image.
     case UseMostRecentImage = "UseMostRecentImage"
+    /// Boolean: If available, only use user-provided samples.
+    case ShowUserSamplesOnlyIfAvailable = "ShowUserSamplesOnlyIfAvailable"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.
@@ -332,8 +334,23 @@ enum SettingKeys: String, CaseIterable
     case SolarizeGreenThreshold = "SolarizeGreenThreshold"
     /// Double: Blue channel threshold.
     case SolarizeBlueThreshold = "SolarizeBlueThreshold"
+    /// Boolean: If true only the specified RGB channel will be solarized. Otherwise, all
+    ///          RGB channels will be solarized.
+    case SolarizeOnlyChannel = "SolarizeOnlyChannel"
     
     // MARK: - Kuwahara
     /// Double: Radius of Kuwahara effect
     case KuwaharaRadius = "KuwaharaRadius"
+    
+    // MARK: - Metal pixellate
+    /// Integer: Width of pixels.
+    case MetalPixWidth = "MetalPixWidth"
+    /// Integer: Height of pixels.
+    case MetalPixHeight = "MetalPixHeight"
+    /// Integer: Determines how to calculate pixel's color.
+    case MetalPixColorDetermination = "MetalPixColorDetermination"
+    /// Boolean: Merge pixellated image with the background image.
+    case MetalPixMergeImage = "MetalPixMergeImage"
+    /// Integer: Highlight pixel determination.
+    case MetalPixHighlightPixel = "MetalPixHighlightPixel"
 }
