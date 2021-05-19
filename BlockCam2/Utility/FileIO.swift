@@ -224,8 +224,55 @@ class FileIO
         }
     }
     
+    /// Returns an image from the last BlockCam image directory.
+    /// - Parameter FileName: Name of the image file to return. Defaults to `LastBlockCamImage.jpg`.
+    /// - Returns: The image on success, nil if not found or on error.
+    public static func GetLastBlockCamImage(FileName: String = "LastBlockCamImage.jpg") -> UIImage?
+    {
+        if let CPath = GetDocumentDirectory()?.appendingPathComponent(LastImageDirectory)
+        {
+            do
+            {
+                let FinalName = CPath.appendingPathComponent(FileName)
+                let ImageData = try Data(contentsOf: FinalName)
+                let Image = UIImage(data: ImageData)
+                return Image
+            }
+            catch
+            {
+                print("Error loading image data for LastBlockCamImage.jpg")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    public static func GetUserSampleImages() -> [(Name: String, Image: UIImage)]?
+    {
+        if !DirectoryExists(DirectoryName: SampleDirectory)
+        {
+            CreateDirectory(DirectoryName: SampleDirectory)
+        }
+        if let SampleURL = GetDirectoryURL(DirectoryName: SampleDirectory)
+        {
+            if let Images = GetFilesIn(Directory: SampleURL)
+            {
+                var Results = [(Name: String, Image: UIImage)]()
+                for SomeFile in Images
+                {
+                    if let SomeImage = LoadImage(SomeFile)
+                    {
+                        let SomeName = SomeFile.lastPathComponent
+                        Results.append((Name: SomeName, Image: SomeImage))
+                    }
+                }
+                return Results
+            }
+        }
+        return nil
+    }
+    
     /// Save an image to the specified directory.
-    ///
     /// - Parameters:
     ///   - Image: The UIImage to save.
     ///   - WithName: The name to use when saving the image.
@@ -275,14 +322,13 @@ class FileIO
     }
     
     /// Save an image to the specified directory.
-    ///
     /// - Parameters:
     ///   - Image: The UIImage to save.
     ///   - WithName: The name to use when saving the image.
     ///   - Directory: Name of the directory where to save the image.
     ///   - AsJPG: If true, save as a .JPG image. If false, save as a .PNG image.
     /// - Returns: True on success, nil on failure.
-    public static func SaveImage(_ Image: UIImage, WithName: String, Directory: String, AsJPG: Bool = true) -> Bool
+    @discardableResult public static func SaveImage(_ Image: UIImage, WithName: String, Directory: String, AsJPG: Bool = true) -> Bool
     {
         if !DirectoryExists(DirectoryName: Directory)
         {
