@@ -98,9 +98,11 @@ class SolarizeRGB: MetalFilterParent, BuiltInFilterProtocol
         let How = Options[.IntCommand] as! Int
         let IfGreater = Options[.IsGreater] as! Bool
         let Threshold = Options[.Threshold] as! Double
+        let OnlyChannel = Options[.OnlyChannel] as! Bool 
         let Parameter = SolarizeRGBParameters(SolarizeHow: simd_uint1(How),
                                               Threshold: simd_float1(Threshold),
-                                              SolarizeIfGreater: simd_bool(IfGreater))
+                                              SolarizeIfGreater: simd_bool(IfGreater),
+                                              OnlyChannel: simd_bool(OnlyChannel))
         let Parameters = [Parameter]
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<SolarizeRGBParameters>.stride, options: [])
         memcpy(ParameterBuffer.contents(), Parameters, MemoryLayout<SolarizeRGBParameters>.stride)
