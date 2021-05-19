@@ -125,6 +125,7 @@ extension Filters
 //        FilterMap[.SaliencyMap] = BlockCam2.SaliencyMap()
         FilterMap[.AreaMax] = BlockCam2.MPSAreaMax()
         FilterMap[.Convolution] = BlockCam2.MPSConvolution()
+        FilterMap[.MetalPixellate] = BlockCam2.MetalPixellate()
         return FilterMap
     }
     
@@ -453,5 +454,12 @@ enum FilterOptions: String
     case SaturationThresholdLow = "SaturationThreshold"
     case SaturationThresholdHigh = "SaturationThresholdHigh"
     case IsGreater = "IsGreater"
+    case OnlyChannel = "OnlyChannel"
+    
+    case HAction = "HAction"
+    case VAction = "VAction"
+    case By = "By"
+    case ColorDetermination = "ColorDetermination"
+    case Highlight = "Highlight"
 }
 
