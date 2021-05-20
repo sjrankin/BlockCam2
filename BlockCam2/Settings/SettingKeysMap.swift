@@ -221,5 +221,7 @@ extension Settings
             .MetalPixHighlightPixel: Int.self,
             .MetalPixThreshold: Double.self,
             .MetalPixInvertThreshold: Bool.self,
+            .MetalPixShowBorder: Bool.self,
+            .MetalPixBorderColor: UIColor.self,
         ]
 }
