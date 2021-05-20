@@ -357,4 +357,8 @@ enum SettingKeys: String, CaseIterable
     case MetalPixThreshold = "MetalPixThreshold"
     /// Boolean: Invert the threshold calculation.
     case MetalPixInvertThreshold = "MetalPixInvertThreshold"
+    /// Boolean: Show a border around the pixel.
+    case MetalPixShowBorder = "MetalPixShowBorder"
+    /// UIColor: The border color if `MetalPixShowBorder` is true.
+    case MetalPixBorderColor = "MetalPixBorderColor"
 }
