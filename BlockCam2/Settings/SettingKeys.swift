@@ -353,4 +353,8 @@ enum SettingKeys: String, CaseIterable
     case MetalPixMergeImage = "MetalPixMergeImage"
     /// Integer: Highlight pixel determination.
     case MetalPixHighlightPixel = "MetalPixHighlightPixel"
+    /// Double: Threshold for when using pixel highlighting.
+    case MetalPixThreshold = "MetalPixThreshold"
+    /// Boolean: Invert the threshold calculation.
+    case MetalPixInvertThreshold = "MetalPixInvertThreshold"
 }
