@@ -219,5 +219,7 @@ extension Settings
             .MetalPixColorDetermination: Int.self,
             .MetalPixMergeImage: Bool.self,
             .MetalPixHighlightPixel: Int.self,
+            .MetalPixThreshold: Double.self,
+            .MetalPixInvertThreshold: Bool.self,
         ]
 }
