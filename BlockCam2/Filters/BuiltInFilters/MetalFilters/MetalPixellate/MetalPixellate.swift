@@ -98,11 +98,11 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
         
         let FinalWidth = Options[.Width] as! Int
         let FinalHeight = Options[.Height] as! Int
-        let HAction = Options[.HAction] as! Int
+        let HAction = Options[.Highlight] as! Int
         let HIfGreat = Options[.IsGreater] as! Bool
         let HBy = Options[.By] as! Int
         let CDet = Options[.ColorDetermination] as! Int
-        let HValue = Options[.IntCommand] as! Int
+        let HValue = Options[.Threshold] as! Double
         
         let ParameterData = BlockInfoParameters(Width: simd_uint1(FinalWidth),
                                                 Height: simd_uint1(FinalHeight),
