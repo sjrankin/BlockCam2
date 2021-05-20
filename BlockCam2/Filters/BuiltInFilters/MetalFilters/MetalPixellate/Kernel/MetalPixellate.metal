@@ -21,6 +21,8 @@ struct BlockInfoParameters
     uint ColorDetermination;
     float HighlightValue;
     bool HighlightIfGreater;
+    bool AddBorder;
+    float4 BorderColor;
 };
 
 //https://software.intel.com/en-us/ipp-dev-reference-color-models
@@ -286,6 +288,26 @@ kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0
     uint Height = BlockInfo.Height;
     uint CenterX = (gid.x / Width * Width);
     uint CenterY = (gid.y / Width * Height);
+    uint Left = gid.x - Width;
+    if (Left < 0)
+        {
+        Left = 0;
+        }
+    uint Top = gid.y - Height;
+    if (Top < 0)
+        {
+        Top = 0;
+        }
+    uint Right = Left + Width;
+    if (Right > InTexture.get_width() - 1)
+        {
+        Right = InTexture.get_width() - 1;
+        }
+    uint Bottom = Top + Height;
+    if (Top > InTexture.get_height() - 1)
+        {
+        Top = InTexture.get_height() - 1;
+        }
     uint2 PixellatedGrid = uint2(CenterX, CenterY);
     float4 ColorAtPixel = InTexture.read(PixellatedGrid);
     
@@ -425,6 +447,18 @@ kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0
                 break;
             }
         ColorAtPixel = FinalColor;
+        }
+    
+    if (BlockInfo.AddBorder)
+        {
+        if (gid.x % Width == 0)
+            {
+            ColorAtPixel = BlockInfo.BorderColor;
+            }
+        if (gid.y % Height == 0)
+            {
+            ColorAtPixel = BlockInfo.BorderColor;
+            }
         }
     
     OutTexture.write(ColorAtPixel, gid);
