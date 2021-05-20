@@ -172,10 +172,11 @@ class Filters
                 Options[.ColorDetermination] = Settings.GetInt(.MetalPixColorDetermination)
                 Options[.Highlight] = Settings.GetInt(.MetalPixHighlightPixel)
                 Options[.Merge] = Settings.GetBool(.MetalPixMergeImage)
-                Options[.By] = 0
-                Options[.IsGreater] = false
+                Options[.By] = Settings.GetInt(.MetalPixHighlightPixel)
+                Options[.IsGreater] = Settings.GetBool(.MetalPixInvertThreshold)
                 Options[.HAction] = 0
                 Options[.IntCommand] = 0
+                Options[.Threshold] = Settings.GetDouble(.MetalPixThreshold, 0.5)
             
             case .Kuwahara:
                 Options[.Radius] = Settings.GetDouble(.KuwaharaRadius,
