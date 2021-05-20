@@ -103,6 +103,9 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
         let HBy = Options[.By] as! Int
         let CDet = Options[.ColorDetermination] as! Int
         let HValue = Options[.Threshold] as! Double
+        let ShowBorder = Options[.ShowBorder] as! Bool
+        print("ShowBorder=\(ShowBorder)")
+        let BorderColor = Options[.BorderColor] as! UIColor
         
         let ParameterData = BlockInfoParameters(Width: simd_uint1(FinalWidth),
                                                 Height: simd_uint1(FinalHeight),
@@ -112,7 +115,9 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
                                                 HighlightColor: UIColor.yellow.ToFloat4(),
                                                 ColorDetermination: simd_uint1(CDet),
                                                 HighlightValue: simd_float1(HValue),
-                                                HighlightIfGreater: simd_bool(HIfGreat))
+                                                HighlightIfGreater: simd_bool(HIfGreat),
+                                                AddBorder: simd_bool(ShowBorder),
+                                                BorderColor: BorderColor.ToFloat4())
         let Parameters = [ParameterData]
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<BlockInfoParameters>.stride, options: [])
         memcpy(ParameterBuffer?.contents(), Parameters, MemoryLayout<BlockInfoParameters>.stride)
