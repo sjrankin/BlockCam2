@@ -18,9 +18,9 @@ struct MetalPixellateFilter_View: View
     @State var InvertThreshold: Bool = Settings.GetBool(.MetalPixInvertThreshold)
     @State var ColorDetermination: Int = Settings.GetInt(.MetalPixColorDetermination)
     @State var MergeImage: Bool = Settings.GetBool(.MetalPixMergeImage)
-    @State var HighlightPixel: Int = Settings.GetInt(.MetalPixHighlightPixel)
-    @State var HighlightThreshold: Double = Settings.GetDouble(.MetalPixThreshold, 0.5)
-    @State var CurrentThreshold: String = Settings.GetDouble(.MetalPixThreshold, 0.5).RoundedTo(2, PadTo: 2)
+    @State var ShowHighlightDetails: Bool = false
+
+    @State var ShowMoreDetails: Bool = false
     
     var body: some View
     {
@@ -116,7 +116,7 @@ struct MetalPixellateFilter_View: View
                         Picker(selection: $ColorDetermination,
                                label: Text(""))
                         {
-                            Text("Center").tag(0)
+                            Text("Pixel Center").tag(0)
                             Text("Mean Color").tag(1)
                         }
                         .pickerStyle(SegmentedPickerStyle())
@@ -132,73 +132,43 @@ struct MetalPixellateFilter_View: View
                     Divider()
                         .background(Color.black)
 
-                    VStack(alignment: .leading)
-                    {
-                        Text("Highlight Pixels")
-                            .font(.headline)
-                            .padding([.leading, .trailing])
-
-                        Picker(selection: $HighlightPixel,
-                               label: Text(""))
+                        //https://stackoverflow.com/questions/64544452/swiftui-horizontal-scrollview-inside-navigationlink-breaks-navigation
+                        HStack
                         {
-                            Text("Hue").tag(0)
-                            Text("Saturation").tag(1)
-                            Text("Brightness").tag(2)
-                            Text("None").tag(3)
+                        VStack(alignment: .leading)
+                        {
+                            Text("Pixel Highlighting")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .frame(width: Geometry.size.width * 0.6,
+                                       alignment: .leading)
+                            Text("Determines how pixels are highlight.")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .frame(width: Geometry.size.width * 0.6,
+                                       alignment: .leading)
                         }
-                        .pickerStyle(SegmentedPickerStyle())
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .frame(width: 24, height: 24, alignment: .trailing)
+                        }
                         .padding([.leading, .trailing])
-                        .onChange(of: HighlightPixel)
+                        .onTapGesture
                         {
-                            NewValue in
-                            Settings.SetInt(.MetalPixHighlightPixel, NewValue)
-                            Updated.toggle()
+                            ShowHighlightDetails = true
                         }
-                        
-                        HStack
-                        {
-                            Text("Threshold")
-                            Slider(value: Binding(
-                                get:
-                                    {
-                                        self.HighlightThreshold
-                                    },
-                                set:
-                                    {
-                                        NewValue in
-                                        self.HighlightThreshold = NewValue.RoundedTo(2)
-                                        CurrentThreshold = NewValue.RoundedTo(2, PadTo: 2)
-                                        Settings.SetDouble(.MetalPixThreshold, NewValue)
-                                        Updated.toggle()
-                                    }
-                            ), in: 0.0 ... 1.0)
-                            .frame(width: Geometry.size.width * 0.5)
-                            .padding([.leading, .trailing])
-                            
-                            Text($CurrentThreshold.wrappedValue)
-                        }
-                        .padding([.leading, .trailing, .top])
-                        
-                        HStack
-                        {
-                            Toggle("Invert threshold",
-                                   isOn: Binding(
-                                    get:
-                                        {
-                                            self.InvertThreshold
-                                        },
-                                    set:
-                                        {
-                                            NewValue in
-                                            self.InvertThreshold = NewValue
-                                            Settings.SetBool(.MetalPixInvertThreshold, NewValue)
-                                            Updated.toggle()
-                                        }
-                                   )
-                            )
-                            .padding([.leading, .trailing])
-                        }
-                    }
+                        .background(
+                            NavigationLink(destination:
+                                            MetalPixellateFilterDetails_View(ButtonCommand: $ButtonCommand)
+                                            .environmentObject(ChangedSettings()),
+                                isActive: $ShowHighlightDetails)
+                            {
+                            }
+                            .onAppear
+                            {
+                                Updated.toggle()
+                            }
+                        )
 
                     Divider()
                         .background(Color.black)
