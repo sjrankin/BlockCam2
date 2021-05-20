@@ -225,5 +225,7 @@ extension Settings
             .MetalPixHighlightPixel: 3,
             .MetalPixThreshold: 0.5,
             .MetalPixInvertThreshold: false,
+            .MetalPixShowBorder: false,
+            .MetalPixBorderColor: UIColor.black,
         ]
 }
