@@ -15,9 +15,12 @@ struct MetalPixellateFilter_View: View
     @State var PixelWidth: Int = Settings.GetInt(.MetalPixWidth)
     @State var PixelHeight: Int = Settings.GetInt(.MetalPixHeight)
     @State var Updated: Bool = false
+    @State var InvertThreshold: Bool = Settings.GetBool(.MetalPixInvertThreshold)
     @State var ColorDetermination: Int = Settings.GetInt(.MetalPixColorDetermination)
     @State var MergeImage: Bool = Settings.GetBool(.MetalPixMergeImage)
-    @State var HighlightPixel: Int = 3
+    @State var HighlightPixel: Int = Settings.GetInt(.MetalPixHighlightPixel)
+    @State var HighlightThreshold: Double = Settings.GetDouble(.MetalPixThreshold, 0.5)
+    @State var CurrentThreshold: String = Settings.GetDouble(.MetalPixThreshold, 0.5).RoundedTo(2, PadTo: 2)
     
     var body: some View
     {
@@ -49,7 +52,7 @@ struct MetalPixellateFilter_View: View
                         HStack
                         {
                             Text("Width")
-                                .padding()
+                                .padding([.leading, .trailing])
                             Picker(selection: $PixelWidth,
                                    label: Text(""))
                             {
@@ -61,10 +64,12 @@ struct MetalPixellateFilter_View: View
                             }
                             .pickerStyle(SegmentedPickerStyle())
                         }
+                        .padding([.leading, .trailing])
                         .onChange(of: PixelWidth)
                         {
                             Value in
                             Settings.SetInt(.MetalPixWidth, Value)
+                            Updated.toggle()
                         }
                     }
                     .padding([.leading, .trailing])
@@ -74,7 +79,7 @@ struct MetalPixellateFilter_View: View
                         HStack
                         {
                             Text("Height")
-                                .padding()
+                                .padding([.leading, .trailing])
                             Picker(selection: $PixelHeight,
                                    label: Text(""))
                             {
@@ -86,10 +91,12 @@ struct MetalPixellateFilter_View: View
                             }
                             .pickerStyle(SegmentedPickerStyle())
                         }
+                        .padding([.leading, .trailing])
                         .onChange(of: PixelHeight)
                         {
                             Value in
                             Settings.SetInt(.MetalPixHeight, Value)
+                            Updated.toggle()
                         }
                     }
                     .padding([.leading, .trailing])
@@ -118,6 +125,7 @@ struct MetalPixellateFilter_View: View
                         {
                             NewValue in
                             Settings.SetInt(.MetalPixColorDetermination, NewValue)
+                            Updated.toggle()
                         }
                     }
                     
@@ -144,6 +152,51 @@ struct MetalPixellateFilter_View: View
                         {
                             NewValue in
                             Settings.SetInt(.MetalPixHighlightPixel, NewValue)
+                            Updated.toggle()
+                        }
+                        
+                        HStack
+                        {
+                            Text("Threshold")
+                            Slider(value: Binding(
+                                get:
+                                    {
+                                        self.HighlightThreshold
+                                    },
+                                set:
+                                    {
+                                        NewValue in
+                                        self.HighlightThreshold = NewValue.RoundedTo(2)
+                                        CurrentThreshold = NewValue.RoundedTo(2, PadTo: 2)
+                                        Settings.SetDouble(.MetalPixThreshold, NewValue)
+                                        Updated.toggle()
+                                    }
+                            ), in: 0.0 ... 1.0)
+                            .frame(width: Geometry.size.width * 0.5)
+                            .padding([.leading, .trailing])
+                            
+                            Text($CurrentThreshold.wrappedValue)
+                        }
+                        .padding([.leading, .trailing, .top])
+                        
+                        HStack
+                        {
+                            Toggle("Invert threshold",
+                                   isOn: Binding(
+                                    get:
+                                        {
+                                            self.InvertThreshold
+                                        },
+                                    set:
+                                        {
+                                            NewValue in
+                                            self.InvertThreshold = NewValue
+                                            Settings.SetBool(.MetalPixInvertThreshold, NewValue)
+                                            Updated.toggle()
+                                        }
+                                   )
+                            )
+                            .padding([.leading, .trailing])
                         }
                     }
 
