@@ -223,5 +223,7 @@ extension Settings
             .MetalPixColorDetermination: 0,
             .MetalPixMergeImage: false,
             .MetalPixHighlightPixel: 3,
+            .MetalPixThreshold: 0.5,
+            .MetalPixInvertThreshold: false,
         ]
 }
