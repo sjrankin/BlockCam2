@@ -461,5 +461,7 @@ enum FilterOptions: String
     case By = "By"
     case ColorDetermination = "ColorDetermination"
     case Highlight = "Highlight"
+    case ShowBorder = "ShowBorder"
+    case BorderColor = "BorderColor"
 }
 
