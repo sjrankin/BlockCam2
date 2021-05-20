@@ -284,87 +284,149 @@ kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0
 {
     uint Width = BlockInfo.Width;
     uint Height = BlockInfo.Height;
+    uint CenterX = (gid.x / Width * Width);
+    uint CenterY = (gid.y / Width * Height);
+    uint2 PixellatedGrid = uint2(CenterX, CenterY);
+    float4 ColorAtPixel = InTexture.read(PixellatedGrid);
     
-    const uint2 PixelattedGrid = uint2((gid.x / Width) * Width, (gid.y / Height) * Height);
-    const float4 ColorAtPixel = InTexture.read(PixelattedGrid);
-    
-    float4 HSB = RGBtoHSB(ColorAtPixel);
-    float4 FinalColor = float4(1.0, 1.0, 1.0, 1.0);
-    switch (BlockInfo.HighlightPixelBy)
+    if (BlockInfo.ColorDetermination > 0)
         {
-            case 0:
+        uint MinX = CenterX - (Width / 2);
+        if (MinX < 0)
             {
-            //Hue
-            float H = HSB.r / 360.0;
-            if (BlockInfo.HighlightIfGreater)
-                {
-                if (H >= BlockInfo.HighlightValue)
-                    {
-                    FinalColor = ApplyHighlight(HSB, BlockInfo.HighlightAction);
-                    //FinalColor = float4(1.0,1.0,0.0,1.0);
-                    }
-                }
-            else
-                {
-                if (H <= BlockInfo.HighlightValue)
-                    {
-                    FinalColor = ApplyHighlight(HSB, BlockInfo.HighlightAction);
-                    //FinalColor = float4(0.0,1.0,1.0,1.0);
-                    }
-                }
-            break;
+            MinX = 0;
             }
-            
-            case 1:
+        uint MaxX = CenterX + (Width / 2);
+        if (MaxX > InTexture.get_width() - 1)
             {
-            //Saturation
-            float S = HSB.g;
-            if (BlockInfo.HighlightIfGreater)
-                {
-                if (S >= BlockInfo.HighlightValue)
-                    {
-                    FinalColor = ApplyHighlight(HSB, BlockInfo.HighlightAction);
-                    }
-                }
-            else
-                {
-                if (S <= BlockInfo.HighlightValue)
-                    {
-                    FinalColor = ApplyHighlight(HSB, BlockInfo.HighlightAction);
-                    }
-                }
-            break;
+            MaxX = InTexture.get_width() - 1;
             }
-            
-            case 2:
+        uint MinY = CenterY - (Height / 2);
+        if (MinY < 0)
             {
-            //Brightness
-            float B = HSB.b;
-            if (BlockInfo.HighlightIfGreater)
-                {
-                if (B >= BlockInfo.HighlightValue)
-                    {
-                    FinalColor = ApplyHighlight(HSB, BlockInfo.HighlightAction);
-                    //FinalColor = float4(1.0,1.0,0.0,1.0);
-                    }
-                }
-            else
-                {
-                if (B <= BlockInfo.HighlightValue)
-                    {
-                    FinalColor = ApplyHighlight(HSB, BlockInfo.HighlightAction);
-                    //FinalColor = float4(0.0,1.0,1.0,1.0);
-                    }
-                }
-            break;
+            MinY = 0;
             }
-            
-            default:
+        uint MaxY = CenterY + (Height / 2);
+        if (MaxY > InTexture.get_height() - 1)
             {
-            FinalColor = HSBtoRGB(HSB);
-            break;
+            MaxY = InTexture.get_height() - 1;
             }
+        
+        float r = 0.0;
+        float g = 0.0;
+        float b = 0.0;
+        
+        for (uint Y = MinY; Y < MaxY; Y++)
+            {
+            for (uint X = MinX; X < MaxX; X++)
+                {
+                r = r + InTexture.read(uint2(X,Y)).r;
+                g = g + InTexture.read(uint2(X,Y)).g;
+                b = b + InTexture.read(uint2(X,Y)).b;
+                }
+            }
+        r = r / (Height * Width);
+        g = g / (Height * Width);
+        b = b / (Height * Width);
+        ColorAtPixel = float4(r, g, b, 1.0);
         }
     
-    OutTexture.write(FinalColor, gid);
+    if (BlockInfo.HighlightPixelBy < 3)
+        {
+        float4 FinalColor = float4(1.0, 1.0, 1.0, 1.0);
+        float4 HSB = RGBtoHSB(ColorAtPixel);
+        switch (BlockInfo.HighlightPixelBy)
+            {
+                case 0:
+                {
+                float Hue = HSB.r / 360.0;
+                if (BlockInfo.HighlightIfGreater)
+                    {
+                    if (Hue > BlockInfo.HighlightValue)
+                        {
+                        FinalColor = ColorAtPixel;
+                        }
+                    else
+                        {
+                        FinalColor = float4(1.0, 1.0, 1.0, 0.0);
+                        }
+                    }
+                else
+                    {
+                    if (Hue < BlockInfo.HighlightValue)
+                        {
+                        FinalColor = ColorAtPixel;
+                        }
+                    else
+                        {
+                        FinalColor = float4(1.0, 1.0, 1.0, 0.0);
+                        }
+                    }
+                break;
+                }
+                
+                case 1:
+                {
+                float Saturation = HSB.g;
+                if (BlockInfo.HighlightIfGreater)
+                    {
+                    if (Saturation > BlockInfo.HighlightValue)
+                        {
+                        FinalColor = ColorAtPixel;
+                        }
+                    else
+                        {
+                        FinalColor = float4(1.0, 1.0, 1.0, 0.0);
+                        }
+                    }
+                else
+                    {
+                    if (Saturation < BlockInfo.HighlightValue)
+                        {
+                        FinalColor = ColorAtPixel;
+                        }
+                    else
+                        {
+                        FinalColor = float4(1.0, 1.0, 1.0, 0.0);
+                        }
+                    }
+                break;
+                }
+                
+                case 2:
+                {
+                float Brightness = HSB.b;
+                if (BlockInfo.HighlightIfGreater)
+                    {
+                    if (Brightness > BlockInfo.HighlightValue)
+                        {
+                        FinalColor = ColorAtPixel;
+                        }
+                    else
+                        {
+                        FinalColor = float4(1.0, 1.0, 1.0, 0.0);
+                        }
+                    }
+                else
+                    {
+                    if (Brightness < BlockInfo.HighlightValue)
+                        {
+                        FinalColor = ColorAtPixel;
+                        }
+                    else
+                        {
+                        FinalColor = float4(1.0, 1.0, 1.0, 0.0);
+                        }
+                    }
+                break;
+                }
+                
+                default:
+                break;
+            }
+        ColorAtPixel = FinalColor;
+        }
+    
+    OutTexture.write(ColorAtPixel, gid);
+    return;
 }
