@@ -177,6 +177,10 @@ class Filters
                 Options[.HAction] = 0
                 Options[.IntCommand] = 0
                 Options[.Threshold] = Settings.GetDouble(.MetalPixThreshold, 0.5)
+                Options[.ShowBorder] = Settings.GetBool(.MetalPixShowBorder)
+                Options[.BorderColor] = Settings.GetColor(.MetalPixBorderColor,
+                                                          Settings.SettingDefaults[.MetalPixBorderColor] as! UIColor)
+                print("Options[.ShowBorder]=\(Settings.GetBool(.MetalPixShowBorder))")
             
             case .Kuwahara:
                 Options[.Radius] = Settings.GetDouble(.KuwaharaRadius,
