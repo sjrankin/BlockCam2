@@ -36,6 +36,8 @@ enum SettingKeys: String, CaseIterable
     case UseMostRecentImage = "UseMostRecentImage"
     /// Boolean: If available, only use user-provided samples.
     case ShowUserSamplesOnlyIfAvailable = "ShowUserSamplesOnlyIfAvailable"
+    /// String: List of user sample images.
+    case UserSampleList = "UserSampleList"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.
