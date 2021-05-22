@@ -30,6 +30,7 @@ extension Settings
             .UseLatestBlockCamImage: Bool.self,
             .UseMostRecentImage: Bool.self,
             .ShowUserSamplesOnlyIfAvailable: Bool.self,
+            .UserSampleList: String.self,
             
             // MARK: - Filter settings.
             .CurrentFilter: String.self,
