@@ -28,6 +28,7 @@ extension Settings
             .UseLatestBlockCamImage: false,
             .UseMostRecentImage: false,
             .ShowUserSamplesOnlyIfAvailable: false,
+            .UserSampleList: "",
             
             // MARK: - Filter settings.
             .CurrentFilter: "",
