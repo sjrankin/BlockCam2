@@ -288,6 +288,8 @@ kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0
     uint Height = BlockInfo.Height;
     uint CenterX = (gid.x / Width * Width);
     uint CenterY = (gid.y / Width * Height);
+    
+    /*
     uint Left = gid.x - Width;
     if (Left < 0)
         {
@@ -308,6 +310,8 @@ kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0
         {
         Top = InTexture.get_height() - 1;
         }
+     */
+     
     uint2 PixellatedGrid = uint2(CenterX, CenterY);
     float4 ColorAtPixel = InTexture.read(PixellatedGrid);
     
