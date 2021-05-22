@@ -22,6 +22,8 @@ struct SampleImageData
     var Title: String
     /// Attribution of the image.
     var Attribution: String
+    /// Flag that indicates the image is from the user.
+    var IsUserImage: Bool
 }
 
 /// Manages sample images.
@@ -31,6 +33,7 @@ class SampleImages
     public static func Initialize()
     {
         MaxSamples = BuiltInSamples.count
+        InitializeUserSamples()
     }
     
     /// Contains all built-in sample images.
@@ -38,89 +41,76 @@ class SampleImages
     public static var BuiltInSamples: [SampleImageData] =
     [
         SampleImageData(id: "Sample1", SampleName: "SampleImage1", Title: "Black Cat",
-                        Attribution: "Author"),
+                        Attribution: "Author", IsUserImage: false),
         SampleImageData(id: "Sample12", SampleName: "SampleImage12", Title: "Norio the Cat",
-                        Attribution: "Author"),
+                        Attribution: "Author", IsUserImage: false),
         SampleImageData(id: "Sample20", SampleName: "SampleImage20", Title: "Great Wave Off Kanagawa",
-                        Attribution: "Katsushika Hokusai, Rijksmuseum"),
+                        Attribution: "Katsushika Hokusai, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample4", SampleName: "SampleImage4", Title: "Lantern Spook Yōkai",
-                        Attribution: "Katsushika Hokusai, Rijksmuseum"),
+                        Attribution: "Katsushika Hokusai, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample16", SampleName: "SampleImage16", Title: "Woman in Blue Combing Her Hair",
-                        Attribution: "Goyo Hashiguchi, National Diet Library"),
+                        Attribution: "Goyo Hashiguchi, National Diet Library", IsUserImage: false),
         SampleImageData(id: "Sample19", SampleName: "SampleImage19", Title: "Grotesque Mask",
-                        Attribution: "Cornelis Floris, Rijksmuseum"),
+                        Attribution: "Cornelis Floris, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample24", SampleName: "SampleImage24", Title: "Rhinoceros",
-                        Attribution: "Albrecht Dürer, Rijksmuseum"),
+                        Attribution: "Albrecht Dürer, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample2", SampleName: "SampleImage2", Title: "The Jolly Flatboatmen",
-                        Attribution: "George Caleb Bingham, National Gallery of Art"),
+                        Attribution: "George Caleb Bingham, National Gallery of Art", IsUserImage: false),
         SampleImageData(id: "Sample3", SampleName: "SampleImage3", Title: "Cherry Blossoms",
-                        Attribution: "Photo by AJ on Unsplash"),
+                        Attribution: "Photo by AJ on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample9", SampleName: "SampleImage9", Title: "France and Western Europe",
-                        Attribution: "NASA Terra MODIS"),
+                        Attribution: "NASA Terra MODIS", IsUserImage: false),
 
         SampleImageData(id: "Sample28", SampleName: "SampleImage28", Title: "Apollo 17 Orbiting the Moon",
-                        Attribution: "NASA/Apollo 17"),
+                        Attribution: "NASA/Apollo 17", IsUserImage: false),
         SampleImageData(id: "Sample29", SampleName: "SampleImage29", Title: "MSL Gale Crater",
-                        Attribution: "NASA/JPL/Mars Curiosity Rover"),
+                        Attribution: "NASA/JPL/Mars Curiosity Rover", IsUserImage: false),
         SampleImageData(id: "Sample15", SampleName: "SampleImage15", Title: "San Francisco Bay Area",
-                        Attribution: "NASA Landsat 7"),
+                        Attribution: "NASA Landsat 7", IsUserImage: false),
         SampleImageData(id: "Sample17", SampleName: "SampleImage17", Title: "Galaxy NGC 4921",
-                        Attribution: "NASA/ESA Hubble Space Telescope"),
+                        Attribution: "NASA/ESA Hubble Space Telescope", IsUserImage: false),
         SampleImageData(id: "Sample10", SampleName: "SampleImage10", Title: "Orion Nebula, M42",
-                        Attribution: "NASA/ESA Hubble Space Telescope"),
+                        Attribution: "NASA/ESA Hubble Space Telescope", IsUserImage: false),
         SampleImageData(id: "Sample21", SampleName: "SampleImage21", Title: "Grid with Red Lines",
-                        Attribution: "Author"),
+                        Attribution: "Author", IsUserImage: false),
         /*
         
         SampleImageData(id: "Sample5", SampleName: "SampleImage5", Title: "New York City",
-                        Attribution: "Photo by Sean Driscoll on Unsplash"),
+                        Attribution: "Photo by Sean Driscoll on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample6", SampleName: "SampleImage6", Title: "Flowing Purple Liquid",
-                        Attribution: "Photo by Solen Feyissa on Unsplash"),
+                        Attribution: "Photo by Solen Feyissa on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample7", SampleName: "SampleImage7", Title: "Black and White Moon",
-                        Attribution: "Photo by Alexander Andrews on Unsplash"),
+                        Attribution: "Photo by Alexander Andrews on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample8", SampleName: "SampleImage8", Title: "Rose",
-                        Attribution: "Photo by Annie Spratt on Unsplash"),
+                        Attribution: "Photo by Annie Spratt on Unsplash", IsUserImage: false),
 
         SampleImageData(id: "Sample11", SampleName: "SampleImage11", Title: "ACO S 295",
-                        Attribution: "NASA/ESA Hubble Space Telescope"),
+                        Attribution: "NASA/ESA Hubble Space Telescope", IsUserImage: false),
         SampleImageData(id: "Sample13", SampleName: "SampleImage13", Title: "Lights in Japan",
-                        Attribution: "Photo by Luca Florio on Unsplash"),
+                        Attribution: "Photo by Luca Florio on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample14", SampleName: "SampleImage14", Title: "Posing Lady",
-                        Attribution: "Photo by Muhammadtaha Ibrahim Ma'aji on Unsplash"),
+                        Attribution: "Photo by Muhammadtaha Ibrahim Ma'aji on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample18", SampleName: "SampleImage18", Title: "Izu Mountains",
-                        Attribution: "Photo by Peter Nguyen on Unsplash"),
+                        Attribution: "Photo by Peter Nguyen on Unsplash", IsUserImage: false),
         SampleImageData(id: "Sample22", SampleName: "SampleImage22", Title: "The Zojo Shrine in Shiba",
-                        Attribution: "Kawase Hasui, Rijksmuseum"),
+                        Attribution: "Kawase Hasui, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample23", SampleName: "SampleImage23", Title: "Melancholia I",
-                        Attribution: "Albrecht Dürer, Rijksmuseum"),
+                        Attribution: "Albrecht Dürer, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample24", SampleName: "SampleImage24", Title: "Rhinoceros",
-                        Attribution: "Albrecht Dürer, Rijksmuseum"),
+                        Attribution: "Albrecht Dürer, Rijksmuseum", IsUserImage: false),
         SampleImageData(id: "Sample25", SampleName: "SampleImage25", Title: "The Tyger",
-                        Attribution: "William Blake, British Museum"),
+                        Attribution: "William Blake, British Museum", IsUserImage: false),
         SampleImageData(id: "Sample26", SampleName: "SampleImage26", Title: "Europe a Prophecy",
-                        Attribution: "William Blake, British Museum"),
+                        Attribution: "William Blake, British Museum", IsUserImage: false),
         SampleImageData(id: "Sample27", SampleName: "SampleImage27", Title: "Yōkai Figure",
-                        Attribution: "Author"),
+                        Attribution: "Author", IsUserImage: false),
         SampleImageData(id: "Sample29", SampleName: "SampleImage29", Title: "MSL Gale Crater",
-                        Attribution: "NASA/JPL/Mars Curiosity Rover")
+                        Attribution: "NASA/JPL/Mars Curiosity Rover", IsUserImage: false)
  */
     ]
     
     /// Current number of sample images.
     public static var MaxSamples: Int = 0
-    /*
-    public static let BuiltInSamples =
-        [
-            "Sample1" : "Cat",
-            "Sample2" : "Mom",
-            "Sample3" : "Yōkai",
-            "Sample4" : "Galaxy",
-            "Sample5" : "Hokkaido",
-            "Sample6" : "Apollo 17",
-            "Sample7" : "MSL Gale Crater",
-            "Sample8" : "Grid"
-        ]
- */
     
     /// Returns a nice sample name for the current sample image.
     /// - Returns: Nice sample name for the current sample image. If the sample
@@ -134,12 +124,6 @@ class SampleImages
                 return SampleData.Title
             }
         }
-        /*
-        if let Name = BuiltInSamples[GetSampleImageName()]
-        {
-            return Name
-        }
- */
         return "Sample Image"
     }
     
@@ -180,12 +164,6 @@ class SampleImages
                 return SampleData.Title
             }
         }
-        /*
-        if let Name = BuiltInSamples[Title]
-        {
-            return Name
-        }
- */
         return "SampleImage"
     }
     
@@ -228,17 +206,6 @@ class SampleImages
             Settings.SetInt(.SampleImageIndex, Index)
         }
         return UIImage(named: BuiltInSamples[Index].SampleName)!
-        /*
-        let Name = "SampleImage\(Index)"
-        if let Result = UIImage(named: Name)
-        {
-            return Result
-        }
-        else
-        {
-            return UIImage(named: "SampleImage1")!
-        }
- */
     }
     
     /// Increments the sample image and returns the new image.
@@ -341,7 +308,6 @@ class SampleImages
             Settings.SetInt(.SampleImageIndex, Index)
         }
         return BuiltInSamples[Index].SampleName
-//        return "SampleIndex\(Index)"
     }
     
     /// Resets the sample image to the first in the asset catalog.
@@ -390,5 +356,285 @@ class SampleImages
                 RecentImage = Image
             }
         }
+    }
+    
+    // MARK: - Manage user-defined sample images
+    
+    /// Holds an arry of user-defined sample image data.
+    public static var UserDefinedSamples = [SampleImageData]()
+    
+    /// Save the user sample list to settings.
+    /// - Note: This is called whenever a function that manipulates the list is called and probably should
+    ///         not be called otherwise.
+    public static func SaveUserSampleList()
+    {
+        var Result = ""
+        for UserData in UserDefinedSamples
+        {
+            Result.append(UserData.SampleName)
+            Result.append("")
+            Result.append(UserData.Title)
+            Result.append("")
+        }
+        Settings.SetString(.UserSampleList, Result)
+        print("Saved: \(Result)")
+    }
+    
+    /// Initialized user samples.
+    /// - Note:
+    ///  - Reads the user sample list from settings.
+    ///  - Removes any unattached files in the user sample directory.
+    public static func InitializeUserSamples()
+    {
+        if let Raw = Settings.GetString(.UserSampleList)
+        {
+            if !Raw.isEmpty
+            {
+                let Parts = Raw.split(separator: "", omittingEmptySubsequences: true)
+                if !Parts.count.isMultiple(of: 2)
+                {
+                    Debug.Print("String at .\(SettingKeys.UserSampleList.rawValue) is corrupt - uneven number of entries.")
+                    Settings.SetString(.UserSampleList, "")
+                    return
+                }
+                var Index = 0
+                while Index < Parts.count
+                {
+                    let FileName = String(Parts[Index])
+                    Index = Index + 1
+                    let Description = String(Parts[Index])
+                    Index = Index + 1
+                    let ImageData = SampleImageData(id: FileName,
+                                                    SampleName: FileName,
+                                                    Title: Description,
+                                                    Attribution: "User Image",
+                                                    IsUserImage: true)
+                    UserDefinedSamples.append(ImageData)
+                }
+                let DirURL = FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)
+                let Contents = FileIO.GetFilesIn(Directory: DirURL!)
+                if UserDefinedSamples.count > Contents!.count
+                {
+                    //We're in an unstable state. Clear the contents and list.
+                    Debug.Print("Mismatch between user sample list and user samples - in unstable state. Clearing user sample list and directory.")
+                    UserDefinedSamples.removeAll()
+                    FileIO.ClearDirectory(FileIO.SampleDirectory)
+                    return
+                }
+                RemoveUnattachedImages()
+            }
+            else
+            {
+                print("User sample list is empty (inner)")
+            }
+        }
+        else
+        {
+            print("User sample list is empty (outer)")
+        }
+    }
+    
+    /// Determines if the passed file name exists in the current user sample list.
+    /// - Parameter FileName: The file name to look for in the user sample list.
+    /// - Returns: True if the file name was found, false if not.
+    public static func FileInUserList(_ FileName: String) -> Bool
+    {
+        for UserImage in UserDefinedSamples
+        {
+            print("--> \(UserImage.SampleName)")
+            if UserImage.SampleName == FileName
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
+    /// Add a new user sample to the user sample list.
+    /// - Note:
+    ///    - If the callers sets `OverWrite` to `false` and `false` is returned, the image alreadys exists.
+    ///      In that case, the caller is expected to query the user and if the user agrees, make a
+    ///      call again with `OverWrite` set to `true`.
+    /// - Parameter FileName: The name of the file of the user sample image. Also used as the sample
+    ///                       name.
+    /// - Parameter Description: The user's description for the sample image.
+    /// - Parameter Image: Image to save.
+    /// - Parameter OverWrite: If `true`, if a file with the same name already exists, it will be
+    ///                        overwritten. If `false`, when a file with the same name is encountered,
+    ///                        `false` will be returned.
+    /// - Returns: `True` on success, `false` if the file already exists.
+    public static func AddUserSample(FileName: String,
+                                     Description: String,
+                                     Image: UIImage,
+                                     OverWrite: Bool = false) -> Bool
+    {
+        if !OverWrite
+        {
+            if FileInUserList(FileName)
+            {
+                return false
+            }
+        }
+        var FileURL = FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)
+        FileURL?.appendPathComponent(FileName)
+        if FileIO.FileExists(FileURL!)
+        {
+            FileIO.DeleteFile(FileURL!)
+        }
+        guard FileIO.SaveImage(Image, WithName: FileName, Directory: FileIO.SampleDirectory) else
+        {
+            return false
+        }
+        let ImageData = SampleImageData(id: FileName,
+                                        SampleName: FileName,
+                                        Title: Description,
+                                        Attribution: "User Image",
+                                        IsUserImage: true)
+        UserDefinedSamples.append(ImageData)
+        SaveUserSampleList()
+        return true
+    }
+    
+    /// Returns the index of the sample image whose name is `FileName`.
+    /// - Note: The index is based on the **current** `UserDefinedSamples` array. For that reason the
+    ///         returned value should be used immediately. There is no guarentee that the value will be
+    ///         valid after making other function calls into this class.
+    /// - Parameter FileName: The name of the file whose index will be returned. See Notes.
+    /// - Returns: Index of the user sample image data for the given file name. Returns `-1` if not found.
+    public static func IndexOfUserSample(_ FileName: String) -> Int
+    {
+        if let Index = UserDefinedSamples.firstIndex(where: {$0.SampleName == FileName})
+        {
+            return Index
+        }
+        return -1
+    }
+    
+    /// Update the description of a user sample image.
+    /// - Parameter FileName: Determines which description to update.
+    /// - Parameter Description: The new description.
+    public static func EditUserSample(FileName: String,
+                                      Description: String)
+    {
+        let SampleIndex = IndexOfUserSample(FileName)
+        if SampleIndex < 0
+        {
+            Debug.Print("Did not find sample with name \(FileName)")
+            return
+        }
+        UserDefinedSamples[SampleIndex].Title = Description
+        SaveUserSampleList()
+    }
+    
+    /// Determines if the specified user sample exists in the user sample list.
+    /// - Parameter SampleName: The name of the user sample (assumed to be a file name) to check
+    ///             for existence in the user sample list.
+    /// - Returns: True if the sample file name was found, false if not.
+    public static func UserSampleExists(_ SampleName: String) -> Bool
+    {
+        for UserData in UserDefinedSamples
+        {
+            if UserData.SampleName == SampleName
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
+    /// Delete the specified user sample.
+    /// - Note: The sample image will be delted from BlockCam's user sample directory and the entry in the
+    ///         user sample list will be removed.
+    /// - Parameter With: The sample image name (expected to be a file name) to delete. If it does not exist,
+    ///                   no action is taken.
+    public static func DeleteUserSample(With SampleName: String)
+    {
+        if !UserSampleExists(SampleName)
+        {
+            Debug.Print("Did not delete \(SampleName) - entry not found.")
+            return
+        }
+        for UserData in UserDefinedSamples
+        {
+            if UserData.SampleName == SampleName
+            {
+                var FileURL = FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)
+                FileURL?.appendPathComponent(UserData.SampleName)
+                FileIO.DeleteFile(FileURL!)
+                break
+            }
+        }
+        UserDefinedSamples = UserDefinedSamples.filter({$0.SampleName != SampleName})
+        SaveUserSampleList()
+    }
+    
+    /// Delete all user samples.
+    /// - Note: All sample images in BlockCam's user sample directory will be deleted (but not the original
+    ///         images) and the user defined sample list will be cleared.
+    public static func DeleteAllUserSamples()
+    {
+        for UserData in UserDefinedSamples
+        {
+            var FileURL = FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)
+            FileURL?.appendPathComponent(UserData.SampleName)
+            FileIO.DeleteFile(FileURL!)
+        }
+        UserDefinedSamples.removeAll()
+        SaveUserSampleList()
+    }
+    
+    /// Remove all unattached images in the user sample directory.
+    /// - Note:
+    ///   - "Unattached" images are images whose names are not referenced in the user sample list.
+    ///   - The user sample directory is created here if it does not exist.
+    public static func RemoveUnattachedImages()
+    {
+        FileIO.CreateIfDoesNotExist(DirectoryName: FileIO.SampleDirectory)
+        guard let FilesInSampleDirectory = FileIO.GetFilesIn(Directory: FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)!) else
+        {
+            Debug.Print("Error returned getting files in \(FileIO.SampleDirectory)")
+            return
+        }
+        if FilesInSampleDirectory.isEmpty
+        {
+            return
+        }
+        var FileNameSet = Set<String>()
+        for FileURL in FilesInSampleDirectory
+        {
+            let FileName = FileURL.lastPathComponent
+            FileNameSet.insert(FileName)
+        }
+        var ListNameSet = Set<String>()
+        for UserSample in UserDefinedSamples
+        {
+            ListNameSet.insert(UserSample.SampleName)
+        }
+        let Union = ListNameSet.union(FileNameSet)
+        let Unattached = FileNameSet.subtracting(Union)
+        let SampleDirectory = FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)
+        for SomeImage in Unattached
+        {
+            Debug.Print("Removing unattached file \(SomeImage)")
+            if let FileURL = SampleDirectory?.appendingPathComponent(SomeImage)
+            {
+                FileIO.DeleteFile(FileURL)
+            }
+        }
+    }
+    
+    /// Return the URL for the user sample image whose name is passed.
+    /// - Warning: Will throw a fatal error if the URL cannot be determined.
+    /// - Parameter Name: Name of the user sample image.
+    /// - Returns: URL for the specified user sample image.
+    static func URLForSample(Name: String) -> URL
+    {
+        var BaseURL = FileIO.GetDirectoryURL(DirectoryName: FileIO.SampleDirectory)
+        BaseURL = BaseURL?.appendingPathComponent(Name)
+        guard BaseURL != nil else
+        {
+            Debug.FatalError("Error creating URL for \(Name)")
+        }
+        return BaseURL!
     }
 }
