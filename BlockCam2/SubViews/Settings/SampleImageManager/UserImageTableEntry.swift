@@ -16,12 +16,14 @@ struct UserImageTableEntry: View
     @State var ImageTapped: Bool = false
     @State var SelectedItem: Bool = false
     @State var TappedItem: String = ""
+    @Binding var SelectedIndex: Int
+    @State var ItemIndex: Int
     
     var body: some View
     {
         HStack
         {
-            Image(ImageName)
+            Image(uiImage: FileIO.LoadImage(SampleImages.URLForSample(Name: ImageName))!) 
                 .resizable()
                 .border(Color.black, width: 0.5)
                 .frame(alignment: .center)
@@ -50,13 +52,15 @@ struct UserImageTableEntry: View
         }
         .frame(width: OverallWidth * 0.95,
                alignment: .leading)
-        .background(ImageTapped ? Color.yellow : Color.white)
+        .background(ItemIndex == SelectedIndex ? Color.yellow : Color.white)
+        //.background(ImageTapped ? Color.yellow : Color.white)
         .padding([.leading, .trailing])
         .onTapGesture
         {
             TappedItem = ImageName
             ImageTapped.toggle()
             print("\(ImageName) tapped")
+            SelectedIndex = ItemIndex
         }
     }
 }
@@ -80,6 +84,8 @@ struct UserImageTableEntryView_Preview: PreviewProvider
         ItemState(id: "Sample4", WasTapped: false, ItemName: "Sample4", IsSelected: false, TappedName: ""),
     ]
     
+    @State static var SelectedIndex: Int = -1
+    
     static var previews: some View
     {
         GeometryReader
@@ -92,37 +98,13 @@ struct UserImageTableEntryView_Preview: PreviewProvider
                     Index in
                     UserImageTableEntry(ImageName: Items[Index].ItemName,
                                         ImageDescription: SampleImages.GetCurrentSampleImageName(From: Items[Index].ItemName),
-                    OverallWidth: Reader.size.width,
-                    TappedItem: Items[Index].TappedName)
-                    Divider()
-                        .background(Color.black)
-                }
-                /*
-                Group
-                {
-                    UserImageTableEntry(ImageName: "Sample1",
-                                        ImageDescription: Utility.GetCurrentSampleImageName(From: "Sample1"),
                                         OverallWidth: Reader.size.width,
-                                        TappedItem: $TappedItem)
-                    Divider()
-                        .background(Color.black)
-                    UserImageTableEntry(ImageName: "Sample2",
-                                        ImageDescription: Utility.GetCurrentSampleImageName(From: "Sample2"),
-                                        OverallWidth: Reader.size.width)
-                    Divider()
-                        .background(Color.black)
-                    UserImageTableEntry(ImageName: "Sample3",
-                                        ImageDescription: Utility.GetCurrentSampleImageName(From: "Sample3"),
-                                        OverallWidth: Reader.size.width)
-                    Divider()
-                        .background(Color.black)
-                    UserImageTableEntry(ImageName: "Sample4",
-                                        ImageDescription: Utility.GetCurrentSampleImageName(From: "Sample4"),
-                                        OverallWidth: Reader.size.width)
+                                        TappedItem: Items[Index].TappedName,
+                                        SelectedIndex: $SelectedIndex,
+                                        ItemIndex: Index)
                     Divider()
                         .background(Color.black)
                 }
- */
             }
         }
     }
