@@ -9,7 +9,14 @@ import SwiftUI
 
 struct UserSampleManager: View
 {
+    @State var Updated: Bool = false
+    @State var ShowImagePicker: Bool = false
+    @State var ShowDeleteOneAlert: Bool = false
+    @State var ShowDeleteAllAlert: Bool = false
+    @State var SampleList: [SampleImageData] = SampleImages.UserDefinedSamples
     @Environment(\.presentationMode) var presentionMode: Binding<PresentationMode>
+    @State var SelectedIndex: Int = -1
+    @State var ShowEditor: Bool = false
     
     var body: some View
     {
@@ -20,8 +27,18 @@ struct UserSampleManager: View
             {
                 LazyVStack
                 {
+                    ForEach(0 ..< SampleList.count, id: \.self)
+                    {
+                        Index in
+                        UserImageTableEntry(ImageName: SampleImages.UserDefinedSamples[Index].SampleName,
+                                            ImageDescription: SampleImages.UserDefinedSamples[Index].Title,
+                                            OverallWidth: Reader.size.width,
+                                            SelectedIndex: $SelectedIndex,
+                                            ItemIndex: Index)
+                    }
                 }
             }
+            .padding(.top)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarTitle(Text("User Sample Images"))
@@ -42,7 +59,7 @@ struct UserSampleManager: View
             {
                 Button(action:
                         {
-                            print("Add new image")
+                            ShowImagePicker = true
                         },
                        label:
                         {
@@ -58,9 +75,13 @@ struct UserSampleManager: View
                             }
                         })
                     .padding()
+                
                 Button(action:
                         {
-                            print("Edit existing image")
+                            if SelectedIndex > -1
+                            {
+                                ShowEditor = true
+                            }
                         },
                        label:
                         {
@@ -76,10 +97,13 @@ struct UserSampleManager: View
                             }
                         })
                     .padding()
+                
                 Spacer()
+                
                 Button(action:
                         {
                             print("Delete image")
+                            ShowDeleteOneAlert = true
                         },
                        label:
                         {
@@ -96,9 +120,21 @@ struct UserSampleManager: View
                             }
                         })
                     .padding()
+                    .alert(isPresented: $ShowDeleteOneAlert)
+                    {
+                        Alert(title: Text("Really Delete?"),
+                              message: Text("Do you really want to delete the selected image from BlockCam? The image will not be deleted from the Photo Album."),
+                              primaryButton: .destructive(Text("OK"))
+                              {
+                                print("delete something")
+                              },
+                              secondaryButton: .default(Text("Cancel")))
+                    }
+
                 Button(action:
                         {
                             print("Clear all images")
+                            ShowDeleteAllAlert = true
                         },
                        label:
                         {
@@ -115,6 +151,47 @@ struct UserSampleManager: View
                             }
                         })
                     .padding()
+                    .alert(isPresented: $ShowDeleteAllAlert)
+                    {
+                        Alert(title: Text("Really Delete All?"),
+                              message: Text("Do you really want to delete all of your sample images from BlockCam? This action will note delete your images but only removed them from BlockCam."),
+                              primaryButton: .destructive(Text("OK"))
+                              {
+                                SampleImages.DeleteAllUserSamples()
+                                SampleList = SampleImages.UserDefinedSamples
+                                Updated.toggle()
+                              },
+                              secondaryButton: .default(Text("Cancel")))
+                    }
+            }
+        }
+        .sheet(isPresented: $ShowImagePicker)
+        {
+            AddUserImageView()
+            {
+                OK in
+                if OK
+                {
+                    SampleList = SampleImages.UserDefinedSamples
+                    Updated.toggle()
+                }
+            }
+        }
+        .sheet(isPresented: $ShowEditor)
+        {
+            if SelectedIndex > -1
+            {
+                EditUserImageView(SelectedImageName: SampleList[SelectedIndex].SampleName,
+                                  SelectedImage: FileIO.LoadImage(SampleImages.URLForSample(Name: SampleList[SelectedIndex].SampleName))!,
+                                  Description: SampleList[SelectedIndex].Title)
+                {
+                    OK in
+                    if OK
+                    {
+                        SampleList = SampleImages.UserDefinedSamples
+                        Updated.toggle()
+                    }
+                }
             }
         }
     }
