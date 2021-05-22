@@ -16,7 +16,7 @@ struct RunSampleImageSettingView: View
         switch ViewToRun
         {
             case "Built-in":
-                BuiltInSampleImageManager()
+                BuiltInSampleImageManager(ShowPleaseWait: true)
                 
             case "Your images":
                 UserSampleManager()
