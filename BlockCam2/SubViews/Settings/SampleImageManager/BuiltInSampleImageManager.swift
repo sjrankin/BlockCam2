@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BuiltInSampleImageManager: View
 {
+    @State var ShowPleaseWait: Bool
     @Environment(\.presentationMode) var presentionMode: Binding<PresentationMode>
     
     var body: some View
@@ -46,6 +47,10 @@ struct BuiltInSampleImageManager: View
                     }
                 }
             }
+            .onAppear()
+            {
+                ShowPleaseWait = false
+            }
         }
     }
 }
@@ -54,6 +59,6 @@ struct BuiltInSampleImageManager_Previews: PreviewProvider
 {
     static var previews: some View
     {
-        BuiltInSampleImageManager()
+        BuiltInSampleImageManager(ShowPleaseWait: true)
     }
 }
