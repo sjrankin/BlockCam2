@@ -13,7 +13,7 @@ import UIKit
 class FileIO
 {
     /// Name of the directory where user sample images (for viewing filter settings) are stored.
-    static let SampleDirectory = "/UserSample"
+    static let SampleDirectory = "/UserSamples"
     
     /// Name of the directory that holds the last image taken by BlockCam.
     static let LastImageDirectory = "/LastImage"
@@ -32,9 +32,7 @@ class FileIO
     static let DebugDirectory = "/Debug"
     
     /// Determines if the passed directory exists. If it does not, it is created.
-    ///
     /// - Note: A false return indicates something is terribly wrong and execution should stop.
-    ///
     /// - Parameter DirectoryName: The name of the directory to test for existence. This name will be used
     ///                            to create the directory if it does not exist.
     /// - Returns: True on success (the directory already existed or was created successfully), false on error (the
@@ -44,9 +42,7 @@ class FileIO
     {
         if DirectoryExists(DirectoryName: DirectoryName)
         {
-            #if DEBUG
-            print("\(DirectoryName) exists.")
-            #endif
+            Debug.Print("\(DirectoryName) exists.")
             return true
         }
         else
@@ -54,13 +50,10 @@ class FileIO
             let DirURL = CreateDirectory(DirectoryName: DirectoryName)
             if DirURL == nil
             {
-                print("Error creating \(DirectoryName)")
-                return false
+                Debug.FatalError("Error creating \(DirectoryName)")
             }
         }
-        #if DEBUG
-        print("\(DirectoryName) created.")
-        #endif
+        Debug.Print("\(DirectoryName) created.")
         return true
     }
     
@@ -89,6 +82,12 @@ class FileIO
         return FileManager.default.fileExists(atPath: CPath!.path)
     }
     
+    /// Simple wrapper around the `fileExists` function.
+    public static func FileExists(_ FileURL: URL) -> Bool
+    {
+        return FileManager.default.fileExists(atPath: FileURL.path)
+    }
+    
     /// Create a directory in the document directory.
     ///
     /// - Parameter DirectoryName: Name of the directory to create.
@@ -103,8 +102,7 @@ class FileIO
         }
         catch
         {
-            print("Error creating directory \(CPath.path): \(error.localizedDescription)")
-            return nil
+            Debug.FatalError("Error creating directory \(CPath.path): \(error.localizedDescription)")
         }
         return CPath
     }
@@ -142,7 +140,7 @@ class FileIO
     {
         if !DirectoryExists(DirectoryName: Name)
         {
-            print("Directory \(Name) does not exist.")
+            Debug.Print("Directory \(Name) does not exist.")
             return false
         }
         let CPath = GetDocumentDirectory()?.appendingPathComponent(Name)
@@ -158,14 +156,14 @@ class FileIO
                 }
                 catch
                 {
-                    print("Error removing \((ContentPath?.path)!): \(error.localizedDescription)")
+                    Debug.Print("Error removing \((ContentPath?.path)!): \(error.localizedDescription)")
                     return false
                 }
             }
         }
         catch
         {
-            print("Error getting contents of \(CPath!.path): \(error.localizedDescription)")
+            Debug.Print("Error getting contents of \(CPath!.path): \(error.localizedDescription)")
             return false
         }
         return true
@@ -219,7 +217,7 @@ class FileIO
         }
         catch
         {
-            print("Error loading image at \(From.path): \(error.localizedDescription)")
+            Debug.Print("Error loading image at \(From.path): \(error.localizedDescription)")
             return nil
         }
     }
@@ -240,7 +238,7 @@ class FileIO
             }
             catch
             {
-                print("Error loading image data for LastBlockCamImage.jpg")
+                Debug.Print("Error loading image data for LastBlockCamImage.jpg")
                 return nil
             }
         }
@@ -278,8 +276,9 @@ class FileIO
     ///   - WithName: The name to use when saving the image.
     ///   - InDirectory: The directory in which to save the image.
     ///   - AsJPG: If true, save as a .JPG image. If false, save as a .PNG image.
-    /// - Returns: True on success, nil on failure.
-    public static func SaveImage(_ Image: UIImage, WithName: String, InDirectory: URL, AsJPG: Bool = true) -> Bool
+    /// - Returns: True on success, false on failure.
+    public static func SaveImage(_ Image: UIImage, WithName: String, InDirectory: URL,
+                                 AsJPG: Bool = true) -> Bool
     {
         if InMaximumPrivacy()
         {
@@ -288,6 +287,7 @@ class FileIO
         }
         if AsJPG
         {
+            print("Saving \(WithName)")
             if let Data = Image.jpegData(compressionQuality: 1.0)
             {
                 let FileName = InDirectory.appendingPathComponent(WithName)
@@ -297,7 +297,7 @@ class FileIO
                 }
                 catch
                 {
-                    print("Error writing \(FileName.path): \(error.localizedDescription)")
+                    Debug.Print("Error writing \(FileName.path): \(error.localizedDescription)")
                     return false
                 }
             }
@@ -313,7 +313,7 @@ class FileIO
                 }
                 catch
                 {
-                    print("Error writing \(FileName.path): \(error.localizedDescription)")
+                    Debug.Print("Error writing \(FileName.path): \(error.localizedDescription)")
                     return false
                 }
             }
@@ -378,20 +378,20 @@ class FileIO
             {
                 if Images.count < 1
                 {
-                    print("No files returned from " + SampleDirectory)
+                    Debug.Print("No files returned from " + SampleDirectory)
                     return nil
                 }
                 return LoadImage(Images[0])
             }
             else
             {
-                print("No images found in " + SampleDirectory)
+                Debug.Print("No images found in " + SampleDirectory)
                 return nil
             }
         }
         else
         {
-            print("Error getting URL for " + SampleDirectory)
+            Debug.Print("Error getting URL for " + SampleDirectory)
             return nil
         }
     }
@@ -416,20 +416,20 @@ class FileIO
             {
                 if Images.count < 1
                 {
-                    print("No files returned.")
+                    Debug.Print("No files returned.")
                     return nil
                 }
                 return Images[0].path
             }
             else
             {
-                print("No files found in " + SampleDirectory)
+                Debug.Print("No files found in " + SampleDirectory)
                 return nil
             }
         }
         else
         {
-            print("Error getting URL for " + SampleDirectory)
+            Debug.Print("Error getting URL for " + SampleDirectory)
             return nil
         }
     }
@@ -442,7 +442,7 @@ class FileIO
     {
         if !FileManager.default.fileExists(atPath: FileURL.path)
         {
-            print("Unable to find the file \(FileURL.path) - cannot delete.")
+            Debug.Print("Unable to find the file \(FileURL.path) - cannot delete.")
             return false
         }
         do
@@ -452,7 +452,7 @@ class FileIO
         }
         catch
         {
-            print("Error deleting file \(FileURL.path): error: \(error.localizedDescription)")
+            Debug.Print("Error deleting file \(FileURL.path): error: \(error.localizedDescription)")
             return false
         }
     }
@@ -510,7 +510,7 @@ class FileIO
         }
         catch
         {
-            print("Error saving string to \(FinalFile!.path): error: \(error.localizedDescription)")
+            Debug.Print("Error saving string to \(FinalFile!.path): error: \(error.localizedDescription)")
             return false
         }
         return true
@@ -539,7 +539,7 @@ class FileIO
         }
         catch
         {
-            print("Error saving string to \(FinalFile!.path): error: \(error.localizedDescription)")
+            Debug.Print("Error saving string to \(FinalFile!.path): error: \(error.localizedDescription)")
             return false
         }
         return true
@@ -568,7 +568,7 @@ class FileIO
         }
         catch
         {
-            print("Error saving string to \(FinalFile!.path): error: \(error.localizedDescription)")
+            Debug.Print("Error saving string to \(FinalFile!.path): error: \(error.localizedDescription)")
             return nil
         }
         return FinalFile
@@ -588,15 +588,10 @@ class FileIO
     /// - Parameter IncludingDebug: Determines if the debug directory is cleared as well.
     public static func ClearAllDirectories(IncludingDebug: Bool = false)
     {
-        print("Clearing all directories.")
         ClearDirectory(SampleDirectory)
-        print("Sample directory cleared.")
         ClearDirectory(ScratchDirectory)
-        print("Scratch directory cleared.")
         ClearDirectory(PerformanceDirectory)
-        print("Performance directory cleared.")
         ClearDirectory(RuntimeDirectory)
-        print("Runtime directory cleared.")
         if IncludingDebug
         {
             ClearDirectory(DebugDirectory)
