@@ -180,7 +180,6 @@ class Filters
                 Options[.ShowBorder] = Settings.GetBool(.MetalPixShowBorder)
                 Options[.BorderColor] = Settings.GetColor(.MetalPixBorderColor,
                                                           Settings.SettingDefaults[.MetalPixBorderColor] as! UIColor)
-                print("Options[.ShowBorder]=\(Settings.GetBool(.MetalPixShowBorder))")
             
             case .Kuwahara:
                 Options[.Radius] = Settings.GetDouble(.KuwaharaRadius,
