@@ -104,7 +104,6 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
         let CDet = Options[.ColorDetermination] as! Int
         let HValue = Options[.Threshold] as! Double
         let ShowBorder = Options[.ShowBorder] as! Bool
-        print("ShowBorder=\(ShowBorder)")
         let BorderColor = Options[.BorderColor] as! UIColor
         
         let ParameterData = BlockInfoParameters(Width: simd_uint1(FinalWidth),
