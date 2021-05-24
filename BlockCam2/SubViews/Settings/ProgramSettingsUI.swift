@@ -50,7 +50,7 @@ struct ProgramSettingsUI: View
                     SettingsItemView(SettingData: SomeOption)
                 }
             }
-            .navigationBarTitle(Text("Settings"))
+            .navigationBarTitle(Text("BlockCam Settings"))
             .toolbar
             {
                 ToolbarItem(placement: .navigationBarTrailing)
