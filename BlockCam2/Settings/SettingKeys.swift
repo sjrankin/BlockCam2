@@ -38,6 +38,8 @@ enum SettingKeys: String, CaseIterable
     case ShowUserSamplesOnlyIfAvailable = "ShowUserSamplesOnlyIfAvailable"
     /// String: List of user sample images.
     case UserSampleList = "UserSampleList"
+    /// Boolean: If true use user samples for the set of sample images.
+    case UseSampleImages = "UseSampleImages"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.

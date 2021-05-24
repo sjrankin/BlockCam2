@@ -29,6 +29,7 @@ extension Settings
             .UseMostRecentImage: false,
             .ShowUserSamplesOnlyIfAvailable: false,
             .UserSampleList: "",
+            .UseSampleImages: false,
             
             // MARK: - Filter settings.
             .CurrentFilter: "",

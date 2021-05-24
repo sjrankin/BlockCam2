@@ -31,6 +31,7 @@ extension Settings
             .UseMostRecentImage: Bool.self,
             .ShowUserSamplesOnlyIfAvailable: Bool.self,
             .UserSampleList: String.self,
+            .UseSampleImages: Bool.self,
             
             // MARK: - Filter settings.
             .CurrentFilter: String.self,
