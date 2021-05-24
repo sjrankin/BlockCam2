@@ -12,22 +12,9 @@ struct EditUserImageView: View
 {
     @State var FileExists: Bool = false
     @State var Updated: Bool = false
-    @State var Description: String = ""
-    @State var SelectedImageName: String = ""
-    @State var SelectedImage: UIImage = UIImage()
-    @State var SelectedImageURL: URL? = nil
+    @State var UserData: SampleImageData
     @Environment(\.presentationMode) var presentionMode: Binding<PresentationMode>
-    
-    init(SelectedImageName: String, SelectedImage: UIImage, Description: String,
-         _ Block: ((Bool) -> ())? = nil)
-    {
-        Closure = Block
-        self.SelectedImageName = SelectedImageName
-        self.SelectedImage = SelectedImage
-        self.Description = Description
-    }
-    
-    var Closure: ((Bool) -> ())? = nil
+    @State var Closure: ((Bool) -> ())? = nil
     
     var body: some View
     {
@@ -44,12 +31,12 @@ struct EditUserImageView: View
                 TextField("", text: Binding(
                     get:
                         {
-                            self.Description
+                            self.UserData.Title
                         },
                     set:
                         {
                             NewValue in
-                            self.Description = NewValue
+                            self.UserData.Title = NewValue
                         }
                 ))
                 .font(.system(size: 18, weight: .regular, design: .default))
@@ -65,7 +52,7 @@ struct EditUserImageView: View
                 
                 VStack(alignment: .center)
                 {
-                    Image(uiImage: SelectedImage)
+                    Image(uiImage: UserData.SampleImage!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .border(Color.black, width: 0.5)
@@ -80,9 +67,13 @@ struct EditUserImageView: View
                 {
                     Button(action:
                             {
-                                SampleImages.EditUserSample(FileName: SelectedImageName,
-                                                            Description: Description)
+                                SampleImages.EditUserSample(FileName: UserData.SampleName,
+                                                            Description: UserData.Title)
                                 print("OK clicked")
+                                let Info: [AnyHashable: Any] = ["Title": UserData.Title]
+                                NotificationCenter.default.post(name: NSNotification.TitleUpdate,
+                                                                object: nil,
+                                                                userInfo: Info)
                                 Closure?(true)
                                 self.presentionMode.wrappedValue.dismiss()
                             })
@@ -119,8 +110,6 @@ struct EditUserImageView_Previews: PreviewProvider
 {
     static var previews: some View
     {
-        EditUserImageView(SelectedImageName: SampleImages.BuiltInSamples[0].SampleName,
-                          SelectedImage: UIImage(named: SampleImages.CurrentSample.SampleName)!,
-                          Description: "Description of your sample image")
+        EditUserImageView(UserData: SampleImages.UserDefinedSamples[0])
     }
 }
