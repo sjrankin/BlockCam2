@@ -12,18 +12,62 @@ import Photos
 import SwiftUI
 
 /// Contains data on one built-in sample image.
-struct SampleImageData
+class SampleImageData
 {
+    init(id: String, SampleName: String, Title: String, Attribution: String, IsUserImage: Bool)
+    {
+        self.id = id
+        self.SampleName = SampleName
+        self.Title = Title
+        self.Attribution = Attribution
+        self.IsUserImage = IsUserImage
+        
+        if IsUserImage
+        {
+            let ActualURL = SampleImages.URLForSample(Name: SampleName)
+            SampleImage = FileIO.LoadImage(ActualURL)
+        }
+        else
+        {
+            SampleImage = UIImage(named: SampleName)
+        }
+    }
+    
     /// ID of the sample image.
-    var id: String
+    var id: String = ""
     /// Name of the sample image in the asset catalog.
-    var SampleName: String
+    var SampleName: String = ""
     /// Human-readable title for the sample.
-    var Title: String
+    var Title: String = ""
     /// Attribution of the image.
-    var Attribution: String
+    var Attribution: String = ""
     /// Flag that indicates the image is from the user.
-    var IsUserImage: Bool
+    var IsUserImage: Bool = false
+    var SampleImage: UIImage? = nil
+    
+    func AsStruct() -> SampleImageDataStruct
+    {
+        return SampleImageDataStruct(id: self.id,
+                                     SampleName: self.SampleName,
+                                     Title: self.Title,
+                                     Attribution: self.Attribution,
+                                     IsUserImage: self.IsUserImage,
+                                     SampleImage: self.SampleImage)
+    }
+}
+
+struct SampleImageDataStruct: Equatable, Hashable
+{
+    var id: String = ""
+    /// Name of the sample image in the asset catalog.
+    var SampleName: String = ""
+    /// Human-readable title for the sample.
+    var Title: String = ""
+    /// Attribution of the image.
+    var Attribution: String = ""
+    /// Flag that indicates the image is from the user.
+    var IsUserImage: Bool = false
+    var SampleImage: UIImage? = nil
 }
 
 /// Manages sample images.
@@ -34,6 +78,22 @@ class SampleImages
     {
         MaxSamples = BuiltInSamples.count
         InitializeUserSamples()
+    }
+    
+    public static var SampleSource: SampleSources
+    {
+        get
+        {
+            if Settings.GetBool(.UseLatestBlockCamImage)
+            {
+                return SampleSources.LastBlockCam
+            }
+            if Settings.GetBool(.UseMostRecentImage)
+            {
+                return SampleSources.MostRecent
+            }
+            return SampleSources.BuiltIn
+        }
     }
     
     /// Contains all built-in sample images.
@@ -637,4 +697,22 @@ class SampleImages
         }
         return BaseURL!
     }
+    
+    static func GetUserDataStruct() -> [SampleImageDataStruct]
+    {
+        var Results = [SampleImageDataStruct]()
+        for UserItem in UserDefinedSamples
+        {
+            Results.append(UserItem.AsStruct())
+        }
+        return Results
+    }
+}
+
+enum SampleSources: String, CaseIterable
+{
+    case BuiltIn = "Built-In"
+    case User = "User"
+    case LastBlockCam = "Last BlockCam Image"
+    case MostRecent = "Most Recent Image"
 }
