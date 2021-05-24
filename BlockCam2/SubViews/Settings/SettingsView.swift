@@ -17,7 +17,7 @@ struct SettingsView: View
         GeometryReader
         {
             Geometry in
-            NavigationView
+            VStack(alignment: .leading)
             {
                 HStack(alignment: .top)
                 {
@@ -47,13 +47,12 @@ struct SettingsView: View
                                     .foregroundColor(.gray)
                             }
                         }
-                        
-                        Spacer()
                     }
                 }
                 .padding()
             }
             .navigationBarTitle(Text("Program Settings"))
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
