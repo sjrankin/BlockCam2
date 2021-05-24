@@ -4,14 +4,13 @@
 //
 //  Created by Stuart Rankin on 5/18/21.
 //
-
 import SwiftUI
 import Combine
 
 struct UserImageTableEntry: View
 {
     @State var ImageName: String
-    @State var ImageDescription: String
+    @Binding var ImageDescription: String
     @State var OverallWidth: CGFloat
     @State var ImageTapped: Bool = false
     @State var SelectedItem: Bool = false
@@ -23,7 +22,7 @@ struct UserImageTableEntry: View
     {
         HStack
         {
-            Image(uiImage: FileIO.LoadImage(SampleImages.URLForSample(Name: ImageName))!) 
+            Image(uiImage: FileIO.LoadImage(SampleImages.URLForSample(Name: ImageName))!)
                 .resizable()
                 .border(Color.black, width: 0.5)
                 .frame(alignment: .center)
@@ -32,28 +31,12 @@ struct UserImageTableEntry: View
                 .padding([.leading])
             Text(ImageDescription)
                 .font(.headline)
-                .shadow(radius: 3)
+                .shadow(radius: ItemIndex == SelectedIndex ? 3.0 : 0.0)
             Spacer()
-            Button(action:
-                    {
-                        print("show info for \(ImageName)")
-                    })
-            {
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-            }
-            .frame(alignment: .trailing)
-            .padding()
-            .onTapGesture
-            {
-                print("show info for \(ImageName)")
-            }
         }
         .frame(width: OverallWidth * 0.95,
                alignment: .leading)
         .background(ItemIndex == SelectedIndex ? Color.yellow : Color.white)
-        //.background(ImageTapped ? Color.yellow : Color.white)
         .padding([.leading, .trailing])
         .onTapGesture
         {
@@ -72,17 +55,18 @@ struct ItemState
     var ItemName: String
     var IsSelected: Bool
     var TappedName: String
+    var Description: String
 }
 
 struct UserImageTableEntryView_Preview: PreviewProvider
 {
     @State static var Items: [ItemState] =
-    [
-        ItemState(id: "Sample1", WasTapped: false, ItemName: "Sample1", IsSelected: false, TappedName: ""),
-        ItemState(id: "Sample2", WasTapped: false, ItemName: "Sample2", IsSelected: false, TappedName: ""),
-        ItemState(id: "Sample3", WasTapped: false, ItemName: "Sample3", IsSelected: false, TappedName: ""),
-        ItemState(id: "Sample4", WasTapped: false, ItemName: "Sample4", IsSelected: false, TappedName: ""),
-    ]
+        [
+            ItemState(id: "Sample1", WasTapped: false, ItemName: "Sample1", IsSelected: false, TappedName: "", Description: "Image 1"),
+            ItemState(id: "Sample2", WasTapped: false, ItemName: "Sample2", IsSelected: false, TappedName: "", Description: "Image 2"),
+            ItemState(id: "Sample3", WasTapped: false, ItemName: "Sample3", IsSelected: false, TappedName: "", Description: "Image 3"),
+            ItemState(id: "Sample4", WasTapped: false, ItemName: "Sample4", IsSelected: false, TappedName: "", Description: "Image 4"),
+        ]
     
     @State static var SelectedIndex: Int = -1
     
@@ -97,7 +81,7 @@ struct UserImageTableEntryView_Preview: PreviewProvider
                 {
                     Index in
                     UserImageTableEntry(ImageName: Items[Index].ItemName,
-                                        ImageDescription: SampleImages.GetCurrentSampleImageName(From: Items[Index].ItemName),
+                                        ImageDescription: $Items[Index].Description,
                                         OverallWidth: Reader.size.width,
                                         TappedItem: Items[Index].TappedName,
                                         SelectedIndex: $SelectedIndex,
