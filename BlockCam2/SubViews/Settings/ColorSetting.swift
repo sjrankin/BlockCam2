@@ -71,28 +71,28 @@ struct ColorSetting_Previews: PreviewProvider
             Geometry in
             VStack
             {
-        ColorSetting(Title: TitleValue,
-                     SubTitle: SubTitleValue,
-                     SettingColor: SampleColor,
-                     Result: $Color1Result,
-                     Width: Geometry.size.width)
-            .onChange(of: Color1Result)
-            {
-                NewColor in
-                print("Color 1 changed.")
-            }
-            
-            ColorSetting(Title: Title2,
-                         SubTitle: SubTitle2,
-                         SettingColor: SampleColor2,
-                         Result: $Color2Result,
-                         Width: Geometry.size.width)
-            
-            ColorSetting(Title: Title3,
-                         SubTitle: SubTitle3,
-                         SettingColor: SampleColor3,
-                         Result: $Color3Result,
-                         Width: Geometry.size.width)
+                ColorSetting(Title: TitleValue,
+                             SubTitle: SubTitleValue,
+                             SettingColor: SampleColor,
+                             Result: $Color1Result,
+                             Width: Geometry.size.width)
+                    .onChange(of: Color1Result)
+                    {
+                        NewColor in
+                        print("Color 1 changed.")
+                    }
+                
+                ColorSetting(Title: Title2,
+                             SubTitle: SubTitle2,
+                             SettingColor: SampleColor2,
+                             Result: $Color2Result,
+                             Width: Geometry.size.width)
+                
+                ColorSetting(Title: Title3,
+                             SubTitle: SubTitle3,
+                             SettingColor: SampleColor3,
+                             Result: $Color3Result,
+                             Width: Geometry.size.width)
             }
         }
     }
