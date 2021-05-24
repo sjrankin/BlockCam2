@@ -32,14 +32,24 @@ let SettingsData =
     ]
 
 let SampleImageOptions =
-[
-    OptionItem(Title: "Built-in",
-               Annotation: "Manage built-in sample images",
-               Picture: "photo"),
-    OptionItem(Title: "Your images",
-               Annotation: "Manage you own sample images",
-               Picture: "person.crop.circle"),
-    OptionItem(Title: "Other options",
-               Annotation: "Other options for sample images",
-               Picture: "circle.dashed.inset.fill")
-]
+    [
+        OptionItem(Title: "Built-in",
+                   Annotation: "Manage built-in sample images",
+                   Picture: "photo"),
+        OptionItem(Title: "Your images",
+                   Annotation: "Manage you own sample images",
+                   Picture: "person.crop.circle"),
+        OptionItem(Title: "Other options",
+                   Annotation: "Other options for sample images",
+                   Picture: "circle.dashed.inset.fill")
+    ]
+
+let CreditImageOptions =
+    [
+        OptionItem(Title: "Visual",
+                   Annotation: "Acknowlegements related to visuals",
+                   Picture: "eye"),
+        OptionItem(Title: "Technical",
+                   Annotation: "Acknowlegements for technically-related issues",
+                   Picture: "chevron.left.slash.chevron.right"),
+    ]
