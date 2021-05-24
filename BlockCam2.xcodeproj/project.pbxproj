@@ -158,6 +158,14 @@
 		177A004E26410CA600017FB0 /* ColorMapFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A004D26410CA600017FB0 /* ColorMapFilter_View.swift */; };
 		177CF3FB264CA59800A1C77D /* ThresholdFilter2_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177CF3FA264CA59800A1C77D /* ThresholdFilter2_View.swift */; };
 		1786D23626266B1700B34501 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1786D23526266B1700B34501 /* CIImage.swift */; };
+		178A53352659D4E20038C082 /* UserSampleAddController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A53342659D4E20038C082 /* UserSampleAddController.swift */; };
+		178A53372659D57B0038C082 /* UserSampleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A53362659D57B0038C082 /* UserSampleProtocol.swift */; };
+		178A53392659D74F0038C082 /* UserSampleParentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A53382659D74F0038C082 /* UserSampleParentProtocol.swift */; };
+		178A533C2659E4CD0038C082 /* NavigationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A533B2659E4CD0038C082 /* NavigationWrapper.swift */; };
+		178A533E265A0E960038C082 /* Versioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A533D265A0E960038C082 /* Versioning.swift */; };
+		178A5341265A13310038C082 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5340265A13310038C082 /* Credits.swift */; };
+		178A5344265A13B60038C082 /* VisualCreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5343265A13B60038C082 /* VisualCreditsView.swift */; };
+		178A5346265A13EB0038C082 /* CodeCreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5345265A13EB0038C082 /* CodeCreditsView.swift */; };
 		178F9A7C264227C400AEF6D8 /* ColorMonochromeFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178F9A7B264227C400AEF6D8 /* ColorMonochromeFilter_View.swift */; };
 		178F9A7E264253E100AEF6D8 /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178F9A7D264253E100AEF6D8 /* SampleImage.swift */; };
 		1796E6EA2652095300B130CF /* SolarizeRGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796E6E92652095300B130CF /* SolarizeRGB.swift */; };
@@ -236,6 +244,13 @@
 		17E47F8B2643812D00421946 /* BumpDistortionFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E47F8A2643812D00421946 /* BumpDistortionFilter_View.swift */; };
 		17E927DD2634EE3E00708522 /* GroupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E927DC2634EE3E00708522 /* GroupButton.swift */; };
 		17E927DF2634EFAE00708522 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E927DE2634EFAE00708522 /* FilterButton.swift */; };
+		17E9AB6F26590CE700BB326D /* StandardTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E9AB6E26590CE700BB326D /* StandardTable.swift */; };
+		17E9AB712659C20F00BB326D /* StandardTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17E9AB702659C20F00BB326D /* StandardTable.storyboard */; };
+		17E9AB752659C35800BB326D /* NavigationTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17E9AB742659C35800BB326D /* NavigationTable.storyboard */; };
+		17E9AB772659C57B00BB326D /* UserSampleEditorRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E9AB762659C57B00BB326D /* UserSampleEditorRootController.swift */; };
+		17E9AB792659C5A500BB326D /* UserSampleMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E9AB782659C5A500BB326D /* UserSampleMainController.swift */; };
+		17E9AB7B2659C61000BB326D /* UserSampleEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E9AB7A2659C61000BB326D /* UserSampleEditorController.swift */; };
+		17E9AB7D2659C9E000BB326D /* UserImageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E9AB7C2659C9E000BB326D /* UserImageTableCell.swift */; };
 		17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EC997A262FA8F7007FCF00 /* UIImage.swift */; };
 		17EC997D262FDFF5007FCF00 /* FilterMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EC997C262FDFF5007FCF00 /* FilterMap.swift */; };
 		17EC9980262FE09A007FCF00 /* BuiltInFilterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EC997F262FE09A007FCF00 /* BuiltInFilterProtocol.swift */; };
@@ -452,6 +467,14 @@
 		177CF3FA264CA59800A1C77D /* ThresholdFilter2_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThresholdFilter2_View.swift; sourceTree = "<group>"; };
 		1786D234262665DA00B34501 /* BlockCam2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlockCam2.entitlements; sourceTree = "<group>"; };
 		1786D23526266B1700B34501 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
+		178A53342659D4E20038C082 /* UserSampleAddController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleAddController.swift; sourceTree = "<group>"; };
+		178A53362659D57B0038C082 /* UserSampleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleProtocol.swift; sourceTree = "<group>"; };
+		178A53382659D74F0038C082 /* UserSampleParentProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleParentProtocol.swift; sourceTree = "<group>"; };
+		178A533B2659E4CD0038C082 /* NavigationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationWrapper.swift; sourceTree = "<group>"; };
+		178A533D265A0E960038C082 /* Versioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Versioning.swift; sourceTree = "<group>"; };
+		178A5340265A13310038C082 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
+		178A5343265A13B60038C082 /* VisualCreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualCreditsView.swift; sourceTree = "<group>"; };
+		178A5345265A13EB0038C082 /* CodeCreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCreditsView.swift; sourceTree = "<group>"; };
 		178F9A7B264227C400AEF6D8 /* ColorMonochromeFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMonochromeFilter_View.swift; sourceTree = "<group>"; };
 		178F9A7D264253E100AEF6D8 /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
 		1796E6E92652095300B130CF /* SolarizeRGB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarizeRGB.swift; sourceTree = "<group>"; };
@@ -530,6 +553,13 @@
 		17E47F8A2643812D00421946 /* BumpDistortionFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BumpDistortionFilter_View.swift; sourceTree = "<group>"; };
 		17E927DC2634EE3E00708522 /* GroupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupButton.swift; sourceTree = "<group>"; };
 		17E927DE2634EFAE00708522 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
+		17E9AB6E26590CE700BB326D /* StandardTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardTable.swift; sourceTree = "<group>"; };
+		17E9AB702659C20F00BB326D /* StandardTable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StandardTable.storyboard; sourceTree = "<group>"; };
+		17E9AB742659C35800BB326D /* NavigationTable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationTable.storyboard; sourceTree = "<group>"; };
+		17E9AB762659C57B00BB326D /* UserSampleEditorRootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleEditorRootController.swift; sourceTree = "<group>"; };
+		17E9AB782659C5A500BB326D /* UserSampleMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleMainController.swift; sourceTree = "<group>"; };
+		17E9AB7A2659C61000BB326D /* UserSampleEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSampleEditorController.swift; sourceTree = "<group>"; };
+		17E9AB7C2659C9E000BB326D /* UserImageTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageTableCell.swift; sourceTree = "<group>"; };
 		17EC997A262FA8F7007FCF00 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		17EC997C262FDFF5007FCF00 /* FilterMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMap.swift; sourceTree = "<group>"; };
 		17EC997F262FE09A007FCF00 /* BuiltInFilterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuiltInFilterProtocol.swift; sourceTree = "<group>"; };
@@ -621,6 +651,7 @@
 		170EFC2A26255754001227D0 /* BlockCam2 */ = {
 			isa = PBXGroup;
 			children = (
+				178A533D265A0E960038C082 /* Versioning.swift */,
 				1786D234262665DA00B34501 /* BlockCam2.entitlements */,
 				170EFC2B26255754001227D0 /* BlockCam2App.swift */,
 				170EFC2D26255754001227D0 /* ContentView.swift */,
@@ -628,6 +659,7 @@
 				17BF7C762633E5A900181FA1 /* SubViews */,
 				17606B91264913200050EFCF /* ImagePicker */,
 				17688E7B262BEB6900D1523A /* Filters */,
+				17E9AB6B26590B8800BB326D /* TableViews */,
 				173B224F262834C40075EB71 /* LiveView */,
 				17688E74262BE70B00D1523A /* CameraOutput */,
 				17DE342E26291FA40029D3DA /* SoundInput */,
@@ -1193,7 +1225,7 @@
 			children = (
 				17702F32263A95EA00D0C54B /* FilterSettingViews */,
 				1796E701265234BF00B130CF /* SampleImageManager */,
-				176FE29C2637E43C00650060 /* AboutView.swift */,
+				178A5342265A139B0038C082 /* About */,
 				1708E065264CB6B60010F301 /* ColorSetting.swift */,
 				176FE2952637CCE400650060 /* ProgramSettingsUI.swift */,
 				176FE29A2637E3BF00650060 /* SettingsItemView.swift */,
@@ -1213,6 +1245,17 @@
 				17536E74264E11BE0036E11C /* Matrix */,
 			);
 			path = FilterSettingViews;
+			sourceTree = "<group>";
+		};
+		178A5342265A139B0038C082 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				176FE29C2637E43C00650060 /* AboutView.swift */,
+				178A5340265A13310038C082 /* Credits.swift */,
+				178A5343265A13B60038C082 /* VisualCreditsView.swift */,
+				178A5345265A13EB0038C082 /* CodeCreditsView.swift */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 		1796E6E82652093500B130CF /* SolarizeRGB */ = {
@@ -1569,6 +1612,40 @@
 			path = VWXYZ;
 			sourceTree = "<group>";
 		};
+		17E9AB6B26590B8800BB326D /* TableViews */ = {
+			isa = PBXGroup;
+			children = (
+				17E9AB732659C34800BB326D /* Navigation */,
+				17E9AB722659C33B00BB326D /* Standard */,
+			);
+			path = TableViews;
+			sourceTree = "<group>";
+		};
+		17E9AB722659C33B00BB326D /* Standard */ = {
+			isa = PBXGroup;
+			children = (
+				17E9AB6E26590CE700BB326D /* StandardTable.swift */,
+				17E9AB702659C20F00BB326D /* StandardTable.storyboard */,
+			);
+			path = Standard;
+			sourceTree = "<group>";
+		};
+		17E9AB732659C34800BB326D /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				17E9AB742659C35800BB326D /* NavigationTable.storyboard */,
+				17E9AB782659C5A500BB326D /* UserSampleMainController.swift */,
+				178A53362659D57B0038C082 /* UserSampleProtocol.swift */,
+				178A53382659D74F0038C082 /* UserSampleParentProtocol.swift */,
+				17E9AB7C2659C9E000BB326D /* UserImageTableCell.swift */,
+				17E9AB762659C57B00BB326D /* UserSampleEditorRootController.swift */,
+				17E9AB7A2659C61000BB326D /* UserSampleEditorController.swift */,
+				178A53342659D4E20038C082 /* UserSampleAddController.swift */,
+				178A533B2659E4CD0038C082 /* NavigationWrapper.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		17EC9979262FA8E9007FCF00 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1638,6 +1715,7 @@
 				170EFC2426255754001227D0 /* Sources */,
 				170EFC2526255754001227D0 /* Frameworks */,
 				170EFC2626255754001227D0 /* Resources */,
+				178A533F265A106A0038C082 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1686,13 +1764,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17E9AB712659C20F00BB326D /* StandardTable.storyboard in Resources */,
 				17702F23263A7BB000D0C54B /* LaunchScreen.storyboard in Resources */,
 				170EFC3326255755001227D0 /* Preview Assets.xcassets in Resources */,
 				170EFC3026255755001227D0 /* Assets.xcassets in Resources */,
+				17E9AB752659C35800BB326D /* NavigationTable.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		178A533F265A106A0038C082 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/BlockCam2/VersionUpdater/VersionUpdater \"/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/BlockCam2/Versioning.swift\" \"/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/BlockCam2/Info.plist\" \n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		170EFC2426255754001227D0 /* Sources */ = {
@@ -1713,10 +1813,12 @@
 				17EC998D262FE369007FCF00 /* LinearTosRGB.swift in Sources */,
 				172ABCDD2636853D00AE53D1 /* Erode.swift in Sources */,
 				172ABCE726368D2A00AE53D1 /* Dither.swift in Sources */,
+				17E9AB7B2659C61000BB326D /* UserSampleEditorController.swift in Sources */,
 				17BF7C752633E4B200181FA1 /* FilterView.swift in Sources */,
 				17BAA8BF2655082C006A5055 /* BlockInfoParameters.swift in Sources */,
 				17602410263B9B3C006A3DE2 /* FilterViewServer.swift in Sources */,
 				17A61263263E6C2800B9BB1F /* Reflect.swift in Sources */,
+				17E9AB772659C57B00BB326D /* UserSampleEditorRootController.swift in Sources */,
 				17F70A2326341C9600BCC3CF /* ThermalEffect.swift in Sources */,
 				179DD4E4263CE813007A12FA /* MirrorFilter_View.swift in Sources */,
 				172C8E3E263549740096C331 /* CircleAndLines.swift in Sources */,
@@ -1765,6 +1867,7 @@
 				17A3F039264FA755002E234C /* ColorInverter.swift in Sources */,
 				176FE2842637C3E700650060 /* +CGPoint.swift in Sources */,
 				17279F5B2652000900C51070 /* SolarizeHSB.metal in Sources */,
+				178A53352659D4E20038C082 /* UserSampleAddController.swift in Sources */,
 				171C3883264A1D0100B69492 /* +ImagePicker.swift in Sources */,
 				17EC999F262FE563007FCF00 /* Noir.swift in Sources */,
 				17A3F051264FA947002E234C /* GrayscaleKernel.metal in Sources */,
@@ -1780,9 +1883,11 @@
 				17416C05265094E700A1B2C0 /* ConditionalSilhouetteFilter_View.swift in Sources */,
 				17606B892648D7150050EFCF /* TwirlDistortionFilter_View.swift in Sources */,
 				17F0340226439BAF00F83556 /* HSBFilter_ViewX.swift in Sources */,
+				17E9AB7D2659C9E000BB326D /* UserImageTableCell.swift in Sources */,
 				172ABCA226364B3000AE53D1 /* ColorMap.metal in Sources */,
 				17A61265263E6C8800B9BB1F /* Reflect.metal in Sources */,
 				17688E8D262C100800D1523A /* MinMaxFromBuffer.m in Sources */,
+				178A5341265A13310038C082 /* Credits.swift in Sources */,
 				17DCDF772650D68A00DAB1C6 /* BayerDecodeParameters.swift in Sources */,
 				17F8247F264750B200AC0D3D /* EdgesFilter_View.swift in Sources */,
 				172ABCBA26365A9800AE53D1 /* MaskingKernelParameters.swift in Sources */,
@@ -1810,6 +1915,7 @@
 				17A3F047264FA875002E234C /* ChannelMangler.metal in Sources */,
 				171C387F264A049700B69492 /* ImageSourceButton.swift in Sources */,
 				170FAB4926314D30003DDA35 /* Bloom.swift in Sources */,
+				17E9AB792659C5A500BB326D /* UserSampleMainController.swift in Sources */,
 				170FAB3D26312864003DDA35 /* ColorMonochrome.swift in Sources */,
 				17606B8D2648DDB00050EFCF /* EdgeWorkFilter_View.swift in Sources */,
 				1768307026355F24001DC88E /* ColorMapBad.swift in Sources */,
@@ -1860,6 +1966,7 @@
 				173B224E262830AB0075EB71 /* LiveViewControllerUI.swift in Sources */,
 				17BF7C732633DE1E00181FA1 /* UIColor.swift in Sources */,
 				172C8E4226354C5F0096C331 /* MaskToAlpha.swift in Sources */,
+				178A533C2659E4CD0038C082 /* NavigationWrapper.swift in Sources */,
 				170FAB43263129BE003DDA35 /* HistogramDisplay.swift in Sources */,
 				1796E6F4265217AD00B130CF /* Kuwahara.swift in Sources */,
 				17602413263BA97F006A3DE2 /* HueAdjustFilter_View.swift in Sources */,
@@ -1867,6 +1974,7 @@
 				17A3F04F264FA92B002E234C /* GrayscaleKernelParameters.swift in Sources */,
 				17602417263BC243006A3DE2 /* NoFilter_View.swift in Sources */,
 				176FE29D2637E43C00650060 /* AboutView.swift in Sources */,
+				178A5344265A13B60038C082 /* VisualCreditsView.swift in Sources */,
 				1764BF1B26394150001644E3 /* Stack.swift in Sources */,
 				1796E70026522FFF00B130CF /* SlowLargeSampleImage.swift in Sources */,
 				176FE29B2637E3BF00650060 /* SettingsItemView.swift in Sources */,
@@ -1892,6 +2000,7 @@
 				17A6125E263E641B00B9BB1F /* Crop.metal in Sources */,
 				1764BEFA26391F40001644E3 /* SobelBlend.swift in Sources */,
 				17A3F037264FA71F002E234C /* ColorInverter.metal in Sources */,
+				178A53392659D74F0038C082 /* UserSampleParentProtocol.swift in Sources */,
 				170FAB5126314EB6003DDA35 /* Gloom.swift in Sources */,
 				17EC9989262FE2F5007FCF00 /* Sepia.swift in Sources */,
 				179721FE262EC09F004B7134 /* +LiveViewInitialization.swift in Sources */,
@@ -1901,14 +2010,17 @@
 				176FE2942637C97000650060 /* Defaults.swift in Sources */,
 				172ABCAA26364DDD00AE53D1 /* MetalFilterParent.swift in Sources */,
 				1796E6F126520B9C00B130CF /* SolarizationRGBFilter_View.swift in Sources */,
+				178A533E265A0E960038C082 /* Versioning.swift in Sources */,
 				17DCDF7F26513A3D00DAB1C6 /* SolarizeParameters.swift in Sources */,
 				17BAA8B3265360E1006A5055 /* UserImageTableEntry.swift in Sources */,
+				17E9AB6F26590CE700BB326D /* StandardTable.swift in Sources */,
 				17F70A1F263417B900BCC3CF /* LightTunnel.swift in Sources */,
 				1796E6FB26522B8E00B130CF /* SlowFilterProtocol.swift in Sources */,
 				17A6125C263E639B00B9BB1F /* CropParameters.swift in Sources */,
 				171C3881264A07E100B69492 /* CameraButton.swift in Sources */,
 				176FE2A32638090700650060 /* SettingEncapsulation.swift in Sources */,
 				17606B902648E7D80050EFCF /* LargeSampleImage.swift in Sources */,
+				178A5346265A13EB0038C082 /* CodeCreditsView.swift in Sources */,
 				17F033FB26438E6700F83556 /* HSB.swift in Sources */,
 				172ABCF32636959C00AE53D1 /* MorphologyGradient.swift in Sources */,
 				176FE2902637C55700650060 /* Debug.swift in Sources */,
@@ -1928,6 +2040,7 @@
 				17606B872648D3090050EFCF /* UnsharpMaskFilter_View.swift in Sources */,
 				17A3F055264FE649002E234C /* GrayscaleMetalFilter_View.swift in Sources */,
 				17EC99A9262FE6A0007FCF00 /* Tonal.swift in Sources */,
+				178A53372659D57B0038C082 /* UserSampleProtocol.swift in Sources */,
 				17F8C782262C301F00DB7D51 /* DepthToGrayscale.metal in Sources */,
 				1764BF1526393DF4001644E3 /* ImageDeltaParameters.swift in Sources */,
 				17F0340026438F3B00F83556 /* HSBParameters.swift in Sources */,
@@ -2118,7 +2231,7 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BlockCam2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2147,7 +2260,7 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BlockCam2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
