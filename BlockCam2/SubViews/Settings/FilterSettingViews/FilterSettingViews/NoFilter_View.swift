@@ -23,12 +23,12 @@ struct NoFilter_View: View
                     .padding()
                 
                 Spacer()
-                Spacer()
                 
                 Divider()
                     .background(Color.black)
-                SampleImage(UICommand: $ButtonCommand, 
-                            Filter: BuiltInFilters(rawValue: Settings.GetString(.CurrentFilter, "Passthrough"))!,
+                
+                SampleImage(UICommand: $ButtonCommand,
+                            Filter: Filters.GetFilter(),
                             Updated: true)
                     .frame(width: 300, height: 300, alignment: .center)
             }
