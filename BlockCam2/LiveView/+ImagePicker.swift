@@ -18,7 +18,7 @@ extension LiveViewController
     {
         let ImagePicker = UIImagePickerController()
         ImagePicker.sourceType = .photoLibrary
-        //ImagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: UIImagePickerController.SourceType.photoLibrary)!
+        ImagePicker.mediaTypes = ["public.image", "public.movie"]
         ImagePicker.delegate = self
         self.present(ImagePicker, animated: true, completion: nil)
     }
@@ -47,7 +47,7 @@ extension LiveViewController
             case kUTTypeMovie:
                 if let VideoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
                 {
-                    //Not supported yet
+                    ApplyFilterToVideo(VideoURL, ScratchName: "TemporaryVideo.mov")
                 }
                 
             case kUTTypeImage:
@@ -58,7 +58,6 @@ extension LiveViewController
                         let ID = PHImageManager.default().requestImageDataAndOrientation(for: Asset, options: PHImageRequestOptions())
                         {
                             (AssetData, UTI, Orientation, Info) in
-                            print("Orientation=\(LiveViewController.Orientations[Int(Orientation.rawValue)]!)")
                             guard var SelectedCI = CIImage(image: SelectedImage) else
                             {
                                 Debug.FatalError("Error convering photo album to CIImage.")
