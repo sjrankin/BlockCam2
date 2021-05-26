@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+/// User interface for the filter groups and filter buttons that let the user select the filter to use
+/// for images and live view.
+/// - Parameter Width: Width of the parent view.
+/// - Parameter Height: Height of the parent view.
+/// - Parameter ToolHeight: Height of the tool bar.
+/// - Parameter BottomHeight: Height of the bottom tool bar.
+/// - Parameter ToggleHidden: Hide or show the filter bar.
+/// - Parameter SelectedFilter: Name of the selected filter at the time this view is shown.
+/// - Parameter SelectedGroup: Name of the selected group at the time this view is shown.
+/// - Parameter Block: Block of code to execute by the filter button.
+/// - Parameter SelectedBorderColor: Not surrently used.
 struct FilterView: View 
 {
     @State var Width: CGFloat
@@ -39,6 +50,11 @@ struct FilterView: View
                     .frame(height: Geometry.size.height / 2)
                     .padding(.all, 2.0)
                 }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.GroupUpdate))
+                {
+                    Changed in
+                    SelectedGroup = Settings.GetString(.CurrentGroup, "Reset")
+                }
                 
                 Divider()
                 
@@ -56,6 +72,11 @@ struct FilterView: View
                         }
                     }
                 }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.FilterUpdate))
+                {
+                    Changed in
+                    SelectedFilter = Settings.GetString(.CurrentFilter, "")
+                }
                 .frame(height: Geometry.size.height / 2)
                 .padding(.all, 2.0)
             }
@@ -65,7 +86,7 @@ struct FilterView: View
         .background(Color.init(UIColor.black.withAlphaComponent(0.65)))
         .position(x: ToggleHidden ? -Width / 2 : Width / 2,
                   y: (Height - ToolHeight / 2) - (ToolHeight / 2) + (BottomHeight * 0.5 / 2))
-        .animation(.linear(duration: ToggleHidden ? 0.1 : 0.2))
+        .animation(.linear(duration: ToggleHidden ? 0.35 : 0.2))
         .transition(.slide)
     }
 }
