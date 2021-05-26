@@ -62,5 +62,9 @@ class SmoothLinearGradient: CIFilterBase, BuiltInFilterProtocol
     /// Reset the filter's settings.
     static func ResetFilter()
     {
+        Settings.SetColor(.SmoothLinearColor0,
+                          Settings.SettingDefaults[.SmoothLinearColor0] as! UIColor)
+        Settings.SetColor(.SmoothLinearColor1,
+                          Settings.SettingDefaults[.SmoothLinearColor1] as! UIColor)
     }
 }
