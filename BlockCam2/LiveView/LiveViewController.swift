@@ -60,7 +60,7 @@ class LiveViewController: UIViewController,
                                 width: self.view.frame.size.width,
                                 height: self.view.frame.size.height - HeightOffset)
         StillImageView = UIImageView(frame: StillFrame)
-        StillImageView?.backgroundColor = UIColor.systemGray2
+        StillImageView?.backgroundColor = UIColor.black//UIColor.systemGray2
         StillImageView?.contentMode = .scaleAspectFit
         self.view.addSubview(StillImageView!)
         #if targetEnvironment(simulator)
@@ -154,6 +154,7 @@ class LiveViewController: UIViewController,
             {
                 FilteredStillImage = Filters.RunFilter(On: Image, Filter: Filter)
                 StillImageView?.image = FilteredStillImage
+                ImageToExport = FilteredStillImage
                 return
             }
         }
@@ -207,6 +208,7 @@ class LiveViewController: UIViewController,
                     {
                         return
                     }
+                    ImageToExport = FilteredStillImage
                     UIImageWriteToSavedPhotosAlbum(FilteredStillImage!, nil, nil, nil)
                     
                 case UICommands.SelectFromAlbum.rawValue:
@@ -234,21 +236,32 @@ class LiveViewController: UIViewController,
                     UpdateStillImage()
                     
                 case UICommands.ShareImage.rawValue:
-                    break
+                    guard ImageToExport != nil else
+                    {
+                        UIDelegate?.ShowShortMessage(With: "Nothing to share")
+                        Debug.Print("No image to export.")
+                        UIDelegate?.HideShortMessage(With: 2.0)
+                        return
+                    }
+                    Share()
                     
                 case UICommands.SetStillImageMode.rawValue:
                     StillImageView?.layer.zPosition = 150
                     MetalView?.layer.zPosition = 50
+                    Settings.SetInt(.InputSourceIndex, 1)
                     
                 case UICommands.SetLiveViewMode.rawValue:
                     StillImageView?.layer.zPosition = 50
                     MetalView?.layer.zPosition = 150
+                    Settings.SetInt(.InputSourceIndex, 0)
                     
                 default:
                     break
             }
         }
     }
+    
+    var ImageToExport: UIImage? = nil
     
     func GetBuiltInFilterList() -> [String]
     {
