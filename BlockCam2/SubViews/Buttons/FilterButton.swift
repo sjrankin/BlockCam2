@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//https://www.davidgagne.net/2020/09/30/dealing-with-word-breaks-in-swiftui-text/
 struct FilterButton: View
 {
     @State var Name: String
@@ -26,16 +27,18 @@ struct FilterButton: View
                 })
         {
             Text(Name)
-                .font(.custom("Avenir-Medium", size: 18.0))
+                .font(.custom("Avenir-Medium", size: 17.0))
+                .allowsTightening(true)
+                .minimumScaleFactor(0.75)
                 .foregroundColor(.black)
-                .padding(.horizontal, 3)
+                .padding(.horizontal, 2)
                 .padding(.vertical, 10)
                 .shadow(radius: 5)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
                 .multilineTextAlignment(.center)
         }
-        .frame(width: 110, height: 50)
+        .frame(width: 112, height: 50)
         .foregroundColor(.black)
         .background(
             ZStack
