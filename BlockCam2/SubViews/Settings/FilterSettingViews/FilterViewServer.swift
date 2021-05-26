@@ -80,6 +80,20 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.LineScreen.rawValue:
+                SettingsContainer
+                {
+                    LineScreenFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.TwirlBump.rawValue:
+                SettingsContainer
+                {
+                    TwirlBumpFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.MetalPixellate.rawValue:
                 SettingsContainer
                 {
