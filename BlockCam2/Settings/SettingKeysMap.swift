@@ -36,6 +36,7 @@ extension Settings
             // MARK: - Filter settings.
             .CurrentFilter: String.self,
             .CurrentGroup: String.self,
+            .FilterListDisplay: Int.self,
             
             // MARK: - Hue Adjust
             .HueAngle: Double.self,
@@ -225,5 +226,17 @@ extension Settings
             .MetalPixInvertThreshold: Bool.self,
             .MetalPixShowBorder: Bool.self,
             .MetalPixBorderColor: UIColor.self,
+            
+            // MARK: - Twirl bump distortion
+            .TwirlBumpTwirlRadius: Double.self,
+            .TwirlBumpBumpRadius: Double.self,
+            .TwirlBumpAngle: Double.self,
+            
+            // MARK: - Line screen halftone
+            .LineScreenAngle: Double.self,
+            
+            // MARK: - Smooth linear gradient
+            .SmoothLinearColor0: UIColor.self,
+            .SmoothLinearColor1: UIColor.self,
         ]
 }

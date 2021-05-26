@@ -34,6 +34,7 @@ extension Settings
             // MARK: - Filter settings.
             .CurrentFilter: "",
             .CurrentGroup: "",
+            .FilterListDisplay: 0,
             
             // MARK: - Hue Adjust.
             .HueAngle: 135.0,
@@ -229,5 +230,17 @@ extension Settings
             .MetalPixInvertThreshold: false,
             .MetalPixShowBorder: false,
             .MetalPixBorderColor: UIColor.black,
+            
+            // MARK: - Twirl bump distortion
+            .TwirlBumpTwirlRadius: 1000.0,
+            .TwirlBumpBumpRadius: 1000.0,
+            .TwirlBumpAngle: 90.0,
+            
+            // MARK: - Line screen halftone.
+            .LineScreenAngle: 0.0,
+            
+            // MARK: - Smooth linear gradient
+            .SmoothLinearColor0: UIColor.white,
+            .SmoothLinearColor1: UIColor.black,
         ]
 }

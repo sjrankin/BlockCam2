@@ -13,8 +13,9 @@ import Foundation
 enum SettingKeys: String, CaseIterable
 {
     // MARK: - Infrastructure/initialization-related settings.
-    
+    /// Boolean: Settings initialized flag
     case InitializationFlag = "InitializationFlag"
+    /// String: Instance ID.
     case InstanceID = "InstanceID"
     
     // MARK: - Audio settings.
@@ -46,6 +47,8 @@ enum SettingKeys: String, CaseIterable
     case CurrentFilter = "CurrentFilter"
     /// String: Current group in which the current filter resides.
     case CurrentGroup = "CurrentGroup"
+    /// Integer: Which filter list to display.
+    case FilterListDisplay = "FilterListDisplay"
     
     // MARK: - Hue Adjust
     /// Double: The angle of the hue for Hue Adjust
@@ -365,4 +368,22 @@ enum SettingKeys: String, CaseIterable
     case MetalPixShowBorder = "MetalPixShowBorder"
     /// UIColor: The border color if `MetalPixShowBorder` is true.
     case MetalPixBorderColor = "MetalPixBorderColor"
+    
+    // MARK: - Twirl bump distortion
+    /// Double: Radius for the twirl.
+    case TwirlBumpTwirlRadius = "TwirlBumpTwirlRadius"
+    /// Double: Radius for the bump.
+    case TwirlBumpBumpRadius = "TwirlBumpBumpRadius"
+    /// Double: Angle for the twirl.
+    case TwirlBumpAngle = "TwirlBumpAngle"
+    
+    // MARK: - Line screen halftone
+    /// Double: Angle for the line screen.
+    case LineScreenAngle = "LineScreenAngle"
+    
+    // MARK: - Smooth linear gradient
+    /// UIColor: Linear color 0.
+    case SmoothLinearColor0 = "SmoothLinearColor0"
+    /// UIColor: Linear color 1.
+    case SmoothLinearColor1 = "SmoothLinearColor1"
 }
