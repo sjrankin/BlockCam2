@@ -250,7 +250,3 @@ struct UserSampleManager_Previews: PreviewProvider
 }
 
 
-extension NSNotification
-{
-    static let TitleUpdate = NSNotification.Name.init("TitleUpdate")
-}
