@@ -166,6 +166,24 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .SmoothLinearGradient:
+                Options[.GradientColor0] = Settings.GetColor(.SmoothLinearColor0,
+                                                             Settings.SettingDefaults[.SmoothLinearColor0] as! UIColor).ciColor
+                Options[.GradientColor1] = Settings.GetColor(.SmoothLinearColor1,
+                                                             Settings.SettingDefaults[.SmoothLinearColor1] as! UIColor).ciColor
+            
+            case .LineScreen:
+                Options[.Angle] = Settings.GetDouble(.LineScreenAngle,
+                                                     Settings.SettingDefaults[.LineScreenAngle] as! Double)
+            
+            case .TwirlBump:
+                Options[.TwirlRadius] = Settings.GetDouble(.TwirlBumpTwirlRadius,
+                                                           Settings.SettingDefaults[.TwirlBumpTwirlRadius] as! Double)
+                Options[.BumpRadius] = Settings.GetDouble(.TwirlBumpBumpRadius,
+                                                           Settings.SettingDefaults[.TwirlBumpBumpRadius] as! Double)
+                Options[.Angle] = Settings.GetDouble(.TwirlBumpAngle,
+                                                     Settings.SettingDefaults[.TwirlBumpAngle] as! Double)
+            
             case .MetalPixellate:
                 Options[.Width] = Settings.GetInt(.MetalPixWidth, IfZero: 24)
                 Options[.Height] = Settings.GetInt(.MetalPixHeight, IfZero: 24)
@@ -483,6 +501,50 @@ class Filters
     }
     
     /// Run a built-in filter on the passed image.
+    /// - Parameter On: The image (in `CIImage` format) on which to run the filter.
+    /// - Parameter Extent: The size of the image.
+    /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
+    ///                     filter will be used.
+    /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
+    ///                                    nil is returned on error.
+    /// - Returns: Processed image on success, nil on error unless `ReturnOriginalOnError` is true.
+    public static func RunFilter2(On Image: CIImage,
+                                  Extent: CGRect,
+                                  Filter: BuiltInFilters? = nil,
+                                  ReturnOriginalOnError: Bool = true) -> CIImage?
+    {
+        var Buffer: CVPixelBuffer?
+        let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
+                          kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            Int(Extent.width),
+                            Int(Extent.height),
+                            kCVPixelFormatType_32BGRA,
+                            Attributes,
+                            &Buffer)
+        let Context = CIContext()
+        guard let ActualBuffer = Buffer else
+        {
+            Debug.Print("Error creating buffer")
+            return Image
+        }
+        Context.render(Image, to: ActualBuffer)
+        
+        if let NewBuffer = RunFilter(With: ActualBuffer, Filter)
+        {
+            let FinalImage = CIImage(cvImageBuffer: NewBuffer)
+            return FinalImage
+        }
+        if ReturnOriginalOnError
+        {
+            Debug.Print("Returning original image due to processing error: \(#function)")
+            return Image
+        }
+        return nil
+    }
+    
+    /// Run a built-in filter on the passed image.
     /// - Parameter On: The image on which to run the filter.
     /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
     ///                     filter will be used.
@@ -605,6 +667,247 @@ class Filters
             .Test: 0xffe0d0,
             .NonLiveView: 0xa070d0
         ]
+    
+    /// Returns the current filter (stored in user settings at `.CurrentFilter`) to the caller.
+    /// - Parameter Default: Filter name (see `BuiltInFilters`) to use if there is no value in
+    ///                      `.CurrentFilter` or the valid is invalid. Defaults to the name for
+    ///                      `.Passthrough`.
+    /// - Returns: The `BuiltInFilters` enum equivalent for the current filter on success. If the stored
+    ///            filter name is invalid, the `BuiltInFilters` equivalent for `Default` is returned. If that
+    ///            is invalid, `.Passthrough` is returned.
+    static func GetFilter(_ Default: String = BuiltInFilters.Passthrough.rawValue) -> BuiltInFilters
+    {
+        if let Stored = Settings.GetString(.CurrentFilter)
+        {
+            if let SomeFilter = BuiltInFilters(rawValue: Stored)
+            {
+                return SomeFilter
+            }
+        }
+        if let IsValid = BuiltInFilters(rawValue: Default)
+        {
+            return IsValid
+        }
+        return .Passthrough
+    }
+    
+    /// Returns a list of all filters, sorted as per the parameter.
+    /// - Parameter SortAscending: If true, data returned in ascending order (sorted on first tuple element).
+    ///                            If false, data returned in descending order. Defaults to `true`.
+    /// - Returns: Array of sorted filter data in an array of tuples. Tuple structure is (Filter Name, Filter
+    ///            Description, Filter enum).
+    static func AllFilters(SortAscending: Bool = true) -> [(String, String, BuiltInFilters)]
+    {
+        var Final = [(String, String, BuiltInFilters)]()
+        Final = BuiltInFilters.allCases.map({($0.rawValue,
+                                              GetFilterDescription(For: $0),
+                                              $0)})
+        if SortAscending
+        {
+            Final.sort(by: {$0.0 < $1.0})
+        }
+        else
+        {
+            Final.sort(by: {$0.0 > $1.0})
+        }
+        return Final
+    }
+    
+    /// Returns an array of grouped filters.
+    /// - Returns: Array of a tuple of the format (Group Name, Filter Name, Filter enum).
+    static func GroupedFilters() -> [(String, String, BuiltInFilters)]
+    {
+        var Grouped = [(String, String, BuiltInFilters)]()
+        for (Group, FiltersInGroup) in FilterTree
+        {
+            var IFilterList = [(String, BuiltInFilters)]()
+            for SomeFilter in FiltersInGroup
+            {
+                IFilterList.append((SomeFilter.key.rawValue, SomeFilter.key))
+            }
+            IFilterList.sort(by: {$0.0 < $1.0})
+            for SomeFilter in IFilterList
+            {
+                Grouped.append((Group.rawValue, SomeFilter.0, SomeFilter.1))
+            }
+        }
+        Grouped.sort(by: {$0.0 < $1.0})
+        return Grouped
+    }
+    
+    /// Returns a short description for the passed filter. If the filter is not recognized, a generic
+    /// error message is returned.
+    /// - Parameter For: The filter whose description will be returned.
+    /// - Returns: Short description of the passed filter. If not found, a generic error message is returned.
+    public static func GetFilterDescription(For Filter: BuiltInFilters) -> String
+    {
+        if let Description = Descriptions[Filter]
+        {
+            return Description
+        }
+        return "No description found for \"\(Filter.rawValue)\"."
+    }
+    
+    /// Returns the group a given filter belongs to.
+    /// - Parameter Filter: The filter whose group will be returned.
+    /// - Returns: The filter group for the passed `Filter` on success. If not found, `.Reset` is returned.
+    public static func GroupFor(Filter: BuiltInFilters) -> FilterGroups
+    {
+        for (Group, FiltersInGroup) in FilterTree
+        {
+            if FiltersInGroup.keys.contains(Filter)
+            {
+                return Group
+            }
+        }
+        return .Reset
+    }
+    
+    /// Given a group name, return a description of the group.
+    /// - Parameter For: The name of the group.
+    /// - Returns: Short description of the group on success. If not found, the description for
+    ///            the `.Reset` group is returned.
+    public static func GroupDescription(For Name: String) -> String
+    {
+        if let SearchGroup = FilterGroups(rawValue: Name)
+        {
+            if let Description = GroupDescriptions[SearchGroup]
+            {
+                return Description
+            }
+        }
+        return GroupDescriptions[.Reset]!
+    }
+    
+    public static let GroupDescriptions: [FilterGroups: String] =
+        [
+            .Adjust: "Whole image adjustment",
+            .Blur: "Image blurring",
+            .Color: "Whole image color adjustments",
+            .Combined: "Combined filters",
+            .Distortion: "Image distortion",
+            .Edges: "Edge detection and display",
+            .Effect: "Image effects",
+            .Grayscale: "Black and white filters",
+            .Halftone: "Halftone filters",
+            .Information: "Informational filters",
+            .MultiFrame: "Filters for multiple images",
+            .NonLiveView: "Filters that are very slow",
+            .Reset: "Passthrough filters",
+            .Sharpen: "Image sharpening",
+            .Test: "Test filters",
+            .ThreeD: "Filters that use 3D processing"
+        ]
+    
+    /// Short descriptions for each filter.
+    public static let Descriptions: [BuiltInFilters: String] =
+        [
+            .Passthrough: "Passthrough - no filtering done.",
+            .LineOverlay: "Halftone line screen overlayed original image.",
+            .Pixellate: "Image pixellation.",
+            .FalseColor: "Built-in false color filter.",
+            .HueAdjust: "Image hue adjustment.",
+            .ExposureAdjust: "Image exposure adjustment.",
+            .Posterize: "Level posterization filter.",
+            .Noir: "Black and white noir filter.",
+            .LinearTosRGB: "Linear RGB to sRGB colorspace conversion.",
+            .Chrome: "Built-in vibrance and color lightening filter.",
+            .Sepia: "Built-in sepia tone filter.",
+            .DotScreen: "Halftone dot-screen filter.",
+            .LineScreen: "Halftone line screen filter.",
+            .CircularScreen: "Halftone circular screen filter.",
+            .HatchedScreen: "Halftone hatched screen filter.",
+            .CMYKHalftone: "Halftone CMYK screen filter.",
+            .Instant: "Built-in instant image effect.",
+            .Fade: "Built-in faded image effect.",
+            .Mono: "Built-in black and white image effect.",
+            .Process: "Built-in process image effect.",
+            .Tonal: "Built-in tonal image effect.",
+            .Transfer: "Built-in transfer image effect.",
+            .Vibrance: "Built-in vibrance increase effect.",
+            .XRay: "Built-in X-Ray-like effect.",
+            .Comic: "Built-in comic style effect.",
+            .TriangleKaleidoscope: "Built-in triangular kaleidoscope distortion.",
+            .Kaleidoscope: "Built-in kaleidoscope distortion.",
+            .ColorMonochrome: "Built-in monochromatic color effect.",
+            .MaximumComponent: "Built-in maximum grayscale channel effect.",
+            .MinimumComponent: "Built-in minimum grayscale channel effect.",
+            .HistogramDisplay: "Display a histogram of the view.",
+            .SharpenLuminance: "Luminance image sharpening.",
+            .UnsharpMask: "Image sharpening.",
+            .Bloom: "Built-in color bloom filter effect.",
+            .HexagonalPixellate: "Image pixellation with hexagonal pixels.",
+            .Crystallize: "Built-in \"crystallization\" effect.",
+            .Edges: "Built-in edge detection effect.",
+            .EdgeWork: "Black and white edge detection effect.",
+            .Gloom: "Built-in color darkening effect.",
+            .Pointillize: "Pointillization image effect.",
+            .LinearGradient: "Image mapped to linear color gradient.",
+            .SmoothLinearGradient: "Image mapped to linear color gradiant.",
+            .ColorMap: "Image mapped to color gradient.",
+            .MaskToAlpha: "Internal: Masking image to alpha channel.",
+            .SourceATop: "Internal: Merge images.",
+            .CircleAndLines: "Halftone combination of circular and line screen filters.",
+            .LineScreenBlend: "Halftone line screen overlayed original image.",
+            .CircleScreenBlend: "Halftone circle screen overlayed with original image.",
+            .ThermalEffect: "Built-in thermal color mapping effect.",
+            .TwirlDistortion: "Built-in twirl distortion.",
+            .LightTunnel: "Built-in light tunnel distortion.",
+            .HoleDistortion: "Built-in hole in the middle distortion.",
+            .Droste: "Built-in droste (repeating pattern) distortion.",
+            .CircleSplashDistortion: "Built-in circle-splash distortion.",
+            .BumpDistortion: "Built-in bump distortion.",
+            .AreaHistogram: "Internal: Histogram function.",
+            .ColorInvert: "Color inversion effect.",
+            .ColorInvert2: "Conditional color inversion effect.",
+            .GrayscaleInvert: "Inverted grayscale effect.",
+            .GaussianBlur: "Built-in Gaussian blur effect.",
+            .MedianFilter: "Built-in median blur effect.",
+            .MotionBlur: "Built-in motion blur effect.",
+            .ZoomBlur: "Built-in zoom blur effect.",
+            .Masking1: "Internal: Masking filter.",
+            .GradientToAlpha: "Internal: Gradient colors to alpha channel.",
+            .AlphaBlend: "Internal: Blend two alpha-enabled images together.",
+            .Mirroring2: "Image mirroring.",
+            .Threshold: "Conditional threshold filter.",
+            .Laplacian: "Laplacian kernel edge processing.",
+            .Dilate: "Dilation kernel edge processing.",
+            .Emboss: "Emboss kernel edge processing.",
+            .Erode: "Erode kernel edge processing.",
+            .Sobel: "Sobel kernel edge processing.",
+            .SobelBlend: "Sobel kernel edge processing with original image.",
+            .Median: "Built-in median image processing.",
+            .GaborGradients: "Built-in Gabor gradient edge processing.",
+            .GammaAdjust: "Image gamma level adjustment.",
+            .HeightField: "Built-in height field processing.",
+            .SaliencyMap: "Does not work - very very bad.",
+            .MorphologyGradient: "Color image edge processing.",
+            .ColorControls: "Color adjustments.",
+            .ConditionalTransparency: "Conditional transparency filter.",
+            .ImageDelta: "Delta of two images filter.",
+            .AreaMax: "Maximum color in image region filter.",
+            .Convolution: "Kernel convolution filter.",
+            .MetalGrayscale: "Grayscale image processing.",
+            .ChannelMangler: "Color channel mangling for surreal results.",
+            .ConditionalSilhouette: "Conditional silhouette filter.",
+            .ChannelMixer: "Color channel mixer.",
+            .BayerDecode: "Bayer-encoded image decoder.",
+            .Solarize: "Image solarization.",
+            .SolarizeHSB: "Solarize image with HSB channels.",
+            .SolarizeRGB: "Solarize image with RGB channels.",
+            .Kuwahara: "Kuwahara smoothing. Very slow.",
+            .MetalPixellate: "Pixellation with various parameters and borders.",
+            .TwirlBump: "Combination of Bump and Twirl filters.",
+            .Crop: "Internal: Crop an image.",
+            .Crop2: "Internal: Crop an image.",
+            .Reflect: "Reflection test.",
+            .QuadrantTest: "Quadrant reflection test.",
+            .MatrixTest: "Matrix test.",
+            .Blocks: "3D block image.",
+            .Spheres: "3D sphere image.",
+            .HSB: "Color adjustment with hue, saturation, and brightness settings",
+            .Dither: "Built-in color dithering."
+        ]
 }
 
 /// High-level filter groups.
@@ -657,7 +960,7 @@ enum BuiltInFilters: String, CaseIterable
     case XRay = "X-Ray"
     case Comic = "Comic"
     case TriangleKaleidoscope = "Triangle Kaleido."
-    case Kaleidoscope = "Kaleido-scope"
+    case Kaleidoscope = "Kaleidoscope"
     case ColorMonochrome = "Color Mono"
     case MaximumComponent = "Maximum"
     case MinimumComponent = "Minimum"
@@ -734,6 +1037,7 @@ enum BuiltInFilters: String, CaseIterable
     case SolarizeRGB = "Solarize RGB"
     case Kuwahara = "Kuwahara"
     case MetalPixellate = "Metal Pixellate"
+    case TwirlBump = "Twirl Bump"
     
     //Internal filters
     case Crop = "Crop"
