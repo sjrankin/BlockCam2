@@ -126,6 +126,7 @@ extension Filters
         FilterMap[.AreaMax] = BlockCam2.MPSAreaMax()
         FilterMap[.Convolution] = BlockCam2.MPSConvolution()
         FilterMap[.MetalPixellate] = BlockCam2.MetalPixellate()
+        FilterMap[.TwirlBump] = BlockCam2.TwirlBump()
         return FilterMap
     }
     
@@ -309,6 +310,39 @@ extension Filters
     /// Simple tree of filters.
     public static var FilterTree = [(FilterGroups, [BuiltInFilters: BuiltInFilterProtocol])]()
     
+    /// Returns a simple tree of filter groups with associated filters for each group.
+    /// - Note: Returned value is an array of tuples of type (Group Name, [(Filter Name, Filter Description, Filter enum)]).
+    public static var DisplayTree: [(String, [(String, String, BuiltInFilters)])]
+    {
+        get
+        {
+            var Tree = [(String, [(String, String, BuiltInFilters)])]()
+            for (Group, FilterList) in FilterTree
+            {
+                let GroupName = Group.rawValue.trimmingCharacters(in: .whitespaces)
+                var TempList = [(String, String, BuiltInFilters)]()
+                for SomeFilter in FilterList
+                {
+                    TempList.append((SomeFilter.key.rawValue,
+                                     Filters.GetFilterDescription(For: SomeFilter.key),
+                                     SomeFilter.key))
+                }
+                TempList.sort(by: {$0.0 < $1.0})
+                Tree.append((GroupName, TempList))
+            }
+            for (gname, _) in Tree
+            {
+                print("gname=\(gname)")
+            }
+            Tree.sort(by: {$0.0 < $1.0})
+            for (gname, _) in Tree
+            {
+                print("sorted gname=\(gname)")
+            }
+            return Tree 
+        }
+    }
+    
     /// Returns a structure of filter groups and filter names in each group.
     /// - Returns: An array of tuples with the first item the group name and the second item an array of
     ///            filter names.
@@ -455,6 +489,8 @@ enum FilterOptions: String
     case SaturationThresholdHigh = "SaturationThresholdHigh"
     case IsGreater = "IsGreater"
     case OnlyChannel = "OnlyChannel"
+    case BumpRadius = "BumpRadius"
+    case TwirlRadius = "TwirlRadius"
     
     case HAction = "HAction"
     case VAction = "VAction"
