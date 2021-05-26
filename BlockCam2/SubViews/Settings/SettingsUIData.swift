@@ -28,7 +28,10 @@ let SettingsData =
                    Picture: "camera"),
         OptionItem(Title: "Sample Images",
                    Annotation: "Manage sample images.",
-                   Picture: "photo.on.rectangle")
+                   Picture: "photo.on.rectangle"),
+        OptionItem(Title: "Filter List",
+                   Annotation: "List of all filters in BlockCam.",
+                   Picture: "camera.filters")
     ]
 
 let SampleImageOptions =
