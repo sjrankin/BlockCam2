@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RunSettingView: View
 {
+    @EnvironmentObject var Changed: ChangedSettings
     @State var ViewToRun: String
     
     var body: some View
@@ -27,6 +28,10 @@ struct RunSettingView: View
             case "Camera":
                 CameraSettings()
                 
+            case "Filter List":
+                AllFilterView()
+                    .environmentObject(Changed)
+                
             default:
                 UnexpectedView()
         }
@@ -35,6 +40,7 @@ struct RunSettingView: View
 
 struct ProgramSettingsUI: View
 {
+    @EnvironmentObject var Changed: ChangedSettings
     var OptionList: [OptionItem] = []
     @Environment(\.presentationMode) var presentionMode: Binding<PresentationMode>
     
@@ -45,7 +51,8 @@ struct ProgramSettingsUI: View
             List(OptionList)
             {
                 SomeOption in
-                NavigationLink(destination: RunSettingView(ViewToRun: SomeOption.Title))
+                NavigationLink(destination: RunSettingView(ViewToRun: SomeOption.Title)
+                                .environmentObject(Changed))
                 {
                     SettingsItemView(SettingData: SomeOption)
                 }
@@ -74,5 +81,6 @@ struct ProgramSettingsUI_Previews: PreviewProvider
     static var previews: some View
     {
         ProgramSettingsUI(OptionList: SettingsData)
+            .environmentObject(ChangedSettings())
     }
 }
