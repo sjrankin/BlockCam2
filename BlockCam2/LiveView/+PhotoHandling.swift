@@ -50,6 +50,7 @@ extension LiveViewController
             let Context = CIContext(options: nil)
             let CGImg = Context.createCGImage(CImg, from: CImg.extent)!
             ImageToSave = UIImage(cgImage: CGImg).RotateImage(By: 90.0 * Double.pi / 180.0)
+            self.ImageToExport = ImageToSave
             /*
             if let ImageBuffer = Filters.RunFilter(With: PhotoPixelBuffer)
             {
