@@ -38,6 +38,10 @@ class Sobel: MetalFilterParent, BuiltInFilterProtocol
     
     func Initialize(With FormatDescription: CMFormatDescription, BufferCountHint: Int)
     {
+        if Initialized
+        {
+            return
+        }
         Reset()
         (LocalBufferPool, _, OutputFormatDescription) = CreateBufferPool(From: FormatDescription, BufferCountHint: BufferCountHint)
         if LocalBufferPool == nil
@@ -58,6 +62,7 @@ class Sobel: MetalFilterParent, BuiltInFilterProtocol
         {
             TextureCache = MetalTextureCache
         }
+        print("MPS kernel function Sobel initialized")
     }
     
     func Reset()
