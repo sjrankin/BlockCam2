@@ -597,4 +597,24 @@ class FileIO
             ClearDirectory(DebugDirectory)
         }
     }
+    
+    /// Clears the built-in user temporary directory of all files.
+    public static func ClearUserTempDirectory()
+    {
+        do
+        {
+            let TempDirURL = FileManager.default.temporaryDirectory
+            let Contents = try FileManager.default.contentsOfDirectory(atPath: TempDirURL.path)
+            
+            for Content in Contents
+            {
+                let CurrentPath = TempDirURL.appendingPathComponent(Content)
+                try FileManager.default.removeItem(at: CurrentPath)
+            }
+        }
+        catch
+        {
+            Debug.Print("Error thrown when clearing temporary directory: \(error)")
+        }
+    }
 }
