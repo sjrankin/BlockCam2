@@ -107,8 +107,6 @@ struct ContentView: View
                             {
                                 Button(action:
                                         {
-                                            self.ShowImageControls.toggle()
-                                            //self.FilterButtonPressed = ""
                                             self.UICommand = UICommands.ShareImage.rawValue
                                         })
                                 {
@@ -151,6 +149,7 @@ struct ContentView: View
                                        content:
                                         {
                                             ProgramSettingsUI(OptionList: SettingsData)
+                                                .environmentObject(Changed)
                                         })
                                 
                                 Spacer()
@@ -232,12 +231,7 @@ struct ContentView: View
                                         FilterButtonTapped.toggle()
                                     })
                             {
-                                #if true
                                 FiltersIcon(IsHighlighted: $FilterButtonTapped)
-                                #else
-                                FiltersIcon(IsHighlighted: $FilterButtonTapped,
-                                            DoRotate: $FilterButtonTapped)
-                                #endif
                             }
                             .buttonStyle(BorderlessButtonStyle())
                             .shadow(radius: 3)
