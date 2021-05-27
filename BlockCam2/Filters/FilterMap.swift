@@ -127,6 +127,7 @@ extension Filters
         FilterMap[.Convolution] = BlockCam2.MPSConvolution()
         FilterMap[.MetalPixellate] = BlockCam2.MetalPixellate()
         FilterMap[.TwirlBump] = BlockCam2.TwirlBump()
+        FilterMap[.CircularWrap] = BlockCam2.CircularWrap() 
         return FilterMap
     }
     
@@ -215,6 +216,7 @@ extension Filters
         return FilterMap
     }
     
+    /// Initialize the filter tree.
     public static func InitializeFilterTree()
     {
         if TreeInitialized
@@ -330,15 +332,7 @@ extension Filters
                 TempList.sort(by: {$0.0 < $1.0})
                 Tree.append((GroupName, TempList))
             }
-            for (gname, _) in Tree
-            {
-                print("gname=\(gname)")
-            }
             Tree.sort(by: {$0.0 < $1.0})
-            for (gname, _) in Tree
-            {
-                print("sorted gname=\(gname)")
-            }
             return Tree 
         }
     }
