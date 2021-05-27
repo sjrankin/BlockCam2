@@ -16,6 +16,7 @@ import Photos
 import MobileCoreServices
 import CoreMotion
 
+//https://swdevnotes.com/swift/2021/how-to-create-progress-indicator-in-swiftui/
 extension LiveViewController
 {
     /// Run the current filter against the passed video.
@@ -42,6 +43,16 @@ extension LiveViewController
         Export?.outputURL = ExportURL
         Export?.videoComposition = Composition
         UIDelegate?.ShowSlowMessage(With: "Processing Video - Please Wait")
+        var ProgressTimer = Timer()
+        ProgressTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
+        {
+            SomeTimer in
+            let Progress = Double((Export?.progress)!)
+            if Progress < 0.99
+            {
+                self.UIDelegate?.NewPercent(Progress)
+            }
+        }
         Export?.exportAsynchronously
         {
             PHPhotoLibrary.shared().performChanges(
@@ -50,6 +61,7 @@ extension LiveViewController
                 })
             {
                 Saved, Error in
+                ProgressTimer.invalidate()
                 if Saved
                 {
                     self.UIDelegate?.HideSlowMessage()
