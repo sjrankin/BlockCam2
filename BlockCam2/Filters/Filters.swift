@@ -166,6 +166,12 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .CircularWrap:
+                Options[.Angle] = Settings.GetDouble(.CircularWrapAngle,
+                                                     Settings.SettingDefaults[.CircularWrapAngle] as! Double)
+                Options[.Radius] = Settings.GetDouble(.CircularWrapRadius,
+                                                     Settings.SettingDefaults[.CircularWrapRadius] as! Double)
+            
             case .SmoothLinearGradient:
                 Options[.GradientColor0] = Settings.GetColor(.SmoothLinearColor0,
                                                              Settings.SettingDefaults[.SmoothLinearColor0] as! UIColor).ciColor
@@ -616,7 +622,9 @@ class Filters
                 FilterInTree.Initialize(With: Format, BufferCountHint: 3)
 //            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
             let FinalOptions = GetOptions(For: FilterToUse)
-            let FinalBuffer = FilterInTree.RunFilter([Buffer], BufferPool!, ColorSpace!,
+            let FinalBuffer = FilterInTree.RunFilter([Buffer],
+                                                     BufferPool!,
+                                                     ColorSpace!,
                                                      Options: FinalOptions)
             #endif
             return FinalBuffer
@@ -906,7 +914,8 @@ class Filters
             .Blocks: "3D block image.",
             .Spheres: "3D sphere image.",
             .HSB: "Color adjustment with hue, saturation, and brightness settings",
-            .Dither: "Built-in color dithering."
+            .Dither: "Built-in color dithering.",
+            .CircularWrap: "Circular wrapping of the image.",
         ]
 }
 
@@ -1038,6 +1047,7 @@ enum BuiltInFilters: String, CaseIterable
     case Kuwahara = "Kuwahara"
     case MetalPixellate = "Metal Pixellate"
     case TwirlBump = "Twirl Bump"
+    case CircularWrap = "Circular Wrap"
     
     //Internal filters
     case Crop = "Crop"
