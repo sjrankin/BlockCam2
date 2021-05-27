@@ -238,5 +238,9 @@ extension Settings
             // MARK: - Smooth linear gradient
             .SmoothLinearColor0: UIColor.self,
             .SmoothLinearColor1: UIColor.self,
+            
+            // MARK: - Circular wrap distortion
+            .CircularWrapRadius: Double.self,
+            .CircularWrapAngle: Double.self,
         ]
 }
