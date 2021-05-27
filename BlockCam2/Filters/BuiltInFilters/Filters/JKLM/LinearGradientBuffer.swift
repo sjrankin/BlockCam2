@@ -19,7 +19,7 @@ import CoreMedia
 import CoreVideo
 import CoreImage.CIFilterBuiltins
 
-class LinearGradient: CIFilterBase, BuiltInFilterProtocol
+class LinearGradientFilter: CIFilterBase, BuiltInFilterProtocol
 {
     static var FilterType: BuiltInFilters = .LinearGradient
     
