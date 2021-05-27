@@ -25,6 +25,8 @@ struct ContentView: View
     @State var IsSelfieCamera: Bool = false
     @State var ShowShortMessage: Bool = false
     @State var ShortMessage: String = ""
+    @State var ShowSlowMessage: Bool = false
+    @State var SlowMessageText: String = ""
     @State var ToolHeight: CGFloat = 150
     @State var WhichCamera: String = "arrow.triangle.2.circlepath.camera"
     @State var ShowSettings: Bool = false
@@ -51,11 +53,13 @@ struct ContentView: View
                 let TopHeight: CGFloat = Geometry.size.height - BottomHeight
                 let TopBarHeight: CGFloat = 64
                 
-                LiveViewControllerUI(UICommand: $UICommand,
+                LiveViewControllerUI(UICommand: $UICommand, 
                                      IsSelfieCamera: $IsSelfieCamera,
                                      ShowFilterSettings: $ShowFilterSettings,
                                      ShowShortMessageView: $ShowShortMessage,
-                                     ShortMessage: $ShortMessage)
+                                     ShortMessage: $ShortMessage,
+                                     ShowSlowMessageView: $ShowSlowMessage,
+                                     SlowMessageText: $SlowMessageText)
                     .frame(width: Geometry.size.width, height: TopHeight,
                            alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
@@ -65,6 +69,10 @@ struct ContentView: View
                            Message: $ShortMessage,
                            Width: Geometry.size.width,
                            Height: Geometry.size.height)
+                SlowMessage(IsVisible: $ShowSlowMessage,
+                            Message: $SlowMessageText,
+                            Width: Geometry.size.width,
+                            Height: Geometry.size.height)
                 
                 FilterView(Width: Geometry.size.width,
                            Height: Geometry.size.height,
