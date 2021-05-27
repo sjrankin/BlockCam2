@@ -25,6 +25,7 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     @Binding var ShortMessage: String
     @Binding var ShowSlowMessageView: Bool
     @Binding var SlowMessageText: String
+    @Binding var OperationPercent: Double
     
     /// Returns the LiveViewController instance.
     func makeUIViewController(context: Context) -> LiveViewController
@@ -126,6 +127,12 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
         {
             Parent.ShowSlowMessageView = false
         }
+        
+        func NewPercent(_ Percent: Double)
+        {
+            print("New percent: \(Percent)")
+            Parent.OperationPercent = Percent
+        }
     }
 }
 
@@ -142,9 +149,19 @@ protocol ViewControllerDelegate: AnyObject
     /// - Parameter With: Number of seconds to wait before hiding the message.
     func HideShortMessage(With Delay: Double)
     
+    /// Show a long-duration message.
+    /// - Parameter With: The text to display.
     func ShowSlowMessage(With Text: String)
+    
+    /// Hide the long-duration message.
     func HideSlowMessage()
+    
+    /// Hide the long-duration message after a delay.
+    /// - Parameter With: Number of seconds to wait before hiding the long-duration message.
     func HideSlowMessage(With Delay: Double)
+    
+    /// Sets the percent complete for long-duration messages.
+    func NewPercent(_ Percent: Double)
 }
 
 /// Commands from the UI (SwiftUI) to the live view (UIKit), where they are executed.
