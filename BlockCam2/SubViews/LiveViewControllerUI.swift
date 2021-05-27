@@ -23,6 +23,8 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
     @Binding var ShowFilterSettings: Bool
     @Binding var ShowShortMessageView: Bool
     @Binding var ShortMessage: String
+    @Binding var ShowSlowMessageView: Bool
+    @Binding var SlowMessageText: String
     
     /// Returns the LiveViewController instance.
     func makeUIViewController(context: Context) -> LiveViewController
@@ -94,6 +96,36 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
         {
             Parent.ShowShortMessageView = false
         }
+        
+        /// Show a message for long-running operations.
+        /// - Parameter With: The message to display.
+        func ShowSlowMessage(With Text: String)
+        {
+            DispatchQueue.main.async
+            {
+                self.Parent.SlowMessageText = Text
+                self.Parent.ShowSlowMessageView = true
+            }
+        }
+        
+        /// Hide the slow message view.
+        func HideSlowMessage()
+        {
+            Parent.ShowSlowMessageView = false
+        }
+        
+        /// Hide the slow message view after a period of time.
+        /// - Parameter With: Number of seconds before hiding the slow message.
+        func HideSlowMessage(With Delay: Double)
+        {
+            perform(#selector(DoHideSlowMessage), with: nil, afterDelay: Delay)
+        }
+        
+        /// Hide the slow status message.
+        @objc func DoHideSlowMessage()
+        {
+            Parent.ShowSlowMessageView = false
+        }
     }
 }
 
@@ -109,6 +141,10 @@ protocol ViewControllerDelegate: AnyObject
     /// Hide the short status message after a delay.
     /// - Parameter With: Number of seconds to wait before hiding the message.
     func HideShortMessage(With Delay: Double)
+    
+    func ShowSlowMessage(With Text: String)
+    func HideSlowMessage()
+    func HideSlowMessage(With Delay: Double)
 }
 
 /// Commands from the UI (SwiftUI) to the live view (UIKit), where they are executed.
