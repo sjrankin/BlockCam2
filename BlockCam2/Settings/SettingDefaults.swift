@@ -242,5 +242,9 @@ extension Settings
             // MARK: - Smooth linear gradient
             .SmoothLinearColor0: UIColor.white,
             .SmoothLinearColor1: UIColor.black,
+            
+            // MARK: - Circular wrap distortion
+            .CircularWrapRadius: 100.0,
+            .CircularWrapAngle: 0.0,
         ]
 }
