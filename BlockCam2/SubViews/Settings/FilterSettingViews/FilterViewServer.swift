@@ -80,6 +80,13 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.CircularWrap.rawValue:
+                SettingsContainer
+                {
+                    CircularWrapFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.LineScreen.rawValue:
                 SettingsContainer
                 {
