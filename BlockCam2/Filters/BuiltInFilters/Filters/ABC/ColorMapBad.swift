@@ -37,7 +37,7 @@ class ColorMapBad: BuiltInFilterProtocol
         let GradientImage = FilterHelper.GradientImage(SourceImage.extent,
                                                        Stops: [(UIColor.cyan, 0.0), (UIColor.blue, 1.0)])
         #else
-        let Gradient = LinearGradient()
+        let Gradient = LinearGradientFilter()
         let GradientOptions =
             [
                 FilterOptions.GradientColor0: CIColor.blue,
