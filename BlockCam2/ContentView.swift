@@ -33,6 +33,7 @@ struct ContentView: View
     @State var ShowFilterSettings: Bool = false
     @State var FilterSettingsVisible: Bool = false
     @State var ShowImageControls: Bool = false
+    @State var OperationPercent: Double = 0.0
     @EnvironmentObject var Changed: ChangedSettings
     #if targetEnvironment(simulator)
     @State var OnSimulator: Bool = true
@@ -59,7 +60,8 @@ struct ContentView: View
                                      ShowShortMessageView: $ShowShortMessage,
                                      ShortMessage: $ShortMessage,
                                      ShowSlowMessageView: $ShowSlowMessage,
-                                     SlowMessageText: $SlowMessageText)
+                                     SlowMessageText: $SlowMessageText,
+                                     OperationPercent: $OperationPercent)
                     .frame(width: Geometry.size.width, height: TopHeight,
                            alignment: .top)
                     .position(x: Geometry.size.width / 2.0,
@@ -72,7 +74,8 @@ struct ContentView: View
                 SlowMessage(IsVisible: $ShowSlowMessage,
                             Message: $SlowMessageText,
                             Width: Geometry.size.width,
-                            Height: Geometry.size.height)
+                            Height: Geometry.size.height,
+                            OperationPercent: $OperationPercent)
                 
                 FilterView(Width: Geometry.size.width,
                            Height: Geometry.size.height,
