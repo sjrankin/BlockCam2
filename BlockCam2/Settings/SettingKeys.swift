@@ -386,4 +386,10 @@ enum SettingKeys: String, CaseIterable
     case SmoothLinearColor0 = "SmoothLinearColor0"
     /// UIColor: Linear color 1.
     case SmoothLinearColor1 = "SmoothLinearColor1"
+    
+    // MARK: - Circular wrap
+    /// Double: Circular wrap radius.
+    case CircularWrapRadius = "CircularWrapRadius"
+    /// Double: Circular wrap angle.
+    case CircularWrapAngle = "CircularWrapAngle"
 }
