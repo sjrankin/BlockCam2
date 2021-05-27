@@ -164,6 +164,8 @@
 		178A5346265A13EB0038C082 /* CodeCreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5345265A13EB0038C082 /* CodeCreditsView.swift */; };
 		178B4E4E265F2D440049140F /* CircularWrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B4E4D265F2D440049140F /* CircularWrap.swift */; };
 		178B4E50265F3C210049140F /* CircularWrapFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B4E4F265F3C210049140F /* CircularWrapFilter_View.swift */; };
+		178B4E52265F583E0049140F /* SlowMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B4E51265F583E0049140F /* SlowMessage.swift */; };
+		178B4E54265F70280049140F /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B4E53265F70280049140F /* CircularProgressView.swift */; };
 		178EFEBA265B45E00006E3BE /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EFEB9265B45E00006E3BE /* Sharing.swift */; };
 		178EFEBC265B74780006E3BE /* TwirlBump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EFEBB265B74780006E3BE /* TwirlBump.swift */; };
 		178EFEBE265B75AF0006E3BE /* TwirlBumpFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EFEBD265B75AF0006E3BE /* TwirlBumpFilter_View.swift */; };
@@ -476,6 +478,8 @@
 		178A5345265A13EB0038C082 /* CodeCreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCreditsView.swift; sourceTree = "<group>"; };
 		178B4E4D265F2D440049140F /* CircularWrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularWrap.swift; sourceTree = "<group>"; };
 		178B4E4F265F3C210049140F /* CircularWrapFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularWrapFilter_View.swift; sourceTree = "<group>"; };
+		178B4E51265F583E0049140F /* SlowMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMessage.swift; sourceTree = "<group>"; };
+		178B4E53265F70280049140F /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		178EFEB9265B45E00006E3BE /* Sharing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing.swift; sourceTree = "<group>"; };
 		178EFEBB265B74780006E3BE /* TwirlBump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwirlBump.swift; sourceTree = "<group>"; };
 		178EFEBD265B75AF0006E3BE /* TwirlBumpFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwirlBumpFilter_View.swift; sourceTree = "<group>"; };
@@ -1353,7 +1357,6 @@
 			children = (
 				170EFC3A26256138001227D0 /* SCNNode3 */,
 				176FE28F2637C55700650060 /* Debug.swift */,
-				178EFEC7265CE5840006E3BE /* NSNotification.swift */,
 				179721FB262E93E5004B7134 /* FileIO.swift */,
 				172ABCAB263653CC00AE53D1 /* GradientManager.swift */,
 				1764BF1C263941B5001644E3 /* Queue.swift */,
@@ -1508,6 +1511,8 @@
 				17A91445265DF3AB00C3F2BC /* Divider2.swift */,
 				176FE2A426380E5E00650060 /* IDString.swift */,
 				17BF7C772633E5FC00181FA1 /* ImageSaved.swift */,
+				178B4E51265F583E0049140F /* SlowMessage.swift */,
+				178B4E53265F70280049140F /* CircularProgressView.swift */,
 				173B224D262830AB0075EB71 /* LiveViewControllerUI.swift */,
 			);
 			path = SubViews;
@@ -1654,6 +1659,7 @@
 				174AE02D2642857200105425 /* CMFormatDescription.swift */,
 				174AE02F264285A200105425 /* CMSampleBuffer.swift */,
 				172ABCAD2636543E00AE53D1 /* Double.swift */,
+				178EFEC7265CE5840006E3BE /* NSNotification.swift */,
 				17BF7C722633DE1E00181FA1 /* UIColor.swift */,
 				17EC997A262FA8F7007FCF00 /* UIImage.swift */,
 			);
@@ -1885,6 +1891,7 @@
 				17606B892648D7150050EFCF /* TwirlDistortionFilter_View.swift in Sources */,
 				17F0340226439BAF00F83556 /* HSBFilter_ViewX.swift in Sources */,
 				172ABCA226364B3000AE53D1 /* ColorMap.metal in Sources */,
+				178B4E52265F583E0049140F /* SlowMessage.swift in Sources */,
 				17A61265263E6C8800B9BB1F /* Reflect.metal in Sources */,
 				17688E8D262C100800D1523A /* MinMaxFromBuffer.m in Sources */,
 				178A5341265A13310038C082 /* Credits.swift in Sources */,
@@ -1951,6 +1958,7 @@
 				171F49BF2656339B004BC049 /* AddUserImageView.swift in Sources */,
 				17D662842635577100B3A057 /* CircleScreenBlend.swift in Sources */,
 				176FE2862637C41000650060 /* +Double.swift in Sources */,
+				178B4E54265F70280049140F /* CircularProgressView.swift in Sources */,
 				176FE2A526380E5E00650060 /* IDString.swift in Sources */,
 				179DD4EC263D2002007A12FA /* VerticalMirroring.metal in Sources */,
 				17EC9983262FE12D007FCF00 /* CMYKHalftone.swift in Sources */,
