@@ -41,7 +41,7 @@ extension LiveViewController
         Export?.outputFileType = AVFileType.mov
         Export?.outputURL = ExportURL
         Export?.videoComposition = Composition
-        UIDelegate?.ShowShortMessage(With: "Processing Video")
+        UIDelegate?.ShowSlowMessage(With: "Processing Video - Please Wait")
         Export?.exportAsynchronously
         {
             PHPhotoLibrary.shared().performChanges(
@@ -52,12 +52,12 @@ extension LiveViewController
                 Saved, Error in
                 if Saved
                 {
-                    self.UIDelegate?.HideShortMessage()
+                    self.UIDelegate?.HideSlowMessage()
                     Debug.Print("Saved video")
                 }
                 if let error = Error
                 {
-                    self.UIDelegate?.HideShortMessage()
+                    self.UIDelegate?.HideSlowMessage()
                     Debug.Print("Error: \(error)")
                 }
             }
