@@ -162,6 +162,8 @@
 		178A5341265A13310038C082 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5340265A13310038C082 /* Credits.swift */; };
 		178A5344265A13B60038C082 /* VisualCreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5343265A13B60038C082 /* VisualCreditsView.swift */; };
 		178A5346265A13EB0038C082 /* CodeCreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A5345265A13EB0038C082 /* CodeCreditsView.swift */; };
+		178B4E4E265F2D440049140F /* CircularWrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B4E4D265F2D440049140F /* CircularWrap.swift */; };
+		178B4E50265F3C210049140F /* CircularWrapFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B4E4F265F3C210049140F /* CircularWrapFilter_View.swift */; };
 		178EFEBA265B45E00006E3BE /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EFEB9265B45E00006E3BE /* Sharing.swift */; };
 		178EFEBC265B74780006E3BE /* TwirlBump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EFEBB265B74780006E3BE /* TwirlBump.swift */; };
 		178EFEBE265B75AF0006E3BE /* TwirlBumpFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EFEBD265B75AF0006E3BE /* TwirlBumpFilter_View.swift */; };
@@ -472,6 +474,8 @@
 		178A5340265A13310038C082 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
 		178A5343265A13B60038C082 /* VisualCreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualCreditsView.swift; sourceTree = "<group>"; };
 		178A5345265A13EB0038C082 /* CodeCreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCreditsView.swift; sourceTree = "<group>"; };
+		178B4E4D265F2D440049140F /* CircularWrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularWrap.swift; sourceTree = "<group>"; };
+		178B4E4F265F3C210049140F /* CircularWrapFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularWrapFilter_View.swift; sourceTree = "<group>"; };
 		178EFEB9265B45E00006E3BE /* Sharing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing.swift; sourceTree = "<group>"; };
 		178EFEBB265B74780006E3BE /* TwirlBump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwirlBump.swift; sourceTree = "<group>"; };
 		178EFEBD265B75AF0006E3BE /* TwirlBumpFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwirlBumpFilter_View.swift; sourceTree = "<group>"; };
@@ -1000,6 +1004,7 @@
 				172C8E3D263549740096C331 /* CircleAndLines.swift */,
 				17F70A182634153B00BCC3CF /* CircleSplashDistortion.swift */,
 				17EC9984262FE244007FCF00 /* CircularScreen.swift */,
+				178B4E4D265F2D440049140F /* CircularWrap.swift */,
 				17D662832635577100B3A057 /* CircleScreenBlend.swift */,
 				172ABCF42636964E00AE53D1 /* ColorControls.swift */,
 				17F70A1026340C3A00BCC3CF /* ColorInvert.swift */,
@@ -1562,6 +1567,7 @@
 				17416C0E2650A41400A1B2C0 /* ChannelMangerFilter_View.swift */,
 				17337822264FFA7400118A0D /* ChannelMixerFilter_View.swift */,
 				1730352A2645693F0087188F /* CircleSplashDistortionFilter_View.swift */,
+				178B4E4F265F3C210049140F /* CircularWrapFilter_View.swift */,
 				171DB75D26464D70007686B4 /* CMYKHalftoneFilter_View.swift */,
 				17F033F7264386E400F83556 /* ColorControlsFilter_View.swift */,
 				177A004D26410CA600017FB0 /* ColorMapFilter_View.swift */,
@@ -1892,6 +1898,7 @@
 				17EC99AE262FE945007FCF00 /* Passthrough.swift in Sources */,
 				172ABCDB263684DC00AE53D1 /* Sobel.swift in Sources */,
 				17972202262EC2A2004B7134 /* +Audio.swift in Sources */,
+				178B4E4E265F2D440049140F /* CircularWrap.swift in Sources */,
 				17A91449265DF94000C3F2BC /* +VideoProcessing.swift in Sources */,
 				179DD4E8263D19D0007A12FA /* HorizontalMirroring.metal in Sources */,
 				17A3F041264FA7D3002E234C /* ConditionalSilhouette.metal in Sources */,
@@ -1980,6 +1987,7 @@
 				172ABCA426364B6600AE53D1 /* ColorMapParameters.swift in Sources */,
 				17BA0404265CF7D200757D11 /* AllFiltersByGroupView.swift in Sources */,
 				17A3F045264FA859002E234C /* ChannelManglerParameters.swift in Sources */,
+				178B4E50265F3C210049140F /* CircularWrapFilter_View.swift in Sources */,
 				17DCDF752650D66800DAB1C6 /* BayerDecode.metal in Sources */,
 				17EE44DE26588FB80056D419 /* EditUserImageView.swift in Sources */,
 				17E14205264D18CB00CBC72D /* Threshold.swift in Sources */,
