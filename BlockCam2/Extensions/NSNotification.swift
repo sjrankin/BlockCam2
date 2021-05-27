@@ -12,4 +12,5 @@ extension NSNotification
     static let TitleUpdate = NSNotification.Name.init("TitleUpdate")
     static let FilterUpdate = NSNotification.Name.init("FilterUpdate")
     static let GroupUpdate = NSNotification.Name.init("GroupUpdate")
+    static let ProgressUpdate = NSNotification.Name.init("ProgressUpdate")
 }
