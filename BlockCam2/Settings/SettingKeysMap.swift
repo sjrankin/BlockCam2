@@ -32,6 +32,7 @@ extension Settings
             .ShowUserSamplesOnlyIfAvailable: Bool.self,
             .UserSampleList: String.self,
             .UseSampleImages: Bool.self,
+            .SubSampleScratchKey: Int.self,
             
             // MARK: - Filter settings.
             .CurrentFilter: String.self,
@@ -242,5 +243,20 @@ extension Settings
             // MARK: - Circular wrap distortion
             .CircularWrapRadius: Double.self,
             .CircularWrapAngle: Double.self,
+            
+            // MARK: - Multi-frame combiner
+            .MultiFrameCombinerCommand: Int.self,
+            .MultiFrameCombinerInvertCommand: Bool.self,
+            .MultiFrameSubImage0: Int.self,
+            .MultiFrameSubImage1: Int.self,
+            
+            // MARK: - Image delta frame combiner
+            .ImageDeltaCommand: Int.self,
+            .ImageDeltaBackground: UIColor.self,
+            .ImageDeltaThreshold: Double.self,
+            .ImageDeltaSubImage0: Int.self,
+            .ImageDeltaSubImage1: Int.self,
+            .ImageDeltaUseEffectiveColor: Bool.self,
+            .ImageDeltaEffectiveColor: UIColor.self,
         ]
 }
