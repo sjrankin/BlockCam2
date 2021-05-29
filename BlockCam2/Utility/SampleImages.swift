@@ -707,6 +707,79 @@ class SampleImages
         }
         return Results
     }
+    
+    // MARK: - Sub-sample data and handling.
+    
+    public static var SubSamples: [SampleImageData] =
+        [
+            SampleImageData(id: "Sample1", SampleName: "Checkerboard2048x1024", Title: "Checkerboard",
+                            Attribution: "Author", IsUserImage: false),
+            SampleImageData(id: "Sample2", SampleName: "CheckerboardColor2048x1024", Title: "Color Checkerboard",
+                            Attribution: "Author", IsUserImage: false),
+            SampleImageData(id: "Sample3", SampleName: "Cloud2048x1024", Title: "Cloud",
+                            Attribution: "Author", IsUserImage: false),
+            SampleImageData(id: "Sample4", SampleName: "MaskedCloud2048x1024", Title: "Inverted Cloud",
+                            Attribution: "Author", IsUserImage: false),
+            SampleImageData(id: "Sample5", SampleName: "EndeavourMir2048x1024", Title: "Endeavour",
+                            Attribution: "NASA/STS-89", IsUserImage: false),
+            SampleImageData(id: "Sample6", SampleName: "FloridaApollo72048x1024", Title: "Florida",
+                            Attribution: "NASA/Apollo 7", IsUserImage: false),
+            SampleImageData(id: "Sample7", SampleName: "Sapporo2048x1024", Title: "Sapporo",
+                            Attribution: "Author", IsUserImage: false),
+            SampleImageData(id: "Sample8", SampleName: "Saturn2048x1024", Title: "Saturn",
+                            Attribution: "NASA/Cassini", IsUserImage: false),
+            ]
+    
+    public static func GetSubSampleImageName(At Key: SettingKeys) -> String
+    {
+        let Index = Settings.GetInt(Key)
+        return SubSamples[Index].SampleName
+    }
+    
+    public static func GetCurrentSubSampleImageTitle(At Key: SettingKeys) -> String
+    {
+        let Index = Settings.GetInt(Key)
+        let SubSampleData = SubSamples[Index]
+        return SubSampleData.Title
+    }
+    
+    public static func GetCurrentSubSampleImageName(From: String) -> String
+    {
+        for SubSample in SubSamples
+        {
+            if SubSample.Title == From
+            {
+                return SubSample.SampleName
+            }
+        }
+        return SubSamples[0].Title
+    }
+    
+    public static func IncrementSubSampleImageName(At Key: SettingKeys) -> String
+    {
+        var Index = Settings.GetInt(Key)
+        Index = Index + 1
+        if Index > SubSamples.count - 1
+        {
+            Index = 0
+        }
+        print("Increment index to \(Index)")
+        Settings.SetInt(Key, Index)
+        return SubSamples[Index].SampleName
+    }
+    
+    public static func DecrementSubSampleImageName(At Key: SettingKeys) -> String
+    {
+        var Index = Settings.GetInt(Key)
+        Index = Index - 1
+        if Index < 0
+        {
+            Index = SubSamples.count - 1
+        }
+        print("Deccrement index to \(Index)")
+        Settings.SetInt(Key, Index)
+        return SubSamples[Index].SampleName
+    }
 }
 
 enum SampleSources: String, CaseIterable
