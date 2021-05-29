@@ -603,7 +603,8 @@ struct ConvolutionFilter_View: View
                     .padding(.top, -10)
                     .padding(.bottom)
                     
-                    Divider().background(Color.black)
+                    Divider()
+                        .background(Color.black)
                     
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .Convolution,
