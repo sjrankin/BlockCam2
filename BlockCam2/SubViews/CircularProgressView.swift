@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//https://swdevnotes.com/swift/2021/how-to-create-progress-indicator-in-swiftui/
 struct CircularProgressView: View
 {
     @Binding var Percent: Double
