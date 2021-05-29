@@ -128,9 +128,10 @@ struct LiveViewControllerUI: UIViewControllerRepresentable
             Parent.ShowSlowMessageView = false
         }
         
+        /// Update the SwiftUI content with a new operational percent. This function is not concerned with
+        /// which operation.
         func NewPercent(_ Percent: Double)
         {
-            print("New percent: \(Percent)")
             Parent.OperationPercent = Percent
         }
     }
