@@ -80,6 +80,20 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.ImageDelta.rawValue:
+                SettingsContainer
+                {
+                    ImageDeltaFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+                
+            case BuiltInFilters.MultiFrameCombiner.rawValue:
+                SettingsContainer
+                {
+                    MultiFrameCombinerFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+                
             case BuiltInFilters.CircularWrap.rawValue:
                 SettingsContainer
                 {
