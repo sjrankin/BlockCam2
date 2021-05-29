@@ -41,6 +41,8 @@ enum SettingKeys: String, CaseIterable
     case UserSampleList = "UserSampleList"
     /// Boolean: If true use user samples for the set of sample images.
     case UseSampleImages = "UseSampleImages"
+    /// Integer: Used for previews of sub-sample images.
+    case SubSampleScratchKey = "SubSampleScratchKey"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.
@@ -392,4 +394,30 @@ enum SettingKeys: String, CaseIterable
     case CircularWrapRadius = "CircularWrapRadius"
     /// Double: Circular wrap angle.
     case CircularWrapAngle = "CircularWrapAngle"
+    
+    // MARK: - Multi-frame combiner
+    /// Integer: Determines how to combine frames.
+    case MultiFrameCombinerCommand = "MultiFrameCombinerCommand"
+    /// Bool: Determines if the command is inverted.
+    case MultiFrameCombinerInvertCommand = "MultiFrameCombinerInvertCommand"
+    /// Integer: Index for the first sub-sample image.
+    case MultiFrameSubImage0 = "MultiFrameSubImage0"
+    /// Integer: Index for the second sub-sample image.
+    case MultiFrameSubImage1 = "MultiFrameSubImage1"
+    
+    // MARK: - Imgage delta frame combiner
+    /// Integer: How to perform the image delta.
+    case ImageDeltaCommand = "ImageDeltaCommand"
+    /// UIColor: Background color for results near black.
+    case ImageDeltaBackground = "ImageDeltaBackground"
+    /// Double: Threshold to determine if `ImageDeltaBackground` is used.
+    case ImageDeltaThreshold = "ImageDeltaThreshold"
+    /// Integer: Index for the first sub-sample image.
+    case ImageDeltaSubImage0 = "ImageDeltaSubImage0"
+    /// Integer: Index for the second sub-sample image.
+    case ImageDeltaSubImage1 = "ImageDeltaSubImage1"
+    /// Boolean: Determines if the effective color is used.
+    case ImageDeltaUseEffectiveColor = "ImageDeltaUseEffectiveColor"
+    /// UIColor: The effective color to use with standand image delta.
+    case ImageDeltaEffectiveColor = "ImageDeltaEffectiveColor"
 }
