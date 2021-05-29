@@ -166,6 +166,20 @@ class Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .ImageDelta:
+                Options[.IntCommand] = Settings.GetInt(.ImageDeltaCommand)
+                Options[.Threshold] = Settings.GetDouble(.ImageDeltaThreshold,
+                                                         Settings.SettingDefaults[.ImageDeltaThreshold] as! Double)
+                Options[.UseEffective] = Settings.GetBool(.ImageDeltaUseEffectiveColor)
+                Options[.EffectiveColor] = Settings.GetColor(.ImageDeltaEffectiveColor,
+                                                             Settings.SettingDefaults[.ImageDeltaEffectiveColor] as! UIColor)
+                Options[.BGColor] = Settings.GetColor(.ImageDeltaBackground,
+                                                      Settings.SettingDefaults[.ImageDeltaBackground] as! UIColor)
+            
+            case .MultiFrameCombiner:
+                Options[.IntCommand] = Settings.GetInt(.MultiFrameCombinerCommand)
+                Options[.Invert] = Settings.GetBool(.MultiFrameCombinerInvertCommand)
+            
             case .CircularWrap:
                 Options[.Angle] = Settings.GetDouble(.CircularWrapAngle,
                                                      Settings.SettingDefaults[.CircularWrapAngle] as! Double)
@@ -442,8 +456,48 @@ class Filters
         return Options
     }
     
+    /// List of filters that are intended for use only on videos.
+    public static let VideoOnlyFilters = [BuiltInFilters.TrailingFrames]
+    
+    /// List of filter names that are intended only for videos.
+    public static let VideoOnlyFilterNames = [BuiltInFilters.TrailingFrames.rawValue]
+    
     /// List of filters that are too slow to run in real-time and so are not available in live view.
     public static let NonRealTimeFilters = [BuiltInFilters.Kuwahara]
+    
+    /// List of filter names that are too slow to run in real-time.
+    public static let NonRealTimeFilterNames = [BuiltInFilters.Kuwahara.rawValue]
+    
+    public static func HasSpecialSymbol(_ FilterName: String) -> Bool
+    {
+        if VideoOnlyFilterNames.contains(FilterName)
+        {
+            return true
+        }
+        if NonRealTimeFilterNames.contains(FilterName)
+        {
+            return true
+        }
+        return false
+    }
+    
+    public static func GetTitleSymbol(For Title: String) -> String
+    {
+        if VideoOnlyFilterNames.contains(Title)
+        {
+            return "rectangle.stack"
+        }
+        if NonRealTimeFilterNames.contains(Title)
+        {
+            return "tortoise"
+        }
+        return ""
+    }
+    
+    public static func TitleHasSymbol(_ Title: String) -> Bool
+    {
+        return !GetTitleSymbol(For: Title).isEmpty
+    }
     
     /// Determines if the passed filter is real-time or not.
     /// - Note: Real-time filters are sufficiently performant that they can be used in live views.
@@ -452,197 +506,6 @@ class Filters
     public static func IsRealTime(_ Filter: BuiltInFilters) -> Bool
     {
         return !NonRealTimeFilters.contains(Filter)
-    }
-    
-    public static func BufferToUIImage(_ Buffer: CVPixelBuffer) -> UIImage?
-    {
-        let CImg = CIImage(cvImageBuffer: Buffer)
-        let Img = UIImage(ciImage: CImg)
-        return Img
-    }
-    
-    /// Run a built-in filter on the passed image.
-    /// - Parameter On: The image on which to run the filter.
-    /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
-    ///                     filter will be used.
-    /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
-    ///                                    nil is returned on error.
-    /// - Returns: New and filtered `UIImage` on success, nil on error.
-    public static func RunFilter(On Image: UIImage,
-                                 Filter: BuiltInFilters? = nil,
-                                 ReturnOriginalOnError: Bool = true) -> UIImage?
-    {
-        if let CImg = CIImage(image: Image)
-        {
-            var Buffer: CVPixelBuffer?
-            let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                              kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
-                              kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue] as CFDictionary
-            CVPixelBufferCreate(kCFAllocatorDefault,
-                                Int(Image.size.width),
-                                Int(Image.size.height),
-                                kCVPixelFormatType_32BGRA,
-                                Attributes,
-                                &Buffer)
-            let Context = CIContext()
-            guard let ActualBuffer = Buffer else
-            {
-                Debug.Print("Error creating buffer")
-                return Image
-            }
-            Context.render(CImg, to: ActualBuffer)
-            
-            if let NewBuffer = RunFilter(With: ActualBuffer, Filter)
-            {
-                let FinalImage = UIImage(Buffer: NewBuffer)
-                return FinalImage
-            }
-            if ReturnOriginalOnError
-            {
-                Debug.Print("Returning original image due to processing error: \(#function)")
-                return Image
-            }
-        }
-        return nil
-    }
-    
-    /// Run a built-in filter on the passed image.
-    /// - Parameter On: The image (in `CIImage` format) on which to run the filter.
-    /// - Parameter Extent: The size of the image.
-    /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
-    ///                     filter will be used.
-    /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
-    ///                                    nil is returned on error.
-    /// - Returns: Processed image on success, nil on error unless `ReturnOriginalOnError` is true.
-    public static func RunFilter2(On Image: CIImage,
-                                  Extent: CGRect,
-                                  Filter: BuiltInFilters? = nil,
-                                  ReturnOriginalOnError: Bool = true) -> CIImage?
-    {
-        var Buffer: CVPixelBuffer?
-        let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                          kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
-                          kCVPixelBufferMetalCompatibilityKey: kCFBooleanTrue] as CFDictionary
-        CVPixelBufferCreate(kCFAllocatorDefault,
-                            Int(Extent.width),
-                            Int(Extent.height),
-                            kCVPixelFormatType_32BGRA,
-                            Attributes,
-                            &Buffer)
-        let Context = CIContext()
-        guard let ActualBuffer = Buffer else
-        {
-            Debug.Print("Error creating buffer")
-            return Image
-        }
-        Context.render(Image, to: ActualBuffer)
-        
-        if let NewBuffer = RunFilter(With: ActualBuffer, Filter)
-        {
-            let FinalImage = CIImage(cvImageBuffer: NewBuffer)
-            return FinalImage
-        }
-        if ReturnOriginalOnError
-        {
-            Debug.Print("Returning original image due to processing error: \(#function)")
-            return Image
-        }
-        return nil
-    }
-    
-    /// Run a built-in filter on the passed image.
-    /// - Parameter On: The image on which to run the filter.
-    /// - Parameter Filter: The filter to use on the image. If this parameter is nil, the current
-    ///                     filter will be used.
-    /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
-    ///                                    nil is returned on error.
-    /// - Parameter Block: Trailing closure that is called (if provided) after processing is complete. The
-    ///                    boolean value passed to the close will be true on success, false on failure.
-    /// - Returns: New and filtered `UIImage` on success, nil on error.
-    public static func RunFilter(On Image: UIImage,
-                                 Filter: BuiltInFilters? = nil,
-                                 ReturnOriginalOnError: Bool = true,
-                                 Block: ((Bool) -> ())? = nil) -> UIImage?
-    {
-        let Results = RunFilter(On: Image, Filter: Filter, ReturnOriginalOnError: ReturnOriginalOnError)
-        Block?(Results == nil ? false : true)
-        return Results
-    }
-
-    /// Run a built-in filter on the passed buffer.
-    /// - Parameter With: The buffer to filter.
-    /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
-    ///                     prior to this call, `.Passthrough` is used.
-    /// - Returns: Filtered data according to `Filter`. Nil on error.
-    public static func RunFilter(With Buffer: CVPixelBuffer, _ Filter: BuiltInFilters? = nil) -> CVPixelBuffer?
-    {
-        if Filter == nil && LastBuiltInFilterUsed == nil
-        {
-            return Filters.RunFilter(With: Buffer, .Passthrough)
-        }
-        var FilterToUse: BuiltInFilters = .Passthrough
-        if Filter == nil
-        {
-            FilterToUse = LastBuiltInFilterUsed!
-        }
-        else
-        {
-            LastBuiltInFilterUsed = Filter
-            FilterToUse = Filter!
-        }
-        if FilterToUse == .Passthrough
-        {
-            return Buffer
-        }
-        if let FilterInTree = Filters.FilterFromTree(FilterToUse)
-        {
-            #if targetEnvironment(simulator)
-            guard let Format = FilterHelper.GetFormatDescription(From: Buffer) else
-            {
-                fatalError("Error getting description of buffer in \(#function).")
-            }
-            guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
-                                                                      BufferCountHint: 3,
-                                                                      BufferSize: CGSize(width: Int(Format.dimensions.width),
-                                                                                         height: Int(Format.dimensions.height))) else
-            {
-                fatalError("Error creating local buffer pool in \(#function).")
-            }
-            FilterInTree.Initialize(With: Format, BufferCountHint: 3)
-            let FinalOptions = GetOptions(For: FilterToUse)
-            let FinalBuffer = FilterInTree.RunFilter([Buffer],
-                                                     LocalBufferPool,
-                                                     CGColorSpaceCreateDeviceRGB(),
-                                                     Options: FinalOptions)
-            #else
-            guard let Format = FilterHelper.GetFormatDescription(From: Buffer) else
-            {
-                fatalError("Error getting description of buffer in \(#function).")
-            }
-                FilterInTree.Initialize(With: Format, BufferCountHint: 3)
-//            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
-            let FinalOptions = GetOptions(For: FilterToUse)
-            let FinalBuffer = FilterInTree.RunFilter([Buffer],
-                                                     BufferPool!,
-                                                     ColorSpace!,
-                                                     Options: FinalOptions)
-            #endif
-            return FinalBuffer
-        }
-        return nil
-    }
-    
-    /// Run a built-in filter on the passed buffer.
-    /// - Parameter With: The buffer to filter.
-    /// - Parameter Filter: The filter to use. If nil, the last used filter is used. If no filter was used
-    ///                     prior to this call, `.Passthrough` is used.
-    /// - Returns: Filtered data according to `Filter`. Nil on error.
-    public static func RunFilter(With Buffer: CVPixelBuffer, _ Filter: BuiltInFilters? = nil,
-                                 Block: ((Bool) -> ())?) -> CVPixelBuffer?
-    {
-        let Result = RunFilter(With: Buffer, Filter)
-        Block?(Result == nil ? false : true)
-        return Result
     }
     
     /// Sets the default filter.
@@ -913,9 +776,12 @@ class Filters
             .MatrixTest: "Matrix test.",
             .Blocks: "3D block image.",
             .Spheres: "3D sphere image.",
-            .HSB: "Color adjustment with hue, saturation, and brightness settings",
+            .HSB: "Color adjustment with hue, saturation, and brightness settings.",
             .Dither: "Built-in color dithering.",
             .CircularWrap: "Circular wrapping of the image.",
+            .BrightnessMask: "Mask to alpha depending on brightness of pixel.",
+            .MultiFrameCombiner: "Combine frames together",
+            .TrailingFrames: "Video-only time-based frame combining.",
         ]
 }
 
@@ -1048,6 +914,8 @@ enum BuiltInFilters: String, CaseIterable
     case MetalPixellate = "Metal Pixellate"
     case TwirlBump = "Twirl Bump"
     case CircularWrap = "Circular Wrap"
+    case MultiFrameCombiner = "Frame Combiner"
+    case TrailingFrames = "Trailing Frames"
     
     //Internal filters
     case Crop = "Crop"
@@ -1055,6 +923,7 @@ enum BuiltInFilters: String, CaseIterable
     case Reflect = "Reflect"
     case QuadrantTest = "Quadrant Test"
     case MatrixTest = "Matrix Test"
+    case BrightnessMask = "Brightness Mask"
     
     //3D Filters
     case Blocks = "Blocks"
