@@ -182,6 +182,8 @@ extension Filters
     {
         var FilterMap = [BuiltInFilters: BuiltInFilterProtocol]()
         FilterMap[.ImageDelta]  = BlockCam2.ImageDelta()
+        FilterMap[.MultiFrameCombiner] = BlockCam2.MultiFrameCombiner()
+        FilterMap[.TrailingFrames] = BlockCam2.TrailingFrames() 
         return FilterMap
     }
     
@@ -485,6 +487,9 @@ enum FilterOptions: String
     case OnlyChannel = "OnlyChannel"
     case BumpRadius = "BumpRadius"
     case TwirlRadius = "TwirlRadius"
+    case UseEffective = "UseEffective"
+    case EffectiveColor = "EffectiveColor"
+    case BGColor = "BGColor"
     
     case HAction = "HAction"
     case VAction = "VAction"
