@@ -16,9 +16,10 @@ import Photos
 import MobileCoreServices
 import CoreMotion
 
-//https://swdevnotes.com/swift/2021/how-to-create-progress-indicator-in-swiftui/
 extension LiveViewController
 {
+    // MARK: - Code to apply filters and export video files.
+    
     /// Run the current filter against the passed video.
     /// - Parameter VideoURL: The URL of the video to process.
     /// - Parameter ScratchName: Not currently used.
