@@ -30,6 +30,7 @@ extension Settings
             .ShowUserSamplesOnlyIfAvailable: false,
             .UserSampleList: "",
             .UseSampleImages: false,
+            .SubSampleScratchKey: 0,
             
             // MARK: - Filter settings.
             .CurrentFilter: "",
@@ -246,5 +247,20 @@ extension Settings
             // MARK: - Circular wrap distortion
             .CircularWrapRadius: 100.0,
             .CircularWrapAngle: 0.0,
+            
+            // MARK: - Multi-frame combiner
+            .MultiFrameCombinerCommand: 0,
+            .MultiFrameCombinerInvertCommand: false,
+            .MultiFrameSubImage0: 0,
+            .MultiFrameSubImage1: 1,
+            
+            // MARK: - Image delta frame combiner
+            .ImageDeltaCommand: 0,
+            .ImageDeltaBackground: UIColor.black,
+            .ImageDeltaThreshold: 0.01,
+            .ImageDeltaSubImage0: 0,
+            .ImageDeltaSubImage1: 1,
+            .ImageDeltaUseEffectiveColor: false,
+            .ImageDeltaEffectiveColor: UIColor.yellow,
         ]
 }
