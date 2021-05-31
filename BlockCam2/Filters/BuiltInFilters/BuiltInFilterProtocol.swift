@@ -8,7 +8,7 @@
 import Foundation
 import CoreMedia
 
-/// Protocol for 2D filters.
+/// Protocol for filters.
 protocol BuiltInFilterProtocol
 {
     /// Returns the type of filter.
