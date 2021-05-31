@@ -246,10 +246,13 @@ extension Filters
     ///                     filter will be used.
     /// - Parameter ReturnOriginalOnError: If true, the original image is returned on error. If false,
     ///                                    nil is returned on error.
+    /// - Parameter ApplyBackground: If true, the background (as defined in `.SampleImageBackground`) is
+    ///                              applied to the image before it is returned.
     /// - Returns: New and filtered `UIImage` on success, nil on error.
     public static func RunFilter(On Image: UIImage,
                                  Filter: BuiltInFilters? = nil,
-                                 ReturnOriginalOnError: Bool = true) -> UIImage?
+                                 ReturnOriginalOnError: Bool = true,
+                                 ApplyBackground: Bool = true) -> UIImage?
     {
         if let CImg = CIImage(image: Image)
         {
@@ -273,8 +276,52 @@ extension Filters
             
             if let NewBuffer = RunFilter(With: ActualBuffer, Filter)
             {
-                let FinalImage = UIImage(Buffer: NewBuffer)
-                return FinalImage
+                guard let Result = UIImage(Buffer: NewBuffer) else
+                {
+                    return nil
+                }
+                if ApplyBackground
+                {
+                    var BGImage: UIImage!
+                    switch Settings.GetInt(.SampleImageBackground)
+                    {
+                        case 0:
+                            BGImage = UIImage.MakeColorImage(SolidColor: UIColor.black, Size: Result.size)
+                            
+                        case 1:
+                            BGImage = UIImage.MakeColorImage(SolidColor: UIColor.white, Size: Result.size)
+                            
+                        case 2:
+                            BGImage = MetalCheckerboard.Generate(Block: 64,
+                                                                 Width: Int(Result.size.width),
+                                                                 Height: Int(Result.size.height),
+                                                                 Color0: UIColor.black,
+                                                                 Color1: UIColor.white,
+                                                                 Color2: UIColor.black,
+                                                                 Color3: UIColor.white)
+                        default:
+                            return Result
+                    }
+                    
+                    #if true
+                    //https://stackoverflow.com/questions/1309757/blend-two-uiimages-based-on-alpha-transparency-of-top-image
+                    UIGraphicsBeginImageContextWithOptions(Result.size, false, 0.0)
+                    BGImage.draw(in: CGRect(origin: CGPoint.zero, size: Result.size))
+                    Result.draw(in: CGRect(origin: CGPoint.zero, size: Result.size))
+                    let Final = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    return Final
+                    #else
+                    if let Final = FilterHelper.BlitImages(Result, BGImage)
+                    {
+                        return Final
+                    }
+                    #endif
+                }
+                else
+                {
+                    return Result
+                }
             }
             if ReturnOriginalOnError
             {
@@ -343,7 +390,8 @@ extension Filters
                                  ReturnOriginalOnError: Bool = true,
                                  Block: ((Bool) -> ())? = nil) -> UIImage?
     {
-        let Results = RunFilter(On: Image, Filter: Filter, ReturnOriginalOnError: ReturnOriginalOnError)
+        let Results = RunFilter(On: Image, Filter: Filter, ReturnOriginalOnError: ReturnOriginalOnError,
+                                ApplyBackground: true)
         Block?(Results == nil ? false : true)
         return Results
     }
