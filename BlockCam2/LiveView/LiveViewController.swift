@@ -255,6 +255,16 @@ class LiveViewController: UIViewController,
                     MetalView?.layer.zPosition = 150
                     Settings.SetInt(.InputSourceIndex, 0)
                     
+                case UICommands.SaveOriginalSample.rawValue:
+                    let CurrentSample = SampleImages.CurrentSample.SampleImage
+                    break
+                    
+                case UICommands.SaveFilteredSample.rawValue:
+                    let CurrentSample = SampleImages.CurrentSample.SampleImage
+                    let SampleFilterString = Settings.GetString(.SampleImageFilter,
+                                                                BuiltInFilters.Passthrough.rawValue)
+                    break
+                    
                 default:
                     break
             }
