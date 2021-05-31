@@ -20,6 +20,7 @@ struct LargeSampleImage: View
     @State var EnableFilter: Bool = true
     @State var ShowHelp: Bool = false
     @State var ShowAttribution: Bool = false
+    @State var PotentiallyTransparent: Bool = false
     
     var body: some View
     {
@@ -49,7 +50,9 @@ struct LargeSampleImage: View
                     }
                     .padding()
                     
-                    Image(uiImage: Filters.RunFilter(On: ImageToView, Filter: EnableFilter ? Filter : .Passthrough)!)
+                    Image(uiImage: Filters.RunFilter(On: ImageToView,
+                                                     Filter: EnableFilter ? Filter : .Passthrough,
+                                                     ApplyBackground: PotentiallyTransparent)!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .background(Color.gray)
