@@ -301,7 +301,8 @@ struct ColorRangeFilter_View: View
                     
                     SampleImage(UICommand: $ButtonCommand,
                                 Filter: .ColorRange,
-                                Updated: $Updated.wrappedValue)
+                                Updated: $Updated.wrappedValue,
+                                PotentiallyTransparent: true)
                         .frame(width: 300,
                                height: 300,
                                alignment: .center)
