@@ -153,6 +153,7 @@ class FilterHelper
     }
     
     /// Create a buffer pool with the suggested number of entries and passed format.
+    /// - Warning: No checking of the passed format's sub-type is done.
     /// - Parameters:
     ///   - From: Format to use for the buffer.
     ///   - BufferCountHint: Suggested number of entries in the buffer pool.
@@ -162,18 +163,19 @@ class FilterHelper
     ///            the buffer pool, and a description of the format of the buffer pool).
     public static func CreateBufferPool(From: CMFormatDescription, BufferCountHint: Int, BufferSize: CGSize) -> CVPixelBufferPool?
     {
+        /*
         let InputSubType = CMFormatDescriptionGetMediaSubType(From)
         if InputSubType != kCVPixelFormatType_32BGRA
         {
             print("Invalid pixel buffer type \(InputSubType)")
             return nil
         }
-        
+        */
         let Width = Int(BufferSize.width)
         let Height = Int(BufferSize.height)
         var PixelBufferAttrs: [String: Any] =
             [
-                kCVPixelBufferPixelFormatTypeKey as String: UInt(InputSubType),
+                kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,//UInt(InputSubType),
                 kCVPixelBufferWidthKey as String: Width,
                 kCVPixelBufferHeightKey as String: Height,
                 kCVPixelBufferIOSurfacePropertiesKey as String: [:]
@@ -216,8 +218,7 @@ class FilterHelper
                                 &CVPixBufPool)
         guard let BufferPool = CVPixBufPool else
         {
-            print("Allocation failure - could not allocate pixel buffer pool.")
-            return nil
+            Debug.FatalError("Allocation failure - could not allocate pixel buffer pool.")
         }
         
         PreAllocateBuffers(Pool: BufferPool, AllocationThreshold: BufferCountHint)
