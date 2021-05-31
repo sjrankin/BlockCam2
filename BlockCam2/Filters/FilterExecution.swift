@@ -207,14 +207,14 @@ extension Filters
             #if targetEnvironment(simulator)
             guard let Format = FilterHelper.GetFormatDescription(From: Buffers[0]) else
             {
-                fatalError("Error getting description of buffer[0] in \(#function).")
+                Debug.FatalError("Error getting description of buffer[0] in \(#function).")
             }
             guard let LocalBufferPool = FilterHelper.CreateBufferPool(From: Format,
                                                                       BufferCountHint: 3,
                                                                       BufferSize: CGSize(width: Int(Format.dimensions.width),
                                                                                          height: Int(Format.dimensions.height))) else
             {
-                fatalError("Error creating local buffer pool in \(#function).")
+                Debug.FatalError("Error creating local buffer pool in \(#function).")
             }
             FilterInTree.Initialize(With: Format, BufferCountHint: 3)
             let FinalOptions = GetOptions(For: FilterToUse)
@@ -225,7 +225,7 @@ extension Filters
             #else
             guard let Format = FilterHelper.GetFormatDescription(From: Buffers[0]) else
             {
-                fatalError("Error getting description of buffer[0] in \(#function).")
+                Debug.FatalError("Error getting description of buffer[0] in \(#function).")
             }
             FilterInTree.Initialize(With: Format, BufferCountHint: 3)
             //            FilterInTree.Initialize(With: OutFormatDesc!, BufferCountHint: 3)
