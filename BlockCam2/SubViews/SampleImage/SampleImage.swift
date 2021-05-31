@@ -18,6 +18,7 @@ struct SampleImage: View
     var EnableImageChange: Bool = true
     @State var Updated: Bool
     @State var ShowAttribution: Bool = false
+    @State var PotentiallyTransparent: Bool = false
     
     var body: some View
     {
@@ -27,14 +28,9 @@ struct SampleImage: View
                 .frame(alignment: .center)
                 .font(.subheadline)
                 .foregroundColor(.gray)
-            ZStack
-            {
-                Image(uiImage: UIImage())
-                    .resizable()
-                    .border(Color.black, width: 0.5)
-                    .frame(alignment: .center)
             Image(uiImage: Filters.RunFilter(On: UIImage(named: $ImageName.wrappedValue)!,
-                                             Filter: Filter)!)
+                                             Filter: Filter,
+                                             ApplyBackground: PotentiallyTransparent)!)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .background(Color.black)
@@ -86,7 +82,8 @@ struct SampleImage: View
                     LargeSampleImage(UICommand: $UICommand,
                                      ImageToView: UIImage(named: ImageName)!,
                                      Filter: Filter,
-                                     PageTitle: "Enlarged: \(Filter.rawValue)")
+                                     PageTitle: "Enlarged: \(Filter.rawValue)",
+                                     PotentiallyTransparent: PotentiallyTransparent)
                 }
                 .actionSheet(isPresented: $OnLongPress)
                 {
@@ -109,16 +106,15 @@ struct SampleImage: View
                             ]
                     )
                 }
-            }
             #if os(iOS)
             HStack
             {
-            Text("Swipe left or right to change the sample image. Double tap to enlarge.")
-                .multilineTextAlignment(.center)
-                .frame(alignment: .center)
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .padding()
+                Text("Swipe left or right to change the sample image. Double tap to enlarge.")
+                    .multilineTextAlignment(.center)
+                    .frame(alignment: .center)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .padding()
                 
                 Button(action:
                         {
@@ -150,7 +146,8 @@ struct SampleImage_Preview: PreviewProvider
     {
         SampleImage(UICommand: $NotUsed,
                     Filter: .Passthrough,
-                    Updated: false)
+                    Updated: false,
+                    PotentiallyTransparent: false)
             .frame(width: 400, height: 400)
     }
 }
