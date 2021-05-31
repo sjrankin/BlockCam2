@@ -90,6 +90,18 @@ class AlphaBlend: MetalFilterParent, BuiltInFilterProtocol
         Initialized = false
     }
     
+    func RenderWith(TopImage: UIImage, BottomImage: UIImage) -> UIImage?
+    {
+        let TopBuffer = TopImage.PixelBuffer()
+        let BottomBuffer = BottomImage.PixelBuffer()
+        guard let Buffer = RenderWith(PixelBuffer: TopBuffer, And: BottomBuffer) else
+        {
+            return nil
+        }
+        let Final = UIImage(Buffer: Buffer)
+        return Final
+    }
+    
     func RenderWith(PixelBuffer: CVPixelBuffer, And: CVPixelBuffer) -> CVPixelBuffer?
     {
         objc_sync_enter(AccessLock)
@@ -168,10 +180,120 @@ class AlphaBlend: MetalFilterParent, BuiltInFilterProtocol
         return OutputBuffer
     }
     
+    //Buffer[0]=top, Buffer[1]=bottom
     func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
                    _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
     {
-        return Buffer.first!
+        objc_sync_enter(AccessLock)
+        defer{objc_sync_exit(AccessLock)}
+        
+        if !Initialized
+        {
+            fatalError("AlphaBlend not initialized at Render(CVPixelBuffer) call.")
+        }
+        
+        var NewPixelBuffer: CVPixelBuffer? = nil
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+        }
+        
+        guard let BottomTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer[0], TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating bottom texture in AlphaBlend.")
+        }
+        guard let TopTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer[1], TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating top texture in AlphaBlend.")
+        }
+        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating output texture in AlphaBlend.")
+        }
+        
+        guard let CommandQ = CommandQueue,
+              let CommandBuffer = CommandQ.makeCommandBuffer(),
+              let CommandEncoder = CommandBuffer.makeComputeCommandEncoder() else
+        {
+            Debug.FatalError("Error creating Metal command queue.")
+        }
+        
+        CommandEncoder.label = "AlphaBlend"
+        CommandEncoder.setComputePipelineState(ComputePipelineState!)
+        CommandEncoder.setTexture(BottomTexture, index: 0)
+        CommandEncoder.setTexture(TopTexture, index: 1)
+        CommandEncoder.setTexture(OutputTexture, index: 2)
+        
+        let w = ComputePipelineState!.threadExecutionWidth
+        let h = ComputePipelineState!.maxTotalThreadsPerThreadgroup / w
+        let ThreadsPerThreadGroup = MTLSize(width: w, height: h, depth: 1)
+        let ThreadGroupsPerGrid = MTLSize(width: (BottomTexture.width + w - 1) / w,
+                                          height: (BottomTexture.height + h - 1) / h,
+                                          depth: 1)
+        CommandEncoder.dispatchThreadgroups(ThreadGroupsPerGrid, threadsPerThreadgroup: ThreadsPerThreadGroup)
+        CommandEncoder.endEncoding()
+        CommandBuffer.commit()
+        
+        return OutputBuffer
+    }
+    
+    func RunFilter(_ Buffer: [CVPixelBuffer], Options: [FilterOptions: Any]) -> CVPixelBuffer
+    {
+        objc_sync_enter(AccessLock)
+        defer{objc_sync_exit(AccessLock)}
+        
+        if !Initialized
+        {
+            fatalError("AlphaBlend not initialized at Render(CVPixelBuffer) call.")
+        }
+        
+        var NewPixelBuffer: CVPixelBuffer? = nil
+        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
+        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
+        guard let OutputBuffer = NewPixelBuffer else
+        {
+            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+        }
+        
+        guard let BottomTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer[0], TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating bottom texture in AlphaBlend.")
+        }
+        guard let TopTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer[1], TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating top texture in AlphaBlend.")
+        }
+        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
+        {
+            Debug.FatalError("Error creating output texture in AlphaBlend.")
+        }
+        
+        guard let CommandQ = CommandQueue,
+              let CommandBuffer = CommandQ.makeCommandBuffer(),
+              let CommandEncoder = CommandBuffer.makeComputeCommandEncoder() else
+        {
+            Debug.FatalError("Error creating Metal command queue.")
+        }
+        
+        CommandEncoder.label = "AlphaBlend"
+        CommandEncoder.setComputePipelineState(ComputePipelineState!)
+        CommandEncoder.setTexture(BottomTexture, index: 0)
+        CommandEncoder.setTexture(TopTexture, index: 1)
+        CommandEncoder.setTexture(OutputTexture, index: 2)
+        
+        let w = ComputePipelineState!.threadExecutionWidth
+        let h = ComputePipelineState!.maxTotalThreadsPerThreadgroup / w
+        let ThreadsPerThreadGroup = MTLSize(width: w, height: h, depth: 1)
+        let ThreadGroupsPerGrid = MTLSize(width: (BottomTexture.width + w - 1) / w,
+                                          height: (BottomTexture.height + h - 1) / h,
+                                          depth: 1)
+        CommandEncoder.dispatchThreadgroups(ThreadGroupsPerGrid, threadsPerThreadgroup: ThreadsPerThreadGroup)
+        CommandEncoder.endEncoding()
+        CommandBuffer.commit()
+        
+        return OutputBuffer
     }
     
     /// Reset the filter's settings.
