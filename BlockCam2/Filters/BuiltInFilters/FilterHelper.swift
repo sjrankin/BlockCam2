@@ -26,6 +26,22 @@ class FilterHelper
         return Blitted
     }
     
+    /// Blit the top image onto the bottom image.
+    /// - Parameter Top: The top image (closest to the viewer). In `UIImage` format.
+    /// - Parameter Bottom: The bottom image (the background image). In `UIImage` format.
+    /// - Returns: Blitted image on success, nil on error.
+    public static func BlitImages(_ Top: UIImage, _ Bottom: UIImage) -> UIImage?
+    {
+       let BlendFilter = AlphaBlend()
+        guard let Format = GetFormatDescription(From: Top.PixelBuffer()) else
+        {
+            return nil
+        }
+        BlendFilter.Initialize(With: Format, BufferCountHint: 3)
+        let Blitted = BlendFilter.RenderWith(TopImage: Top, BottomImage: Bottom)
+        return Blitted
+    }
+    
     /// Merge two images using the SourceAtop compositing filter.
     /// - Parameters:
     ///   - Top: The top image (eg, closest to the viewer).
