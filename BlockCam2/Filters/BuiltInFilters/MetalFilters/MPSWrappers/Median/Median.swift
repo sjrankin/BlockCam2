@@ -90,7 +90,7 @@ class Median: MetalFilterParent, BuiltInFilterProtocol
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
-            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+            Debug.FatalError("Error creating buffer pool for Median.")
         }
         #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
