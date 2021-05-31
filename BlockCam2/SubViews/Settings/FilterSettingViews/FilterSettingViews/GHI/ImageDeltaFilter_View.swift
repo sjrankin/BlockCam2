@@ -238,7 +238,7 @@ struct ImageDeltaFilter_View: View
                         SubSampleImage(Key: .ImageDeltaSubImage0,
                                        UICommand: $ButtonCommand,
                                        ImageName: $Sample0Name,
-                                       Updated: $Updated.wrappedValue,
+                                       Updated: $Updated,
                                        ImageTitle: $Sample0Title)
                             .frame(width: 200, height: 200)
                             .onChange(of: Sample0Name)
@@ -249,7 +249,7 @@ struct ImageDeltaFilter_View: View
                         SubSampleImage(Key: .ImageDeltaSubImage1,
                                        UICommand: $ButtonCommand,
                                        ImageName: $Sample1Name,
-                                       Updated: $Updated.wrappedValue,
+                                       Updated: $Updated,
                                        ImageTitle: $Sample1Title)
                             .frame(width: 200, height: 200)
                             .onChange(of: Sample1Name)
