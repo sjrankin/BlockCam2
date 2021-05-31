@@ -91,7 +91,7 @@ class Erode: MetalFilterParent, BuiltInFilterProtocol
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
-            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+            Debug.FatalError("Error creating buffer pool for Erode.")
         }
         #else
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, LocalBufferPool!, &NewPixelBuffer)
