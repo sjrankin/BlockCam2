@@ -31,6 +31,8 @@ extension Settings
             .UserSampleList: "",
             .UseSampleImages: false,
             .SubSampleScratchKey: 0,
+            .SampleImageFilter: BuiltInFilters.Passthrough.rawValue,
+            .SampleImageBackground: 0,
             
             // MARK: - Filter settings.
             .CurrentFilter: "",
@@ -262,5 +264,22 @@ extension Settings
             .ImageDeltaSubImage1: 1,
             .ImageDeltaUseEffectiveColor: false,
             .ImageDeltaEffectiveColor: UIColor.yellow,
+            
+            // MARK: - Color range filter.
+            .ColorRangeStart: 0.35,
+            .ColorRangeEnd: 0.45,
+            .ColorRangeInvertRange: false,
+            .ColorRangeOutOfRangeAction: 0,
+            .ColorRangeOutOfRangeColor: UIColor.blue,
+            .ColorRangePredefinedRangesIndex: 0,
+            
+            // MARK: - Metal checkerboard.
+            .MCheckerCheckSize: 8,
+            .MCheckerWidth: 512,
+            .MCheckerHeight: 512,
+            .MCheckerColor0: UIColor.black,
+            .MCheckerColor1: UIColor.white,
+            .MCheckerColor2: UIColor.black,
+            .MCheckerColor3: UIColor.white,
         ]
 }
