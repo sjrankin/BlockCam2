@@ -99,7 +99,6 @@ class ColorRange: MetalFilterParent, BuiltInFilterProtocol
                                              InvertRange: simd_bool(Options[.Invert] as! Bool),
                                              NonRangeAction: simd_uint1(Options[.IntCommand] as! Int),
                                              NonRangeColor: (Options[.NonRangeColor] as! UIColor).ToFloat4())
-        print("ColorRange.Parameter=\(Parameter)")
         let Parameters = [Parameter]
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ColorRangeParameters>.stride,
                                                   options: [])
