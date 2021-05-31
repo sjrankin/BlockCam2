@@ -95,7 +95,7 @@ class Sobel: MetalFilterParent, BuiltInFilterProtocol
         CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
         guard let OutputBuffer = NewPixelBuffer else
         {
-            Debug.FatalError("Error creating buffer pool for AlphaBlend.")
+            Debug.FatalError("Error creating buffer pool for Sobel.")
         }
         
         guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: PixelBuffer.first!, TextureFormat: .bgra8Unorm) else
