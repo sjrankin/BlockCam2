@@ -43,6 +43,10 @@ enum SettingKeys: String, CaseIterable
     case UseSampleImages = "UseSampleImages"
     /// Integer: Used for previews of sub-sample images.
     case SubSampleScratchKey = "SubSampleScratchKey"
+    /// String: Name of the filter used on the sample image.
+    case SampleImageFilter = "SampleImageFilter"
+    /// Integer: Index of type of sample image background.
+    case SampleImageBackground = "SampleImageBackground"
     
     // MARK: - Filter settings.
     /// String: Current filter in use.
@@ -420,4 +424,34 @@ enum SettingKeys: String, CaseIterable
     case ImageDeltaUseEffectiveColor = "ImageDeltaUseEffectiveColor"
     /// UIColor: The effective color to use with standand image delta.
     case ImageDeltaEffectiveColor = "ImageDeltaEffectiveColor"
+    
+    // MARK: - Color range filter.
+    /// Double: Start of the color range.
+    case ColorRangeStart = "ColorRangeStart"
+    /// Double: End of the color range.
+    case ColorRangeEnd = "ColorRangeEnd"
+    /// Boolean: Invert the color range.
+    case ColorRangeInvertRange = "ColorRangeInvertRange"
+    /// Integer: Method to use to de-emphasize colors not in the range.
+    case ColorRangeOutOfRangeAction = "ColorRangeOutOfRangeAction"
+    /// UIColor: Color for the use color out of range action.
+    case ColorRangeOutOfRangeColor = "ColorRangeOutOfRangeColor"
+    /// Integer: Index of the pre-defined color range to use.
+    case ColorRangePredefinedRangesIndex = "ColorRangePredefinedRangesIndex"
+
+    // MARK: - Metal checkerboard
+    /// Integer: Width and height of each color check.
+    case MCheckerCheckSize = "MCheckerCheckSize"
+    /// Integer: Width of the final image.
+    case MCheckerWidth = "MCheckerWidth"
+    /// Integer: Height of the final image.
+    case MCheckerHeight = "MCheckerHeight"
+    /// UIColor: Upper-left color.
+    case MCheckerColor0 = "MCheckerColor0"
+    /// UIColor: Upper-right color.
+    case MCheckerColor1 = "MCheckerColor1"
+    /// UIColor: Lower-right color.
+    case MCheckerColor2 = "MCheckerColor2"
+    /// UIColor: Lower-left color.
+    case MCheckerColor3 = "MCheckerColor3"
 }
