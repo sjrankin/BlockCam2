@@ -13,7 +13,7 @@ struct SubSampleImage: View
     @State var Key: SettingKeys
     @Binding var UICommand: String
     @Binding var ImageName: String
-    @State var Updated: Bool
+    @Binding var Updated: Bool
     @Binding var ImageTitle: String
     
     var body: some View
@@ -63,13 +63,14 @@ struct SubSampleImage_Preview: PreviewProvider
     @State static var NotUsed: String = ""
     @State static var SampleName = "Sapporo2048x2014"
     @State static var ImageTitle = "Sapporo"
+    @State static var Updated: Bool = false
     
     static var previews: some View
     {
         SubSampleImage(Key: .SubSampleScratchKey,
                        UICommand: $NotUsed,
                        ImageName: $SampleName,
-                       Updated: false,
+                       Updated: $Updated,
                        ImageTitle: $ImageTitle)
     }
 }
