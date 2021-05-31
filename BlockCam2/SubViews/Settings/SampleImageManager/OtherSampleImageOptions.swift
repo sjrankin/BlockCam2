@@ -14,6 +14,8 @@ struct OtherSampleImageOptions: View
     @State var UseMostRecentImage: Bool = Settings.GetBool(.UseLatestBlockCamImage)
     @State var OnlyUserSamples: Bool = Settings.GetBool(.ShowUserSamplesOnlyIfAvailable)
     @State var ShowPrivacyAlert: Bool = false
+    @State var SampleBackground: Int = Settings.GetInt(.SampleImageBackground)
+    var BGNames = ["Black", "White", "Checkerboard"]
     
     func EnableLastTaken()
     {
@@ -132,7 +134,35 @@ struct OtherSampleImageOptions: View
                 Divider()
                     .background(Color.black)
                 
-                Text("These options are mutually exclusive and should be used with caution as BlockCam will use the most recent image regardless of the contents.")
+                HStack
+                {
+                    VStack
+                    {
+                        Text("Background")
+                            .font(.headline)
+                            .frame(width: Geometry.size.width * 0.6,
+                                   alignment: .leading)
+                        Text("Set the background for sample images. This will be shown when results are transparent.")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .frame(width: Geometry.size.width * 0.6,
+                                   alignment: .leading)
+                    }
+                    Picker(BGNames[SampleBackground],
+                           selection: $SampleBackground)
+                    {
+                        Text("Black").tag(0)
+                        Text("White").tag(1)
+                        Text("Checkerboard").tag(2)
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: Geometry.size.width * 0.35)
+                    .onChange(of: SampleBackground)
+                    {
+                        NewValue in
+                        Settings.SetInt(.SampleImageBackground, NewValue)
+                    }
+                }
                 
                 Divider()
                     .background(Color.black)
