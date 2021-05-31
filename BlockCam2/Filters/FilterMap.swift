@@ -58,6 +58,7 @@ extension Filters
         FilterMap[.ColorMap] = BlockCam2.ColorMap()
         FilterMap[.Threshold] = BlockCam2.Threshold()
         FilterMap[.BayerDecode] = BlockCam2.BayerDecode()
+        FilterMap[.ColorRange] = BlockCam2.ColorRange()
         return FilterMap
     }
     
@@ -215,6 +216,7 @@ extension Filters
         FilterMap[.Reflect] = BlockCam2.Reflect()
         FilterMap[.QuadrantTest] = BlockCam2.QuadrantTest()
         FilterMap[.MatrixTest] = BlockCam2.Passthrough()
+        FilterMap[.MetalCheckerboard] = BlockCam2.MetalCheckerboard()
         return FilterMap
     }
     
@@ -276,8 +278,10 @@ extension Filters
                 case .NonLiveView:
                     FilterData = MakeNonLiveFilters()
                     
+                    #if DEBUG
                 case .Test:
                     FilterData = MakeTestFilters()
+                    #endif
             }
             if let Final = FilterData
             {
@@ -364,139 +368,4 @@ extension Filters
     }
 }
 
-/// Used to specify optional values for filters. Interpretation of filter options depends on the individual
-/// filter.
-enum FilterOptions: String
-{
-    case Radius = "Radius"
-    case Center = "Center"
-    case Angle = "Angle"
-    case Scale = "Scale"
-    case Zoom = "Zoom"
-    case Rotation = "Roation"
-    case Periodicity = "Periodicity"
-    case Sharpness = "Sharpness"
-    case Width = "Width"
-    case Height = "Height"
-    case ExposureValue = "ExposureValue"
-    case Color = "Color"
-    case Color0 = "Color0"
-    case Color1 = "Color1"
-    case LowColor = "LowColor"
-    case HighColor = "HighColor"
-    case GrayscaleFilter = "GrayscaleFilter"
-    case Count = "Count"
-    case Contrast = "Contrast"
-    case Threshold = "Threshold"
-    case ThresholdInput = "ThresholdInput"
-    case ApplyIfHigher = "ApplyIfHigher"
-    case EdgeIntensity = "EdgeIntensity"
-    case NRNoiseLevel = "NRNoiseLevel"
-    case NRSharpness = "NRSharpness"
-    case Levels = "Levels"
-    case Point = "Point"
-    case Amount = "Amount"
-    case Point1 = "Point1"
-    case Point2 = "Point2"
-    case Strands = "Strands"
-    case Intensity = "Intensity"
-    case Size = "Size"
-    case Merge = "Merge"
-    case GradientColor0 = "GradientColor0"
-    case GradientColor1 = "GradientColor1"
-    case GradientPoint0 = "GradientPoint0"
-    case GradientPoint1 = "GradientPoint1"
-    case GradientDefinition = "GradientDefinition"
-    case ChainedFilters = "ChainedFilters"
-    case ShaderBias = "ShaderBias"
-    case ErodeWidth = "ErodeWidth"
-    case ErodeHeight = "ErodeHeight"
-    case DilateWidth = "DilateWidth"
-    case DilateHeight = "DilateHeight"
-    case EmbossType = "EmbossType"
-    case MedianDiameter = "MedianDiameter"
-    case DitherIntensity = "DitherIntensity"
-    case Power = "Power"
-    case Brightness = "Brightness"
-    case Saturation = "Saturation"
-    case HorizontalMirrorSide = "HorizontalMirrorSide"
-    case VerticalMirrorSide = "VerticalMirrorSide"
-    case MirrorQuadrant = "MirrorQuadrant"
-    case SourceIsAV = "SourceIsAV"
-    case Invert = "Invert"
-    case Decay = "Decay"
-    case FilterName = "FilterName"
-    case Hue = "Hue"
-    case ChangeHue = "ChangeHue"
-    case ChangeSaturation = "ChangeSaturation"
-    case ChangeBrightness = "ChangeBrightness"
-    case BackgroundFill = "BackgroundFill"
-    case Matrix = "Matrix"
-    case Bias = "Bias"
-    case IntCommand = "IntCommand"
-    case RedMultiplier = "RedMultiplier"
-    case GreenMultiplier = "GreenMultiplier"
-    case BlueMultiplier = "BlueMultiplier"
-    case CIColorSpace = "CIColorSpace"
-    case CIInvert1 = "CIInvert1"
-    case CIInvert2 = "CIInvert2"
-    case CIInvert3 = "CIInvert3"
-    case CIInvert4 = "CIInvert4"
-    case CIEnableThreshold1 = "CIEnableThreshold1"
-    case CIEnableThreshold2 = "CIEnableThreshold2"
-    case CIEnableThreshold3 = "CIEnableThreshold3"
-    case CIEnableThreshold4 = "CIEnableThreshold4"
-    case CIThreshold1 = "CIThreshold1"
-    case CIThreshold2 = "CIThreshold2"
-    case CIThreshold3 = "CIThreshold3"
-    case CIThreshold4 = "CIThreshold4"
-    case CIInvert1IfGreater = "CIInvert1IfGreater"
-    case CIInvert2IfGreater = "CIInvert2IfGreater"
-    case CIInvert3IfGreater = "CIInvert3IfGreater"
-    case CIInvert4IfGreater = "CIInvert4IfGreater"
-    case CIInvertAlpha = "CIInvertAlpha"
-    case CIInvertAlphaThreshold = "CIInvertAlphaThreshold"
-    case CIAlphaThreshold = "CIAlphaThreshold"
-    case CIAlphaInvertIfGreater = "CIAlphaInvertIfGreater"
-    case CSTrigger = "CSTrigger"
-    case CSHueThreshold = "CSHueThreshold"
-    case CSHueRange = "CSHueRange"
-    case CSSatThreshold = "CSSatThreshold"
-    case CSSatRange = "CSSatRange"
-    case CSBriThreshold = "CSBriThreshold"
-    case CSBriRange = "CSBriRange"
-    case CSGreaterThan = "CSGreaterThan"
-    case CSColor = "CSColor"
-    case Channel1 = "Channel1"
-    case Channel2 = "Channel2"
-    case Channel3 = "Channel3"
-    case InvertChannel1 = "InvertChannel1"
-    case InvertChannel2 = "InvertChannel2"
-    case InvertChannel3 = "InvertChannel3"
-    case Order = "Order"
-    case Method = "Method"
-    case ThresholdAllLow = "ThresholdAllLow"
-    case ThresholdAllHigh = "ThresholdAllHigh"
-    case LowHue = "LowHue"
-    case HighHue = "HighHue"
-    case BrightnessThresholdLow = "BrightnessThresholdLow"
-    case BrightnessThresholdHigh = "BrightnessThresholdHigh"
-    case SaturationThresholdLow = "SaturationThreshold"
-    case SaturationThresholdHigh = "SaturationThresholdHigh"
-    case IsGreater = "IsGreater"
-    case OnlyChannel = "OnlyChannel"
-    case BumpRadius = "BumpRadius"
-    case TwirlRadius = "TwirlRadius"
-    case UseEffective = "UseEffective"
-    case EffectiveColor = "EffectiveColor"
-    case BGColor = "BGColor"
-    
-    case HAction = "HAction"
-    case VAction = "VAction"
-    case By = "By"
-    case ColorDetermination = "ColorDetermination"
-    case Highlight = "Highlight"
-    case ShowBorder = "ShowBorder"
-    case BorderColor = "BorderColor"
-}
 
