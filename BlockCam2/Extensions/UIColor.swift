@@ -288,6 +288,16 @@ extension UIColor
         return Result
     }
     
+    /// Convert a SIMD float4 structure into a UIColor.
+    /// - Parameter Float4: The SIMD float4 structure whose values will be converted into a UIColor.
+    /// - Returns: UIColor equivalent of the passed SIMD float4 set of values.
+    static func From(Float4: simd_float4) -> UIColor
+    {
+        let NewColor = UIColor(red: CGFloat(Float4.w), green: CGFloat(Float4.x),
+                               blue: CGFloat(Float4.y), alpha: CGFloat(Float4.z))
+        return NewColor
+    }
+    
     /// Determines the instance color is the same as the passed color. Both the instance color and the passed
     /// color channels are converted to integers before being compared.
     /// - Parameter As: The color to compare to the instance color.
