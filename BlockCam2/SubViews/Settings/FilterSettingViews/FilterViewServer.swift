@@ -80,6 +80,20 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.MetalCheckerboard.rawValue:
+                SettingsContainer
+                {
+                    CheckerboardGenerator_View(ButtonCommand: $UICommand) 
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
+            case BuiltInFilters.ColorRange.rawValue:
+                SettingsContainer
+                {
+                    ColorRangeFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.ImageDelta.rawValue:
                 SettingsContainer
                 {
