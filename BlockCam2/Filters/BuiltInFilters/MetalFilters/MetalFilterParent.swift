@@ -12,8 +12,10 @@ import Metal
 import CoreMedia
 import CoreVideo
 import CoreImage
+import simd
 
 typealias ReturnBufferType = CFloat
+typealias ColorReturnType = simd_float4
 
 class MetalFilterParent
 {
