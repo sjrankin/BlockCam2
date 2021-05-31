@@ -42,6 +42,8 @@ class MetalFilterParent
                                                  BufferSize: PreviousSize!)
         guard BasePool != nil else
         {
+            print("Format=\(Format)")
+            print("PreviousSize=\(PreviousSize!)")
             Debug.FatalError("Error create base buffer pool.")
         }
     }
@@ -170,6 +172,9 @@ class MetalFilterParent
         }
     }
     
+    /// Returns a pixel buffer from the passed `CIImage`.
+    /// - Parameter Image: The `CIImage` used as the source of the returned `CVPixelBuffer`.
+    /// - Returns: The contents of `Image` as a `CVPixelBuffer` on success, nil on error.
     static func GetPixelBufferFrom(_ Image: CIImage) -> CVPixelBuffer?
     {
         let Attributes = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
@@ -185,11 +190,11 @@ class MetalFilterParent
         CVPixelBufferLockBaseAddress(PixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
         if let PixelData = CVPixelBufferGetBaseAddress(PixelBuffer!)
         {
-        let RGBSpace = CGColorSpaceCreateDeviceRGB()
-         let Context = CIContext()
-        Context.render(Image, to: PixelBuffer!)
-        
-        return PixelBuffer
+            let RGBSpace = CGColorSpaceCreateDeviceRGB()
+            let Context = CIContext()
+            Context.render(Image, to: PixelBuffer!)
+            
+            return PixelBuffer
         }
         return nil
     }
@@ -377,6 +382,8 @@ class MetalFilterParent
     // MARK: Common pixel buffer allocation functions.
     
     /// Create a buffer pool with the suggested number of entries and passed format.
+    /// - Warning: The sub type of the passed format is not checked.
+    /// - Warning: Fatal errors are thrown on API call failures.
     /// - Parameters:
     ///   - From: Format to use for the buffer.
     ///   - BufferCountHint: Suggested number of entries in the buffer pool.
@@ -387,13 +394,14 @@ class MetalFilterParent
     func CreateBufferPool(From: CMFormatDescription, BufferCountHint: Int, BufferSize: CGSize? = nil) ->
     (BufferPool: CVPixelBufferPool?, ColorSpace: CGColorSpace?, FormatDescription: CMFormatDescription?)
     {
+        /*
         let InputSubType = CMFormatDescriptionGetMediaSubType(From)
         if InputSubType != kCVPixelFormatType_32BGRA
         {
             print("Invalid pixel buffer type \(InputSubType)")
             return (nil, nil, nil)
         }
-        
+        */
         var Width: Int = 0
         var Height: Int = 0
         if let PassedSize = BufferSize
@@ -412,7 +420,7 @@ class MetalFilterParent
         var PixelBufferAttrs: [String: Any] =
             [
                 kCVPixelBufferMetalCompatibilityKey as String: kCFBooleanTrue,
-                kCVPixelBufferPixelFormatTypeKey as String: UInt(InputSubType),
+                kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,//UInt(InputSubType),
                 kCVPixelBufferWidthKey as String: Width,
                 kCVPixelBufferHeightKey as String: Height,
                 kCVPixelBufferIOSurfacePropertiesKey as String: [:]
@@ -456,8 +464,7 @@ class MetalFilterParent
                                 &CVPixBufPool)
         guard let BufferPool = CVPixBufPool else
         {
-            print("Allocation failure - could not allocate pixel buffer pool.")
-            return (nil, nil, nil)
+            Debug.FatalError("Allocation failure - unable to allocate pixel buffer pool.")
         }
         
         PreAllocateBuffers(Pool: BufferPool, AllocationThreshold: BufferCountHint)
