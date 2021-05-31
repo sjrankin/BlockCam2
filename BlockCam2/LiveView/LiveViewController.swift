@@ -152,7 +152,7 @@ class LiveViewController: UIViewController,
         {
             if let Filter = BuiltInFilters(rawValue: FilterName)
             {
-                FilteredStillImage = Filters.RunFilter(On: Image, Filter: Filter)
+                FilteredStillImage = Filters.RunFilter(On: Image, Filter: Filter, ApplyBackground: false)
                 StillImageView?.image = FilteredStillImage
                 ImageToExport = FilteredStillImage
                 return
@@ -176,7 +176,7 @@ class LiveViewController: UIViewController,
         {
             if let Filter = BuiltInFilters(rawValue: FilterName)
             {
-                FilteredStillImage = Filters.RunFilter(On: StillImage!, Filter: Filter)
+                FilteredStillImage = Filters.RunFilter(On: StillImage!, Filter: Filter, ApplyBackground: false)
                 StillImageView?.image = FilteredStillImage
                 return
             }
