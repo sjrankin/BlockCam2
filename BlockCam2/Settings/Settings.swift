@@ -109,79 +109,25 @@ class Settings
     
     // MARK: - Filter management.
     
+    /// Resets the current filter (found in the settings in `.CurrentFilter`) to its
+    /// default values as defined in each filter.
+    /// - Warning: Throws a fatal error if the name of the filter in `.CurrentFilter` is
+    ///            not valid.
+    /// - Important: This function depends on each filter having a different type and implementing
+    ///              the `BuiltInFilterProtocol`.
     public static func ResetCurrentFilter()
     {
-       if let FilterToReset = Settings.GetString(.CurrentFilter)
-       {
-        switch FilterToReset
+        if let FilterToReset = Settings.GetString(.CurrentFilter)
         {
-            case BuiltInFilters.UnsharpMask.rawValue:
-                UnsharpMask.ResetFilter()
-                
-            case BuiltInFilters.TwirlDistortion.rawValue:
-                TwirlDistortion.ResetFilter()
-            
-            case BuiltInFilters.EdgeWork.rawValue:
-                EdgeWork.ResetFilter()
-                
-            case BuiltInFilters.Sepia.rawValue:
-                Sepia.ResetFilter()
-            
-            case BuiltInFilters.BumpDistortion.rawValue:
-                BumpDistortion.ResetFilter()
-                
-            case BuiltInFilters.CircleSplashDistortion.rawValue:
-                CircleSplashDistortion.ResetFilter()
-                
-            case BuiltInFilters.CMYKHalftone.rawValue:
-                CMYKHalftone.ResetFilter()
-                
-            case BuiltInFilters.ColorControls.rawValue:
-                ColorControls.ResetFilter()
-                
-            case BuiltInFilters.ColorMap.rawValue:
-                ColorMap.ResetFilter()
-                
-            case BuiltInFilters.ColorMonochrome.rawValue:
-                ColorMonochrome.ResetFilter()
-                
-            case BuiltInFilters.Dither.rawValue:
-                Dither.ResetFilter()
-                
-            case BuiltInFilters.DotScreen.rawValue:
-                DotScreen.ResetFilter()
-                
-            case BuiltInFilters.Droste.rawValue:
-                Droste.ResetFilter()
-                
-            case BuiltInFilters.Edges.rawValue:
-                Edges.ResetFilter()
-                
-            case BuiltInFilters.ExposureAdjust.rawValue:
-                ExposureAdjust.ResetFilter()
-                
-            case BuiltInFilters.HueAdjust.rawValue:
-                HueAdjust.ResetFilter()
-                
-            case BuiltInFilters.HSB.rawValue:
-                HSB.ResetFilter()
-                
-            case BuiltInFilters.Kaleidoscope.rawValue:
-                Kaleidoscope.ResetFilter()
-                
-            case BuiltInFilters.Mirroring2.rawValue:
-                Mirror2.ResetFilter()
-                
-            case BuiltInFilters.TriangleKaleidoscope.rawValue:
-                TriangleKaleidoscope.ResetFilter()
-                
-            case BuiltInFilters.Vibrance.rawValue:
-                Vibrance.ResetFilter()
-                
-            default:
-                break
+            guard let ActualFilter = BuiltInFilters(rawValue: FilterToReset) else
+            {
+                Debug.FatalError("Unexpected filter \"\(FilterToReset)\" found.")
+            }
+            if let FilterToReset = Filters.FilterFromTree(ActualFilter)
+            {
+                type(of: FilterToReset).ResetFilter()
+            }
         }
-       }
     }
 }
 
