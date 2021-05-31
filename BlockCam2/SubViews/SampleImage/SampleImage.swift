@@ -27,6 +27,12 @@ struct SampleImage: View
                 .frame(alignment: .center)
                 .font(.subheadline)
                 .foregroundColor(.gray)
+            ZStack
+            {
+                Image(uiImage: UIImage())
+                    .resizable()
+                    .border(Color.black, width: 0.5)
+                    .frame(alignment: .center)
             Image(uiImage: Filters.RunFilter(On: UIImage(named: $ImageName.wrappedValue)!,
                                              Filter: Filter)!)
                 .resizable()
@@ -92,15 +98,18 @@ struct SampleImage: View
                                 .cancel(),
                                 .default(Text("Save Original"))
                                 {
+                                    Settings.SetString(.SampleImageFilter, Filter.rawValue)
                                     self.UICommand = UICommands.SaveOriginalSample.rawValue
                                 },
                                 .default(Text("Save Filtered"))
                                 {
+                                    Settings.SetString(.SampleImageFilter, Filter.rawValue)
                                     self.UICommand = UICommands.SaveFilteredSample.rawValue
                                 }
                             ]
                     )
                 }
+            }
             #if os(iOS)
             HStack
             {
@@ -123,6 +132,7 @@ struct SampleImage: View
             }
             #endif
         }
+        .frame(alignment: .center)
         .alert(isPresented: $ShowAttribution)
         {
             Alert(title: Text("Attribution"),
@@ -138,6 +148,9 @@ struct SampleImage_Preview: PreviewProvider
     
     static var previews: some View
     {
-        SampleImage(UICommand: $NotUsed, Filter: .Passthrough, Updated: false)
+        SampleImage(UICommand: $NotUsed,
+                    Filter: .Passthrough,
+                    Updated: false)
+            .frame(width: 400, height: 400)
     }
 }
