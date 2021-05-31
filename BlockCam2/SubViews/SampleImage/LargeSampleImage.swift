@@ -102,10 +102,12 @@ struct LargeSampleImage: View
                                         .cancel(),
                                         .default(Text("Save Original"))
                                         {
+                                            Settings.SetString(.SampleImageFilter, Filter.rawValue)
                                             self.UICommand = UICommands.SaveOriginalSample.rawValue
                                         },
                                         .default(Text("Save Filtered"))
                                         {
+                                            Settings.SetString(.SampleImageFilter, Filter.rawValue)
                                             self.UICommand = UICommands.SaveFilteredSample.rawValue
                                         },
                                         .default(Text("Show Attribution"))
