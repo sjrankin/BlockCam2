@@ -33,6 +33,8 @@ extension Settings
             .UserSampleList: String.self,
             .UseSampleImages: Bool.self,
             .SubSampleScratchKey: Int.self,
+            .SampleImageFilter: String.self,
+            .SampleImageBackground: Int.self,
             
             // MARK: - Filter settings.
             .CurrentFilter: String.self,
@@ -258,5 +260,22 @@ extension Settings
             .ImageDeltaSubImage1: Int.self,
             .ImageDeltaUseEffectiveColor: Bool.self,
             .ImageDeltaEffectiveColor: UIColor.self,
+            
+            // MARK: - Color range filter.
+            .ColorRangeStart: Double.self,
+            .ColorRangeEnd: Double.self,
+            .ColorRangeInvertRange: Bool.self,
+            .ColorRangeOutOfRangeAction: Int.self,
+            .ColorRangeOutOfRangeColor: UIColor.self,
+            .ColorRangePredefinedRangesIndex: Int.self,
+            
+            // MARK: - Metal checkerboard.
+            .MCheckerCheckSize: Int.self,
+            .MCheckerWidth: Int.self,
+            .MCheckerHeight: Int.self,
+            .MCheckerColor0: UIColor.self,
+            .MCheckerColor1: UIColor.self,
+            .MCheckerColor2: UIColor.self,
+            .MCheckerColor3: UIColor.self,
         ]
 }
