@@ -103,4 +103,27 @@ extension Settings
         UserDefaults.standard.set(Value.Hex, forKey: Setting.rawValue)
         NotifySubscribers(Setting: Setting, OldValue: OldValue, NewValue: Value)
     }
+    
+    /// Set the default value for the passed setting.
+    /// - Warning: Throws a fatal error if
+    ///   - `For` points to a non-UIColor setting.
+    ///   - There is no default value.
+    /// - Note:
+    ///    - Default values must exist in the `SettingDefaults` dictionary under the same key name
+    ///      as passed in `For`.
+    ///    - Subscribers are notified from `SetColor`.
+    /// - Parameter For: The setting key that will be assigned its default value.
+    public static func SetColorDefault(For: SettingKeys)
+    {
+        guard TypeIsValid(For, Type: UIColor.self) else
+        {
+            Debug.FatalError("\(For) is not a UIColor")
+        }
+        
+        guard let DefaultValue = SettingDefaults[For] as? UIColor else
+        {
+            Debug.FatalError("\(For) has no default setting.")
+        }
+        SetColor(For, DefaultValue)
+    }
 }
