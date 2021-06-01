@@ -233,6 +233,8 @@ extension Settings
             .MetalPixInvertThreshold: false,
             .MetalPixShowBorder: false,
             .MetalPixBorderColor: UIColor.black,
+            .MetalPixBGColor: UIColor.black,
+            .MetalPixShape: 0,
             
             // MARK: - Twirl bump distortion
             .TwirlBumpTwirlRadius: 1000.0,
@@ -281,5 +283,8 @@ extension Settings
             .MCheckerColor1: UIColor.white,
             .MCheckerColor2: UIColor.black,
             .MCheckerColor3: UIColor.white,
+            
+            // MARK: - Simple inversion.
+            .SimpleInversionChannel: 0,
         ]
 }
