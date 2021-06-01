@@ -483,6 +483,7 @@ class Filters
             .MultiFrameCombiner: "Combine frames together",
             .TrailingFrames: "Video-only time-based frame combining.",
             .ColorRange: "Show colors in a specified range of colors, de-emphasizing the rest.",
+            .SimpleInversion: "Invert a single color channel in the image."
         ]
 }
 
@@ -604,7 +605,7 @@ enum BuiltInFilters: String, CaseIterable
     case AreaMax = "Area Max"
     case Convolution = "Convolution"
     case MetalGrayscale = "Grayscale 2"
-    case ChannelMangler = "Channels"
+    case ChannelMangler = "Channel Mangler"
     case ConditionalSilhouette = "Conditional Silhouette"
     case ChannelMixer = "Channel Mixer"
     case BayerDecode = "Bayer Decode"
@@ -618,6 +619,7 @@ enum BuiltInFilters: String, CaseIterable
     case MultiFrameCombiner = "Frame Combiner"
     case TrailingFrames = "Trailing Frames"
     case ColorRange = "Color Range"
+    case SimpleInversion = "Simple Inversion"
     
     //Internal filters
     case Crop = "Crop"
