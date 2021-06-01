@@ -32,6 +32,7 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
     var Initialized = false
     var ParameterBuffer: MTLBuffer! = nil
     
+    /*
     required override init()
     {
         let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
@@ -45,6 +46,7 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
             print("Unable to create pipeline state: \(error.localizedDescription)")
         }
     }
+ */
     
     private var BufferPool: CVPixelBufferPool? = nil
     
@@ -86,14 +88,24 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
     
     var AccessLock = NSObject()
     
-    func RunFilter0(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
-                   _ ColorSpace: CGColorSpace, Options: [FilterOptions: Any]) -> CVPixelBuffer
+    func MakePixelList(_ Buffer: CVPixelBuffer, Options: [FilterOptions: Any]) -> [UIColor]
     {
         objc_sync_enter(AccessLock)
         defer{objc_sync_exit(AccessLock)}
         if !Initialized
         {
             fatalError("Pixellate_Metal not initialized at Render(CVPixelBuffer) call.")
+        }
+        
+        let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
+        let KernelFunction = DefaultLibrary?.makeFunction(name: "PixelBlockColor")
+        do
+        {
+            ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
+        }
+        catch
+        {
+            Debug.FatalError("Unable to create pipeline state: \(error.localizedDescription)")
         }
         
         let FinalWidth = Options[.Width] as! Int
@@ -116,32 +128,20 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
                                                 HighlightValue: simd_float1(HValue),
                                                 HighlightIfGreater: simd_bool(HIfGreat),
                                                 AddBorder: simd_bool(ShowBorder),
-                                                BorderColor: BorderColor.ToFloat4())
+                                                BorderColor: BorderColor.ToFloat4(),
+                                                BGColor: UIColor.black.ToFloat4())
         let Parameters = [ParameterData]
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<BlockInfoParameters>.stride, options: [])
         memcpy(ParameterBuffer?.contents(), Parameters, MemoryLayout<BlockInfoParameters>.stride)
         
         let ResultCount = 10
-        let ResultsBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ReturnBufferType>.stride * ResultCount, options: [])
-        let Results = UnsafeBufferPointer<ReturnBufferType>(start: UnsafePointer(ResultsBuffer!.contents().assumingMemoryBound(to: ReturnBufferType.self)),
+        let ResultsBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ColorReturnType>.stride * ResultCount, options: [])
+        let Results = UnsafeBufferPointer<ColorReturnType>(start: UnsafePointer(ResultsBuffer!.contents().assumingMemoryBound(to: ColorReturnType.self)),
                                                             count: ResultCount)
         
-        super.CreateBufferPool(Source: CIImage(cvPixelBuffer: Buffer.first!), From: Buffer.first!)
-        var NewPixelBuffer: CVPixelBuffer? = nil
-        CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, super.BasePool!, &NewPixelBuffer)
-        guard var OutputBuffer = NewPixelBuffer else
+        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer, TextureFormat: .bgra8Unorm) else
         {
-            fatalError("Error creation textures for MetalPixellate.")
-        }
-        
-        guard let InputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: Buffer.first!, TextureFormat: .bgra8Unorm) else
-        {
-            Debug.FatalError("Error creating input texture in MetalPixellate.")
-        }
-        
-        guard let OutputTexture = MakeTextureFromCVPixelBuffer(PixelBuffer: OutputBuffer, TextureFormat: .bgra8Unorm) else
-        {
-            Debug.FatalError("Error creating output texture in MetalPixellate.")
+            Debug.FatalError("Error creating input texture in MakePixelList.")
         }
         
         guard let CommandQ = CommandQueue,
@@ -151,10 +151,9 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
             Debug.FatalError("Error creating Metal command queue.")
         }
         
-        CommandEncoder.label = "Pixellate Metal"
+        CommandEncoder.label = "Pixellation Counter"
         CommandEncoder.setComputePipelineState(ComputePipelineState!)
         CommandEncoder.setTexture(InputTexture, index: 0)
-        CommandEncoder.setTexture(OutputTexture, index: 1)
         CommandEncoder.setBuffer(ParameterBuffer, offset: 0, index: 0)
         CommandEncoder.setBuffer(ResultsBuffer, offset: 0, index: 1)
         
@@ -169,14 +168,14 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
         CommandBuffer.commit()
         CommandBuffer.waitUntilCompleted()
         
-        if (Options[.Merge] as? Bool ?? false)
+        var Colors = [UIColor]()
+        for RawResult in Results
         {
-            let MaskFilter = Masking1()
-            MaskFilter.Initialize(With: InputFormatDescription!, BufferCountHint: 3)
-            OutputBuffer = MaskFilter.RenderWith(PixelBuffer: Buffer, And: OutputBuffer)!
+            let SomeColor = UIColor.From(Float4: RawResult)
+            Colors.append(SomeColor)
         }
         
-        return OutputBuffer
+        return Colors
     }
     
     func RunFilter(_ Buffer: [CVPixelBuffer], _ BufferPool: CVPixelBufferPool,
@@ -187,6 +186,31 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
         if !Initialized
         {
             fatalError("Pixellate_Metal not initialized at Render(CVPixelBuffer) call.")
+        }
+        
+        let Shape = Options[.Shape] as! Int
+        var KernelName = ""
+        switch Shape
+        {
+            case 0:
+                KernelName = "PixellateKernel"
+                
+            case 1:
+                KernelName = "PixelCircle"
+                
+            default:
+                KernelName = "PixellateKernel"
+        }
+        
+        let DefaultLibrary = MetalDevice?.makeDefaultLibrary()
+        let KernelFunction = DefaultLibrary?.makeFunction(name: KernelName)
+        do
+        {
+            ComputePipelineState = try MetalDevice?.makeComputePipelineState(function: KernelFunction!)
+        }
+        catch
+        {
+            print("Unable to create pipeline state: \(error.localizedDescription)")
         }
         
         let FinalWidth = Options[.Width] as! Int
@@ -209,7 +233,8 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
                                                 HighlightValue: simd_float1(HValue),
                                                 HighlightIfGreater: simd_bool(HIfGreat),
                                                 AddBorder: simd_bool(ShowBorder),
-                                                BorderColor: BorderColor.ToFloat4())
+                                                BorderColor: BorderColor.ToFloat4(),
+                                                BGColor: UIColor.black.ToFloat4())
         let Parameters = [ParameterData]
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<BlockInfoParameters>.stride, options: [])
         memcpy(ParameterBuffer?.contents(), Parameters, MemoryLayout<BlockInfoParameters>.stride)
@@ -273,12 +298,7 @@ class MetalPixellate: MetalFilterParent, BuiltInFilterProtocol
             OutputBuffer = MaskFilter.RenderWith(PixelBuffer: Buffer, And: OutputBuffer)!
         }
         
-        var Colors = [UIColor]()
-        for RawResult in Results
-        {
-            let SomeColor = UIColor.From(Float4: RawResult)
-            Colors.append(SomeColor)
-        }
+
         
         return OutputBuffer
     }
