@@ -48,7 +48,7 @@ struct ChannelManglerFilter_View: View
                                 Settings.SetInt(.ChannelManglerOperation, Value)
                                 Updated.toggle()
                             }
-                            .pickerStyle(MenuPickerStyle())
+                            .pickerStyle(WheelPickerStyle())
                         }
                     }
                     .padding()
