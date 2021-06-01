@@ -175,4 +175,31 @@ extension Settings
     {
         return AllBools(InList, Are: false)
     }
+    
+    /// Set the default value for the passed setting.
+    /// - Warning: Throws a fatal error if
+    ///   - `For` points to a non-boolean setting.
+    ///   - There is no default value.
+    /// - Note:
+    ///    - Default values must exist in the `SettingDefaults` dictionary under the same key name
+    ///      as passed in `For`.
+    ///    - Subscribers are notified of changes.
+    /// - Parameter For: The setting key that will be assigned its default value.
+    public static func SetBoolDefault(For: SettingKeys)
+    {
+        guard TypeIsValid(For, Type: Bool.self) else
+        {
+            Debug.FatalError("\(For) is not a boolean")
+        }
+        
+        guard let DefaultValue = SettingDefaults[For] as? Bool else
+        {
+            Debug.FatalError("\(For) has no default setting.")
+        }
+        
+        let OldValue = UserDefaults.standard.bool(forKey: For.rawValue)
+        let NewValue = DefaultValue
+        UserDefaults.standard.set(DefaultValue, forKey: For.rawValue)
+        NotifySubscribers(Setting: For, OldValue: OldValue, NewValue: NewValue)
+    }
 }
