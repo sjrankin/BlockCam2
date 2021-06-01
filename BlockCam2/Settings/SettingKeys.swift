@@ -374,6 +374,10 @@ enum SettingKeys: String, CaseIterable
     case MetalPixShowBorder = "MetalPixShowBorder"
     /// UIColor: The border color if `MetalPixShowBorder` is true.
     case MetalPixBorderColor = "MetalPixBorderColor"
+    /// UIColor: Background color for when shapes are used that leave gaps.
+    case MetalPixBGColor = "MetalPixBGColor"
+    /// Integer: Determines the shape of the pixel.
+    case MetalPixShape = "MetalPixShape"
     
     // MARK: - Twirl bump distortion
     /// Double: Radius for the twirl.
@@ -454,4 +458,8 @@ enum SettingKeys: String, CaseIterable
     case MCheckerColor2 = "MCheckerColor2"
     /// UIColor: Lower-left color.
     case MCheckerColor3 = "MCheckerColor3"
+    
+    // MARK: - Simple inversion
+    /// Integer: Determines which channel to invert.
+    case SimpleInversionChannel = "SimpleInversionChannel"
 }
