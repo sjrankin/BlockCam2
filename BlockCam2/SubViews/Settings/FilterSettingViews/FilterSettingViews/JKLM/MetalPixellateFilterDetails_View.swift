@@ -13,6 +13,7 @@ struct MetalPixellateFilterDetails_View: View
     @Binding var ButtonCommand: String
     @EnvironmentObject var Changed: ChangedSettings
     @State var Updated: Bool = false
+    @State var PixelShape: Int = Settings.GetInt(.MetalPixShape)
     @State var InvertThreshold: Bool = Settings.GetBool(.MetalPixInvertThreshold)
     @State var HighlightPixel: Int = Settings.GetInt(.MetalPixHighlightPixel)
     @State var HighlightThreshold: Double = Settings.GetDouble(.MetalPixThreshold, 0.5)
@@ -160,6 +161,35 @@ struct MetalPixellateFilterDetails_View: View
                         }
                     }
                     .padding()
+                    
+                    Divider()
+                        .background(Color.black)
+                    
+                    VStack(alignment: .leading)
+                    {
+                        Text("Shape")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                            .frame(width: Geometry.size.width * 0.8,
+                                   alignment: .leading)
+                        Text("Shape of the pixel")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .frame(width: Geometry.size.width * 0.8,
+                                   alignment: .leading)
+                        Picker("", selection: $PixelShape)
+                        {
+                            Text("Rectangular").tag(0)
+                            Text("Circular").tag(1)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .onChange(of: PixelShape)
+                        {
+                            NewValue in
+                            Settings.SetInt(.MetalPixShape, NewValue)
+                            Updated.toggle()
+                        }
+                    }.padding()
                     
                     Divider()
                         .background(Color.black)
