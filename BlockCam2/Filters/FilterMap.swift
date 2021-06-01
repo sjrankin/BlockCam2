@@ -59,6 +59,7 @@ extension Filters
         FilterMap[.Threshold] = BlockCam2.Threshold()
         FilterMap[.BayerDecode] = BlockCam2.BayerDecode()
         FilterMap[.ColorRange] = BlockCam2.ColorRange()
+        FilterMap[.SimpleInversion] = BlockCam2.SimpleInversion()
         return FilterMap
     }
     
