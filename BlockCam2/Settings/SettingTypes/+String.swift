@@ -88,4 +88,31 @@ extension Settings
         UserDefaults.standard.set(NewValue, forKey: Setting.rawValue)
         NotifySubscribers(Setting: Setting, OldValue: OldValue, NewValue: NewValue)
     }
+    
+    /// Set the default value for the passed setting.
+    /// - Warning: Throws a fatal error if
+    ///   - `For` points to a non-string setting.
+    ///   - There is no default value.
+    /// - Note:
+    ///    - Default values must exist in the `SettingDefaults` dictionary under the same key name
+    ///      as passed in `For`.
+    ///    - Subscribers are notified of changes.
+    /// - Parameter For: The setting key that will be assigned its default value.
+    public static func SetStringDefault(For: SettingKeys)
+    {
+        guard TypeIsValid(For, Type: String.self) else
+        {
+            Debug.FatalError("\(For) is not a string")
+        }
+        
+        guard let DefaultValue = SettingDefaults[For] as? String else
+        {
+            Debug.FatalError("\(For) has no default setting.")
+        }
+        
+        let OldValue = UserDefaults.standard.string(forKey: For.rawValue)
+        let NewValue = DefaultValue
+        UserDefaults.standard.set(DefaultValue, forKey: For.rawValue)
+        NotifySubscribers(Setting: For, OldValue: OldValue, NewValue: NewValue)
+    }
 }
