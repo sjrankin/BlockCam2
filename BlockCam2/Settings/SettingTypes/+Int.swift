@@ -136,4 +136,31 @@ extension Settings
         UserDefaults.standard.set(OldValue, forKey: Setting.rawValue)
         return OldValue
     }
+    
+    /// Set the default value for the passed setting.
+    /// - Warning: Throws a fatal error if
+    ///   - `For` points to a non-integer setting.
+    ///   - There is no default value.
+    /// - Note:
+    ///    - Default values must exist in the `SettingDefaults` dictionary under the same key name
+    ///      as passed in `For`.
+    ///    - Subscribers are notified of changes.
+    /// - Parameter For: The setting key that will be assigned its default value.
+    public static func SetIntDefault(For: SettingKeys)
+    {
+        guard TypeIsValid(For, Type: Int.self) else
+        {
+            Debug.FatalError("\(For) is not an integer")
+        }
+        
+        guard let DefaultValue = SettingDefaults[For] as? Int else
+        {
+            Debug.FatalError("\(For) has no default setting.")
+        }
+        
+        let OldValue = UserDefaults.standard.integer(forKey: For.rawValue)
+        let NewValue = DefaultValue
+        UserDefaults.standard.set(DefaultValue, forKey: For.rawValue)
+        NotifySubscribers(Setting: For, OldValue: OldValue, NewValue: NewValue)
+    }
 }
