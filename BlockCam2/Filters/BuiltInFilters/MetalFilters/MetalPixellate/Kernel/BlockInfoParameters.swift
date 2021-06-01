@@ -21,4 +21,5 @@ struct BlockInfoParameters
     let HighlightIfGreater: simd_bool
     let AddBorder: simd_bool
     let BorderColor: simd_float4
+    let BGColor: simd_float4
 }
