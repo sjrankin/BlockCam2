@@ -80,6 +80,13 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.SimpleInversion.rawValue:
+                SettingsContainer
+                {
+                    SimpleInversionFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.MetalCheckerboard.rawValue:
                 SettingsContainer
                 {
