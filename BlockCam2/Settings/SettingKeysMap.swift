@@ -229,6 +229,8 @@ extension Settings
             .MetalPixInvertThreshold: Bool.self,
             .MetalPixShowBorder: Bool.self,
             .MetalPixBorderColor: UIColor.self,
+            .MetalPixBGColor: UIColor.self,
+            .MetalPixShape: Int.self,
             
             // MARK: - Twirl bump distortion
             .TwirlBumpTwirlRadius: Double.self,
@@ -277,5 +279,8 @@ extension Settings
             .MCheckerColor1: UIColor.self,
             .MCheckerColor2: UIColor.self,
             .MCheckerColor3: UIColor.self,
+            
+            // MARK: - Simple inversion.
+            .SimpleInversionChannel: Int.self,
         ]
 }
