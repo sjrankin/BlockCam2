@@ -232,7 +232,7 @@ extension Filters
             let FinalOptions = GetOptions(For: FilterToUse)
             let FinalBuffer = FilterInTree.RunFilter(Buffers,
                                                      BufferPool!,
-                                                     ColorSpace!,
+                                                     CGColorSpaceCreateDeviceRGB(),
                                                      Options: FinalOptions)
             #endif
             return FinalBuffer
@@ -451,7 +451,7 @@ extension Filters
             let FinalOptions = GetOptions(For: FilterToUse)
             let FinalBuffer = FilterInTree.RunFilter([Buffer],
                                                      BufferPool!,
-                                                     ColorSpace!,
+                                                     CGColorSpaceCreateDeviceRGB(),
                                                      Options: FinalOptions)
             #endif
             return FinalBuffer
