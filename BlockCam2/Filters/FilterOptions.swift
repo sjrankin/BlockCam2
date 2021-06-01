@@ -34,6 +34,9 @@ extension Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .SimpleInversion:
+                Options[.Invert] = Settings.GetInt(.SimpleInversionChannel)
+            
             case .MetalCheckerboard:
                 Options[.Size] = Settings.GetInt(.MCheckerCheckSize)
                 Options[.Width] = Settings.GetInt(.MCheckerWidth)
@@ -109,6 +112,9 @@ extension Filters
                 Options[.ShowBorder] = Settings.GetBool(.MetalPixShowBorder)
                 Options[.BorderColor] = Settings.GetColor(.MetalPixBorderColor,
                                                           Settings.SettingDefaults[.MetalPixBorderColor] as! UIColor)
+                Options[.BGColor] = Settings.GetColor(.MetalPixBGColor,
+                                                      Settings.SettingDefaults[.MetalPixBGColor] as! UIColor)
+                Options[.Shape] = Settings.GetInt(.MetalPixShape, IfZero: 0)
                 
             case .Kuwahara:
                 Options[.Radius] = Settings.GetDouble(.KuwaharaRadius,
@@ -480,7 +486,7 @@ enum FilterOptions: String
     case NonRangeColor = "NonRangeColor"
     case StartRange = "StartRange"
     case EndRange = "EndRange"
-    
+    case Shape = "Shape"
     case HAction = "HAction"
     case VAction = "VAction"
     case By = "By"
