@@ -7,6 +7,7 @@
 //
 
 #include <metal_stdlib>
+#include <metal_geometric>
 using namespace metal;
 
 struct BlockInfoParameters
@@ -23,6 +24,7 @@ struct BlockInfoParameters
     bool HighlightIfGreater;
     bool AddBorder;
     float4 BorderColor;
+    float4 BGColor;
 };
 
 //https://software.intel.com/en-us/ipp-dev-reference-color-models
@@ -279,6 +281,7 @@ float4 ApplyHighlight(float4 Source, uint Action)
 }
 
 kernel void PixelBlockColor(texture2d<float, access::read> Texture [[texture(0)]],
+                            //texture2d<float, access::read> NotUsed [[texture(1)]],
                             constant BlockInfoParameters &BlockInfo [[buffer(0)]],
                             device float4 *Output [[buffer(1)]],
                             uint2 gid [[thread_position_in_grid]])
@@ -330,12 +333,87 @@ kernel void PixelBlockColor(texture2d<float, access::read> Texture [[texture(0)]
     b = b / (Height * Width);
     ColorAtPixel = float4(r, g, b, 1.0);
     int HBlocks = int(float(Texture.get_width()) / float(Width));
-    //int VBlocks = int(float(Texture.get_height()) / float(Height));
     int XBlock = int(float(gid.x) / float(Width));
     int YBlock = int(float(gid.y) / float(Height));
     int OutIndex = (YBlock * HBlocks) + XBlock;
     
     Output[OutIndex] = ColorAtPixel;
+}
+
+kernel void PixelCircle(texture2d<float, access::read> Texture [[texture(0)]],
+                        texture2d<float, access::write> Output [[texture(1)]],
+                        constant BlockInfoParameters &BlockInfo [[buffer(0)]],
+                        uint2 gid [[thread_position_in_grid]])
+{
+    uint Width = BlockInfo.Width;
+    uint Height = BlockInfo.Height;
+    uint CenterX = ((gid.x / Width) * Width);
+    uint CenterY = ((gid.y / Width) * Height);
+    
+    uint MinX = CenterX - (Width / 2);
+    if (MinX < 0)
+        {
+        MinX = 0;
+        }
+    uint MaxX = CenterX + (Width / 2);
+    if (MaxX > Texture.get_width() - 1)
+        {
+        MaxX = Texture.get_width() - 1;
+        }
+    uint MinY = CenterY - (Height / 2);
+    if (MinY < 0)
+        {
+        MinY = 0;
+        }
+    uint MaxY = CenterY + (Height / 2);
+    if (MaxY > Texture.get_height() - 1)
+        {
+        MaxY = Texture.get_height() - 1;
+        }
+    
+    float r = 0.0;
+    float g = 0.0;
+    float b = 0.0;
+    
+    for (uint Y = MinY; Y < MaxY; Y++)
+        {
+        for (uint X = MinX; X < MaxX; X++)
+            {
+            r = r + Texture.read(uint2(X, Y)).r;
+            g = g + Texture.read(uint2(X, Y)).g;
+            b = b + Texture.read(uint2(X, Y)).b;
+            }
+        }
+    r = r / (Height * Width);
+    g = g / (Height * Width);
+    b = b / (Height * Width);
+    float4 ColorAtPixel = float4(r, g, b, 1.0);
+    
+#if true
+    if (gid.x == CenterX && gid.y == CenterY)
+        {
+        Output.write(ColorAtPixel, gid);
+        }
+#else
+    int Radius = float(min(Width, Height) / 2);
+    int FX = CenterX - (Width / 2);
+    int FY = CenterY - (Height / 2);
+//    float Distance = distance(float2(gid.x, gid.y), float2(FX, FY));//float2(CenterX, CenterY));
+    float Distance = distance(float2(gid.x, gid.y), float2(CenterX, CenterY));
+    
+    //Output.write(BlockInfo.BGColor, gid);
+    if (Distance <= Radius)
+        {
+        int FinalCenterX = CenterX - (Width / 2);
+        int FinalCenterY = CenterY - (Height / 2);
+        Output.write(ColorAtPixel, gid);//uint2(gid.x + CenterX, gid.y + CenterY));
+        Output.write(ColorAtPixel, uint2(gid.x + gid.x, CenterY + gid.y));
+        }
+   // else
+   //     {
+   //     Output.write(float4(1.0, 1.0, 0.0, 1.0), gid);
+   //     }
+#endif
 }
 
 kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0)]],
@@ -348,29 +426,6 @@ kernel void PixellateKernel(texture2d<float, access::read> InTexture [[texture(0
     uint Height = BlockInfo.Height;
     uint CenterX = (gid.x / Width * Width);
     uint CenterY = (gid.y / Width * Height);
-    
-    /*
-    uint Left = gid.x - Width;
-    if (Left < 0)
-        {
-        Left = 0;
-        }
-    uint Top = gid.y - Height;
-    if (Top < 0)
-        {
-        Top = 0;
-        }
-    uint Right = Left + Width;
-    if (Right > InTexture.get_width() - 1)
-        {
-        Right = InTexture.get_width() - 1;
-        }
-    uint Bottom = Top + Height;
-    if (Top > InTexture.get_height() - 1)
-        {
-        Top = InTexture.get_height() - 1;
-        }
-     */
      
     uint2 PixellatedGrid = uint2(CenterX, CenterY);
     float4 ColorAtPixel = InTexture.read(PixellatedGrid);
