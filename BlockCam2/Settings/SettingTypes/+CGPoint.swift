@@ -104,5 +104,4 @@ extension Settings
         }
         return Default
     }
-    
 }
