@@ -32,6 +32,9 @@ struct RunSettingView: View
                 AllFilterView()
                     .environmentObject(Changed)
                 
+            case "Test Something":
+                TestSomethingView()
+                
             default:
                 UnexpectedView()
         }
