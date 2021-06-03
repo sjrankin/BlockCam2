@@ -577,6 +577,11 @@ struct ConvolutionFilter_View: View
                                     Text("Frei-Chen").tag(10)
                                     Text("Lagrangian").tag(11)
                                 }
+                                Group
+                                {
+                                    Text("High Pass").tag(12)
+                                    Text("Low Pass").tag(13)
+                                }
                             }
                             .onChange(of: Predefined)
                             {
