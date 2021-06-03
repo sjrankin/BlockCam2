@@ -31,7 +31,10 @@ let SettingsData =
                    Picture: "photo.on.rectangle"),
         OptionItem(Title: "Filter List",
                    Annotation: "List of all filters in BlockCam.",
-                   Picture: "camera.filters")
+                   Picture: "camera.filters"),
+        OptionItem(Title: "Test Something",
+                   Annotation: "Test something that Xcode can't run.",
+                   Picture: "pencil.and.outline")
     ]
 
 let SampleImageOptions =
@@ -56,3 +59,13 @@ let CreditImageOptions =
                    Annotation: "Acknowlegements for technically-related issues",
                    Picture: "chevron.left.slash.chevron.right"),
     ]
+
+let TestOptions =
+[
+    OptionItem(Title: "3D Processing View",
+               Annotation: "Test the 3D processing message dailog box.",
+               Picture: "scale.3d"),
+    OptionItem(Title: "Circular Progress",
+               Annotation: "Circular progress view testing.",
+               Picture: "circlebadge")
+]
