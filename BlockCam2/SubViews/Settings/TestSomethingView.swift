@@ -10,6 +10,7 @@ import SwiftUI
 struct RunTest: View
 {
     @State var Test: String
+    @State var ButtonCommand: String = ""
     
     var body: some View
     {
@@ -20,6 +21,18 @@ struct RunTest: View
                 
             case "Circular Progress":
                 Test_CircularProgressView()
+                
+            case "Long Duration":
+                GeometryReader
+                {
+                    Geometry in
+                    Test_LongDurationView(UICommand: ButtonCommand,
+                                          IsVisible: true,
+                                          Width: Geometry.size.width,
+                                          Height: 40,
+                                          Message: "Test of long duration dialog box.",
+                                          OperationPercent: 0.0)
+                }
                 
             default:
                 UnexpectedView()
