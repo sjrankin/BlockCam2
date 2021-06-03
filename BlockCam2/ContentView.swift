@@ -364,7 +364,6 @@ struct ContentView: View
     
     func HandleFilterButtonPress(_ Value: String)
     {
-        //self.UICommand = ""
         self.UICommand = Value
     }
 }
