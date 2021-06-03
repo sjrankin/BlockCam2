@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1708B70D2668F87F001FC0B6 /* Arithmetic_Add.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B70C2668F87F001FC0B6 /* Arithmetic_Add.metal */; };
+		1708B70F2668F949001FC0B6 /* Arithmetic_DivideConstant.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B70E2668F949001FC0B6 /* Arithmetic_DivideConstant.metal */; };
+		1708B7112668F9E6001FC0B6 /* DivideParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7102668F9E6001FC0B6 /* DivideParameters.swift */; };
+		1708B7132668FA2E001FC0B6 /* Arithmetic_AddConstant.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7122668FA2E001FC0B6 /* Arithmetic_AddConstant.metal */; };
+		1708B7152668FAA7001FC0B6 /* AddConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7142668FAA7001FC0B6 /* AddConstant.swift */; };
+		1708B7172668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7162668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal */; };
+		1708B7192668FB8C001FC0B6 /* Arithmetic_Subtract.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7182668FB8C001FC0B6 /* Arithmetic_Subtract.metal */; };
+		1708B71B2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B71A2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal */; };
+		1708B71D2668FC74001FC0B6 /* Arithmetic_Mean.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B71C2668FC74001FC0B6 /* Arithmetic_Mean.metal */; };
 		1708E066264CB6B60010F301 /* ColorSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1708E065264CB6B60010F301 /* ColorSetting.swift */; };
 		170E84272663581A009362A5 /* SingleSettingViewColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170E84262663581A009362A5 /* SingleSettingViewColor.swift */; };
 		170EFC2C26255754001227D0 /* BlockCam2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EFC2B26255754001227D0 /* BlockCam2App.swift */; };
@@ -278,6 +287,7 @@
 		17BAA8BD265507BE006A5055 /* MetalPixellate.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8BC265507BE006A5055 /* MetalPixellate.metal */; };
 		17BAA8BF2655082C006A5055 /* BlockInfoParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8BE2655082C006A5055 /* BlockInfoParameters.swift */; };
 		17BAA8C126553434006A5055 /* MetalPixellateFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAA8C026553434006A5055 /* MetalPixellateFilter_View.swift */; };
+		17BAAD99266885C000FF8481 /* Test_LongDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BAAD98266885C000FF8481 /* Test_LongDurationView.swift */; };
 		17BF7C712633D4BA00181FA1 /* FilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BF7C702633D4BA00181FA1 /* FilterData.swift */; };
 		17BF7C732633DE1E00181FA1 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BF7C722633DE1E00181FA1 /* UIColor.swift */; };
 		17BF7C752633E4B200181FA1 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BF7C742633E4B200181FA1 /* FilterView.swift */; };
@@ -361,6 +371,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1708B70C2668F87F001FC0B6 /* Arithmetic_Add.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_Add.metal; sourceTree = "<group>"; };
+		1708B70E2668F949001FC0B6 /* Arithmetic_DivideConstant.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_DivideConstant.metal; sourceTree = "<group>"; };
+		1708B7102668F9E6001FC0B6 /* DivideParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivideParameters.swift; sourceTree = "<group>"; };
+		1708B7122668FA2E001FC0B6 /* Arithmetic_AddConstant.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_AddConstant.metal; sourceTree = "<group>"; };
+		1708B7142668FAA7001FC0B6 /* AddConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConstant.swift; sourceTree = "<group>"; };
+		1708B7162668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_SubtractConstant.metal; sourceTree = "<group>"; };
+		1708B7182668FB8C001FC0B6 /* Arithmetic_Subtract.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_Subtract.metal; sourceTree = "<group>"; };
+		1708B71A2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MultiplyConstant.metal; sourceTree = "<group>"; };
+		1708B71C2668FC74001FC0B6 /* Arithmetic_Mean.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_Mean.metal; sourceTree = "<group>"; };
 		1708E065264CB6B60010F301 /* ColorSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSetting.swift; sourceTree = "<group>"; };
 		170E84262663581A009362A5 /* SingleSettingViewColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSettingViewColor.swift; sourceTree = "<group>"; };
 		170EFC2826255754001227D0 /* BlockCam2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlockCam2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -636,6 +655,7 @@
 		17BAA8BC265507BE006A5055 /* MetalPixellate.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalPixellate.metal; sourceTree = "<group>"; };
 		17BAA8BE2655082C006A5055 /* BlockInfoParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfoParameters.swift; sourceTree = "<group>"; };
 		17BAA8C026553434006A5055 /* MetalPixellateFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalPixellateFilter_View.swift; sourceTree = "<group>"; };
+		17BAAD98266885C000FF8481 /* Test_LongDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_LongDurationView.swift; sourceTree = "<group>"; };
 		17BF7C702633D4BA00181FA1 /* FilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterData.swift; sourceTree = "<group>"; };
 		17BF7C722633DE1E00181FA1 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		17BF7C742633E4B200181FA1 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
@@ -730,6 +750,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1708B70A2668F826001FC0B6 /* Arithmetic */ = {
+			isa = PBXGroup;
+			children = (
+				1708B70B2668F842001FC0B6 /* Kernel */,
+			);
+			path = Arithmetic;
+			sourceTree = "<group>";
+		};
+		1708B70B2668F842001FC0B6 /* Kernel */ = {
+			isa = PBXGroup;
+			children = (
+				1708B7102668F9E6001FC0B6 /* DivideParameters.swift */,
+				1708B7142668FAA7001FC0B6 /* AddConstant.swift */,
+				1708B70C2668F87F001FC0B6 /* Arithmetic_Add.metal */,
+				1708B7122668FA2E001FC0B6 /* Arithmetic_AddConstant.metal */,
+				1708B70E2668F949001FC0B6 /* Arithmetic_DivideConstant.metal */,
+				1708B71C2668FC74001FC0B6 /* Arithmetic_Mean.metal */,
+				1708B71A2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal */,
+				1708B7182668FB8C001FC0B6 /* Arithmetic_Subtract.metal */,
+				1708B7162668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal */,
+			);
+			path = Kernel;
+			sourceTree = "<group>";
+		};
 		170EFC1F26255754001227D0 = {
 			isa = PBXGroup;
 			children = (
@@ -836,6 +880,7 @@
 			isa = PBXGroup;
 			children = (
 				172ABCA926364DDD00AE53D1 /* MetalFilterParent.swift */,
+				1708B70A2668F826001FC0B6 /* Arithmetic */,
 				1724E6572664658E001FF482 /* Checkerboard */,
 				172F5F78266213890013EE0E /* ColorRange */,
 				17DCDF722650D64300DAB1C6 /* BayerDecode */,
@@ -1694,6 +1739,7 @@
 			children = (
 				17A56373266657720044A90A /* Test_3DProcessingView.swift */,
 				171A566E26673CBB00E77BC8 /* Test_CircularProgressView.swift */,
+				17BAAD98266885C000FF8481 /* Test_LongDurationView.swift */,
 			);
 			path = TestViews;
 			sourceTree = "<group>";
@@ -2123,6 +2169,7 @@
 				172ABCC026365B2F00AE53D1 /* GradientToAlpha.metal in Sources */,
 				17EC99AC262FE6D5007FCF00 /* Transfer.swift in Sources */,
 				1764BEF8263909A4001644E3 /* SettingsUI.swift in Sources */,
+				1708B7152668FAA7001FC0B6 /* AddConstant.swift in Sources */,
 				171A567426674EBB00E77BC8 /* HistogramTransfer.swift in Sources */,
 				176FE2772637C28500650060 /* Settings.swift in Sources */,
 				17DCDF792650D6A600DAB1C6 /* BayerDecode.swift in Sources */,
@@ -2163,6 +2210,7 @@
 				1796E6FE26522E0F00B130CF /* SlowSampleImage.swift in Sources */,
 				179721F7262E8EEB004B7134 /* +PhotoHandling.swift in Sources */,
 				17E927DD2634EE3E00708522 /* GroupButton.swift in Sources */,
+				1708B71D2668FC74001FC0B6 /* Arithmetic_Mean.metal in Sources */,
 				17B6AFA3264F6738009C5AF3 /* ConvolutionFilter_View.swift in Sources */,
 				17DCDF8126513A5400DAB1C6 /* Solarize.metal in Sources */,
 				17F70A1D2634173700BCC3CF /* HoleDistortion.swift in Sources */,
@@ -2187,6 +2235,7 @@
 				171A566F26673CBB00E77BC8 /* Test_CircularProgressView.swift in Sources */,
 				178B4E4E265F2D440049140F /* CircularWrap.swift in Sources */,
 				17A91449265DF94000C3F2BC /* +VideoProcessing.swift in Sources */,
+				17BAAD99266885C000FF8481 /* Test_LongDurationView.swift in Sources */,
 				179DD4E8263D19D0007A12FA /* HorizontalMirroring.metal in Sources */,
 				17A3F041264FA7D3002E234C /* ConditionalSilhouette.metal in Sources */,
 				17F70A17263414AF00BCC3CF /* BumpDistortion.swift in Sources */,
@@ -2201,6 +2250,7 @@
 				172ABCF52636964E00AE53D1 /* ColorControls.swift in Sources */,
 				1724E65C266465D8001FF482 /* CheckerboardParameters.swift in Sources */,
 				172ABCDF2636876C00AE53D1 /* Dilate.swift in Sources */,
+				1708B7192668FB8C001FC0B6 /* Arithmetic_Subtract.metal in Sources */,
 				176FE2822637C3BD00650060 /* +CGFloat.swift in Sources */,
 				1796E6ED265209F500B130CF /* SolarizeRGBParameters.swift in Sources */,
 				17A91446265DF3AB00C3F2BC /* Divider2.swift in Sources */,
@@ -2250,13 +2300,16 @@
 				17D662842635577100B3A057 /* CircleScreenBlend.swift in Sources */,
 				176FE2862637C41000650060 /* +Double.swift in Sources */,
 				178B4E54265F70280049140F /* CircularProgressView.swift in Sources */,
+				1708B7132668FA2E001FC0B6 /* Arithmetic_AddConstant.metal in Sources */,
 				176FE2A526380E5E00650060 /* IDString.swift in Sources */,
 				179DD4EC263D2002007A12FA /* VerticalMirroring.metal in Sources */,
+				1708B71B2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal in Sources */,
 				178B4E5F265F91360049140F /* MultiFrameParameters.swift in Sources */,
 				17EC9983262FE12D007FCF00 /* CMYKHalftone.swift in Sources */,
 				17A3F03F264FA7BB002E234C /* SilhouetteParameters.swift in Sources */,
 				172ABCAC263653CC00AE53D1 /* GradientManager.swift in Sources */,
 				172ABCE526368C7900AE53D1 /* Otsu.swift in Sources */,
+				1708B7112668F9E6001FC0B6 /* DivideParameters.swift in Sources */,
 				17BAA8B126534E5C006A5055 /* UserSampleManager.swift in Sources */,
 				172ABCE32636890F00AE53D1 /* Median.swift in Sources */,
 				17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */,
@@ -2310,6 +2363,7 @@
 				17A6125E263E641B00B9BB1F /* Crop.metal in Sources */,
 				1764BEFA26391F40001644E3 /* SobelBlend.swift in Sources */,
 				172F5F6E2661C30C0013EE0E /* TrailingFramesReduce.metal in Sources */,
+				1708B70F2668F949001FC0B6 /* Arithmetic_DivideConstant.metal in Sources */,
 				17A3F037264FA71F002E234C /* ColorInverter.metal in Sources */,
 				172F5F812662220D0013EE0E /* ColorRangeFilter_View.swift in Sources */,
 				170FAB5126314EB6003DDA35 /* Gloom.swift in Sources */,
@@ -2337,11 +2391,13 @@
 				172ABCF32636959C00AE53D1 /* MorphologyGradient.swift in Sources */,
 				176FE2902637C55700650060 /* Debug.swift in Sources */,
 				17AD33912641693F008C26CE /* SettingDefaults.swift in Sources */,
+				1708B7172668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal in Sources */,
 				172ABCB526365A1A00AE53D1 /* GradientToAlpha.swift in Sources */,
 				17A56374266657720044A90A /* Test_3DProcessingView.swift in Sources */,
 				172C8E4026354BBE0096C331 /* LineScreenBlend.swift in Sources */,
 				17688E86262C0DB300D1523A /* DepthToGrayscaleConverter.swift in Sources */,
 				17A3F03D264FA79F002E234C /* ConditionalSilhouette.swift in Sources */,
+				1708B70D2668F87F001FC0B6 /* Arithmetic_Add.metal in Sources */,
 				171A5671266742AC00E77BC8 /* IndeterminantCircularProgressView.swift in Sources */,
 				17F9250E2655F7F100FC7A13 /* MetalPixellateFilterDetails_View.swift in Sources */,
 				172ABCEB26368EBA00AE53D1 /* GaborGradients.swift in Sources */,
