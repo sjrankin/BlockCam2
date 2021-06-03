@@ -15,6 +15,9 @@ class FileIO
     /// Name of the directory where user sample images (for viewing filter settings) are stored.
     static let SampleDirectory = "/UserSamples"
     
+    /// Name of the directory where the user's source image for histogram transfer resides.
+    static let HistogramSourceDirectory = "/HistogramSource"
+    
     /// Name of the directory that holds the last image taken by BlockCam.
     static let LastImageDirectory = "/LastImage"
     
@@ -245,6 +248,31 @@ class FileIO
         return nil
     }
     
+    /// Returns an image from the historgram source image directory.
+    /// - Parameter FileName: Name of the image file to return. Defaults to `HistogramSource.jpg`.
+    /// - Returns: The image on success, nil if not found or on error.
+    public static func GetHistogramSourceImage(FileName: String = "HistogramSource.jpg") -> UIImage?
+    {
+        if let CPath = GetDocumentDirectory()?.appendingPathComponent(HistogramSourceDirectory)
+        {
+            do
+            {
+                let FinalName = CPath.appendingPathComponent(FileName)
+                let ImageData = try Data(contentsOf: FinalName)
+                let Image = UIImage(data: ImageData)
+                return Image
+            }
+            catch
+            {
+                Debug.Print("Error loading image data for HistogramSource.jpg")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    /// Returns the sample user images and file names.
+    /// - Returns: Array of tuples of user sample images and file names.
     public static func GetUserSampleImages() -> [(Name: String, Image: UIImage)]?
     {
         if !DirectoryExists(DirectoryName: SampleDirectory)
@@ -287,7 +315,6 @@ class FileIO
         }
         if AsJPG
         {
-            print("Saving \(WithName)")
             if let Data = Image.jpegData(compressionQuality: 1.0)
             {
                 let FileName = InDirectory.appendingPathComponent(WithName)
@@ -328,7 +355,8 @@ class FileIO
     ///   - Directory: Name of the directory where to save the image.
     ///   - AsJPG: If true, save as a .JPG image. If false, save as a .PNG image.
     /// - Returns: True on success, nil on failure.
-    @discardableResult public static func SaveImage(_ Image: UIImage, WithName: String, Directory: String, AsJPG: Bool = true) -> Bool
+    @discardableResult public static func SaveImage(_ Image: UIImage, WithName: String, Directory: String,
+                                                    AsJPG: Bool = true) -> Bool
     {
         if !DirectoryExists(DirectoryName: Directory)
         {
