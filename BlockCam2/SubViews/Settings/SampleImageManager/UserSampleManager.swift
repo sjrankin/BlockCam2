@@ -43,9 +43,9 @@ struct UserSampleManager: View
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.TitleUpdate))
             {
                 Changed in
-                print("Received title changed notification: \(Changed)")
+                //print("Received title changed notification: \(Changed)")
                 SampleList[SelectedIndex].Title = Changed.userInfo?["Title"] as! String
-                print("--> \(SampleList[SelectedIndex].Title)")
+                //print("--> \(SampleList[SelectedIndex].Title)")
                 SampleList = SampleImages.UserDefinedSamples
                 Updated.toggle()
             }
