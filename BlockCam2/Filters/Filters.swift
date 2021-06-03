@@ -620,6 +620,7 @@ enum BuiltInFilters: String, CaseIterable
     case TrailingFrames = "Trailing Frames"
     case ColorRange = "Color Range"
     case SimpleInversion = "Simple Inversion"
+    case HistogramTransfer = "Histogram Transfer"
     
     //Internal filters
     case Crop = "Crop"
