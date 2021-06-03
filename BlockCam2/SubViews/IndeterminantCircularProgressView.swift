@@ -17,6 +17,7 @@ struct IndeterminantCircularProgressView: View
     @State var StrokeThickness: CGFloat = 5.0
     @State var DashArray: [CGFloat] = [5, 5]
     @State var RotationAngle: Double = 0.0
+    @State var Direction: Double = 1.0
     var AngleIncrements: [Double] = [0.5, 1.0, 2.0]
     let RotateTimer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     
@@ -36,9 +37,10 @@ struct IndeterminantCircularProgressView: View
         .onReceive(RotateTimer)
         {
             _ in
-            let Increment = AngleIncrements[Velocity]
+            let Increment = AngleIncrements[Velocity] * Direction
             let FinalAngle = RotationAngle + Increment
-            RotationAngle = FinalAngle.truncatingRemainder(dividingBy: 360.0)
+            RotationAngle = FinalAngle
+            //RotationAngle = FinalAngle.truncatingRemainder(dividingBy: 360.0)
             //RotationAngle = Double(Int(RotationAngle + 1.0) % 360)
         }
         .animation(.linear(duration: 0.15))
