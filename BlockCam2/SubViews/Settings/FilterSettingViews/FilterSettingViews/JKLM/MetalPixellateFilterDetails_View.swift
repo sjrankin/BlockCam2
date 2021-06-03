@@ -157,7 +157,7 @@ struct MetalPixellateFilterDetails_View: View
                                                       UIColor(BorderColor))
                                     Updated.toggle()
                                 }
-                                .padding()
+                                .padding([.leading, .trailing])
                         }
                     }
                     .padding()
@@ -172,7 +172,7 @@ struct MetalPixellateFilterDetails_View: View
                             .foregroundColor(.black)
                             .frame(width: Geometry.size.width * 0.8,
                                    alignment: .leading)
-                        Text("Shape of the pixel")
+                        Text("Shape of the pixel (circular pixels do not have borders)")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                             .frame(width: Geometry.size.width * 0.8,
@@ -189,7 +189,9 @@ struct MetalPixellateFilterDetails_View: View
                             Settings.SetInt(.MetalPixShape, NewValue)
                             Updated.toggle()
                         }
-                    }.padding()
+                    }
+                    .padding([.leading, .trailing])
+                    .padding([.bottom], 10)
                     
                     Divider()
                         .background(Color.black)
