@@ -188,4 +188,6 @@ enum UICommands: String
     case SetLiveViewMode = "SetLiveViewMode"
     /// Set the still image mode.
     case SetStillImageMode = "SetStillImageMode"
+    /// The user canceled 3D processing.
+    case Cancel3DProcessing = "Cancel3DProcessing"
 }
