@@ -60,6 +60,7 @@ extension Filters
         FilterMap[.BayerDecode] = BlockCam2.BayerDecode()
         FilterMap[.ColorRange] = BlockCam2.ColorRange()
         FilterMap[.SimpleInversion] = BlockCam2.SimpleInversion()
+        FilterMap[.HistogramTransfer] = BlockCam2.HistogramTransfer()
         return FilterMap
     }
     
