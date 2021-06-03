@@ -13,7 +13,7 @@ extension UIImage
 {
     // MARK: - UIImage extensions.
     
-    /// Create a UI image from a pixel buffer.
+    /// Create a `UIImage` from a pixel buffer.
     /// - Note: See [How to turn a CVPixelBuffer Into a UIImage](https://stackoverflow.com/questions/8072208/how-to-turn-a-cvpixelbuffer-into-a-uiimage)
     /// - Parameter Buffer: A `CVPixelBuffer` with image data to convert to a `UIImage`.
     /// - Returns: `UIImage` on success, nil on failure.
@@ -26,6 +26,38 @@ extension UIImage
             return nil
         }
         self.init(cgImage: FinalCG)
+    }
+    
+    /// Create a `UIImage` from the contents of the file in the passed URL.
+    /// - Parameter FromURL: The URL that describes where the file is.
+    /// - Returns: `UIImage` on success, nil on failure.
+    public convenience init?(FileURL: URL)
+    {
+        guard let SomeImage = UIImage(contentsOfFile: FileURL.path) else
+        {
+            return nil
+        }
+        guard let JpgData = SomeImage.jpegData(compressionQuality: 1.0) else
+        {
+            return nil
+        }
+        self.init(data: JpgData)
+    }
+    
+    /// Create a `UIImage` from a HEIC file.
+    /// - Parameter HEIC: URL to the .heic file to convert.
+    /// - Returns: `UIImage` on success, nil on failure.
+    public convenience init?(HEIC: URL)
+    {
+        guard let HeicImage = UIImage(contentsOfFile: HEIC.path) else
+        {
+            return nil
+        }
+        guard let JpgData = HeicImage.jpegData(compressionQuality: 1.0) else
+        {
+            return nil
+        }
+        self.init(data: JpgData)
     }
     
     /// Rotate the instance image by the passed number of radians.
