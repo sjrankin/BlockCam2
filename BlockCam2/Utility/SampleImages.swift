@@ -501,7 +501,6 @@ class SampleImages
     {
         for UserImage in UserDefinedSamples
         {
-            print("--> \(UserImage.SampleName)")
             if UserImage.SampleName == FileName
             {
                 return true
