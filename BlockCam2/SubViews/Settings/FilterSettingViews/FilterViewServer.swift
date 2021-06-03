@@ -80,6 +80,13 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.HistogramTransfer.rawValue:
+                SettingsContainer
+                {
+                    HistogramTransferFilter_View(ButtonCommand: $UICommand)
+                        .environmentObject(Changed)
+                }.environmentObject(Changed)
+            
             case BuiltInFilters.SimpleInversion.rawValue:
                 SettingsContainer
                 {
