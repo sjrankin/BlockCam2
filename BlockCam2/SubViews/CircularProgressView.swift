@@ -29,6 +29,8 @@ struct CircularProgressView: View
                         style: StrokeStyle(lineWidth: StrokeThickness,
                                            lineCap: .round))
         }
+        .animation(.linear(duration: 0.15))
+        .transition(.slide)
         .rotationEffect(Angle(degrees: -90))
         .frame(width: Width, height: Height)
         .padding()
@@ -40,6 +42,9 @@ struct CircularProgressView_Previews: PreviewProvider
     @State static var Value: Double = 0.61
     static var previews: some View
     {
-        CircularProgressView(Percent: $Value)
+        VStack
+        {
+            CircularProgressView(Percent: $Value)
+        }
     }
 }
