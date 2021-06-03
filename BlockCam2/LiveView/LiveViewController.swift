@@ -109,6 +109,10 @@ class LiveViewController: UIViewController,
         {
             Debug.FatalError("Error creating \(FileIO.LastImageDirectory)")
         }
+        if !FileIO.CreateIfDoesNotExist(DirectoryName: FileIO.HistogramSourceDirectory)
+        {
+            Debug.FatalError("Error creating \(FileIO.HistogramSourceDirectory)")
+        }
     }
     
     /// Override the will appear event. Handles late intialization.
