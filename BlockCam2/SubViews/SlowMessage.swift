@@ -24,11 +24,21 @@ struct SlowMessage: View
     {
         HStack
         {
+            ZStack
+            {
             CircularProgressView(Percent: $OperationPercent,
-                                 Width: 40,
-                                 Height: 40,
+                                 Width: 48,
+                                 Height: 48,
                                  StrokeThickness: 8)
-                .padding([.leading])
+                IndeterminantCircularProgressView(Velocity: 2,
+                                                  ForegroundColor: Color(UIColor.systemYellow),
+                                                  BackgroundColor: Color.clear,
+                                                  Width: 30,
+                                                  Height: 30,
+                                                  DashArray: [1, 15],
+                                                  Direction: -1.0)
+                    .frame(width: 30, height: 30)
+            }
             
             Text(Message)
                 .foregroundColor(.white)
@@ -40,13 +50,13 @@ struct SlowMessage: View
             ZStack
             {
                 RoundedRectangle(cornerRadius: 10.0)
-                    .stroke(Color.blue, lineWidth: 5)
+                    .stroke(Color.white, lineWidth: 5)
                     .shadow(radius: 5)
                 RoundedRectangle(cornerRadius: 10.0)
                     .fill(BGGradient)
                     .shadow(radius: 3)
             }
-            .shadow(color: .accentColor, radius: 5)
+            .shadow(color: .black, radius: 3)
             .frame(width: Width * 0.9, height: 100)
         )
         
