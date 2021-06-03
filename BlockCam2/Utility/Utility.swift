@@ -1158,5 +1158,53 @@ class Utility
         }
         return "\(HourS):\(MinuteS):\(SecondS)"
     }
+    
+    // MARK: - General image handling utilities.
+    
+    /// Returns the histogram source image. If one does not exist, returns an image with a question mark.
+    /// - Returns: The histogram source image if it exists, nil if it does not.
+    public static func GetHistogramSource() -> UIImage?
+    {
+        if let HistogramSource = FileIO.GetHistogramSourceImage()
+        {
+            return HistogramSource
+        }
+        return nil
+    }
+    
+    /// Determines if a histogram source image exists.
+    /// - Returns: If an image exists, true is returned. Otherwise, false is returned.
+    public static func HaveHistogramSource() -> Bool
+    {
+        return GetHistogramSource() != nil
+    }
+    
+    /// Save the passed image into the histogram source directory. Previous images are overwritten.
+    /// - Parameter Image: The image to save to the historgram source directory.
+    public static func SaveHistogramSource(_ Image: UIImage)
+    {
+        FileIO.SaveImage(Image, WithName: "HistogramSource.jpg",
+                         Directory: FileIO.HistogramSourceDirectory)
+    }
+    
+    /// Add a new histogram source image to the histogram source directory..
+    /// - Parameter FileName: The name of the file of the image that will function as a histogram source.
+    /// - Parameter Image: Image to save.
+    /// - Returns: `True` on success, `false` on failure.
+    public static func AddHistogramSource(FileName: String,
+                                          Image: UIImage) -> Bool
+    {
+        var FileURL = FileIO.GetDirectoryURL(DirectoryName: FileIO.HistogramSourceDirectory)
+        FileURL?.appendPathComponent(FileName)
+        if FileIO.FileExists(FileURL!)
+        {
+            FileIO.DeleteFile(FileURL!)
+        }
+        guard FileIO.SaveImage(Image, WithName: FileName, Directory: FileIO.HistogramSourceDirectory) else
+        {
+            return false
+        }
+        return true
+    }
 }
 
