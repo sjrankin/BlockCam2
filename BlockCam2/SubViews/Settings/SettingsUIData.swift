@@ -65,6 +65,9 @@ let TestOptions =
     OptionItem(Title: "3D Processing View",
                Annotation: "Test the 3D processing message dailog box.",
                Picture: "scale.3d"),
+    OptionItem(Title: "Long Duration",
+               Annotation: "Test the long duration dialog box.",
+               Picture: "clock.fill"),
     OptionItem(Title: "Circular Progress",
                Annotation: "Circular progress view testing.",
                Picture: "circlebadge")
