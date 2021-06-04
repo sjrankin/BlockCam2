@@ -462,4 +462,26 @@ enum SettingKeys: String, CaseIterable
     // MARK: - Simple inversion
     /// Integer: Determines which channel to invert.
     case SimpleInversionChannel = "SimpleInversionChannel"
+    
+    // MARK: - Simple arithmetic
+    /// Integer: The simple operation to perform.
+    case SimpleMathOperation = "SimpleMathOperation"
+    /// Boolean: Clamp results to normal range.
+    case SimpleMathClamp = "SimpleMathClamp"
+    /// Double: Constant to apply to the red channel.
+    case SimpleMathRedConstant = "SimpleMathRedConstant"
+    /// Double: Constant to apply to the green channel.
+    case SimpleMathGreenConstant = "SimpleMathGreenConstant"
+    /// Double: Constant to apply to the blue channel.
+    case SimpleMathBlueConstant = "SimpleMathBlueConstant"
+    /// Double: Constant to apply to the alpha channel.
+    case SimpleMathAlphaConstant = "SimpleMathAlphaConstant"
+    /// Boolean: Enable red channel processing.
+    case SimpleMathEnableRed = "SimpleMathEnableRed"
+    /// Boolean: Enable green channel processing.
+    case SimpleMathEnableGreen = "SimpleMathEnableGree"
+    /// Boolean: Enable blue channel processing.
+    case SimpleMathEnableBlue = "SimpleMathEnableBlue"
+    /// Boolean: Enable alpha channel processing.
+    case SimpleMathEnableAlpha = "SimpleMathEnableAlpha"
 }
