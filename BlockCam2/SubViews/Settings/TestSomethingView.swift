@@ -34,6 +34,9 @@ struct RunTest: View
                                           OperationPercent: 0.0)
                 }
                 
+            case "Grid Control":
+                Test_GridControlView() 
+                
             default:
                 UnexpectedView()
         }
