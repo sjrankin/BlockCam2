@@ -483,7 +483,10 @@ class Filters
             .MultiFrameCombiner: "Combine frames together",
             .TrailingFrames: "Video-only time-based frame combining.",
             .ColorRange: "Show colors in a specified range of colors, de-emphasizing the rest.",
-            .SimpleInversion: "Invert a single color channel in the image."
+            .SimpleInversion: "Invert a single color channel in the image.",
+            .HistogramTransfer: "Transfer the histogram from one image to another.",
+            .SimpleArithmetic: "Simple arithmetic functions.",
+            .MultiFrameArithmetic: "Arithmetic functions on multiple frames.",
         ]
 }
 
@@ -506,6 +509,7 @@ enum FilterGroups: String, CaseIterable
     case MultiFrame = "Frames"
     case Test = "Test/Debug"
     case NonLiveView = "Non-Live View"
+    case Arithmetic = "Arithmetic"
 }
 
 /// Individual filters.
@@ -621,6 +625,8 @@ enum BuiltInFilters: String, CaseIterable
     case ColorRange = "Color Range"
     case SimpleInversion = "Simple Inversion"
     case HistogramTransfer = "Histogram Transfer"
+    case SimpleArithmetic = "Simple Arithmetic"
+    case MultiFrameArithmetic = "Arithmetic Frames"
     
     //Internal filters
     case Crop = "Crop"
