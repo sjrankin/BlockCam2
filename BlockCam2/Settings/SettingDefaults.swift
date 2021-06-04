@@ -286,5 +286,17 @@ extension Settings
             
             // MARK: - Simple inversion.
             .SimpleInversionChannel: 0,
+            
+            // Mark: - Simple arithmetic.
+            .SimpleMathOperation: 0,
+            .SimpleMathClamp: true,
+            .SimpleMathRedConstant: 0.5,
+            .SimpleMathGreenConstant: 0.5,
+            .SimpleMathBlueConstant: 0.5,
+            .SimpleMathAlphaConstant: 1.0,
+            .SimpleMathEnableRed: true,
+            .SimpleMathEnableGreen: true,
+            .SimpleMathEnableBlue: true,
+            .SimpleMathEnableAlpha: false,
         ]
 }
