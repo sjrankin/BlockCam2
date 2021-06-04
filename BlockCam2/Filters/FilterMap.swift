@@ -186,7 +186,15 @@ extension Filters
         var FilterMap = [BuiltInFilters: BuiltInFilterProtocol]()
         FilterMap[.ImageDelta]  = BlockCam2.ImageDelta()
         FilterMap[.MultiFrameCombiner] = BlockCam2.MultiFrameCombiner()
-        FilterMap[.TrailingFrames] = BlockCam2.TrailingFrames() 
+        FilterMap[.TrailingFrames] = BlockCam2.TrailingFrames()
+        return FilterMap
+    }
+    
+    private static func MakeArithmeticFilters() -> [BuiltInFilters: BuiltInFilterProtocol]?
+    {
+        var FilterMap = [BuiltInFilters: BuiltInFilterProtocol]()
+        FilterMap[.SimpleArithmetic] = BlockCam2.Arithmetic()
+        FilterMap[.MultiFrameArithmetic] = BlockCam2.Arithmetic()
         return FilterMap
     }
     
@@ -279,6 +287,9 @@ extension Filters
                     
                 case .NonLiveView:
                     FilterData = MakeNonLiveFilters()
+                    
+                case .Arithmetic:
+                    FilterData = MakeArithmeticFilters()
                     
                     #if DEBUG
                 case .Test:
