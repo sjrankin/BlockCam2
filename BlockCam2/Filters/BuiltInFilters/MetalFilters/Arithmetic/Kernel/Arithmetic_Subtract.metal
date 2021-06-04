@@ -8,9 +8,9 @@
 #include <metal_stdlib>
 using namespace metal;
 
-kernel void Arithmetic_Add(texture2d<float, access::read> SourceImage [[texture(0)]],
-                           texture2d<float, access::read_write> Storage [[texture(1)]],
-                           uint2 gid [[thread_position_in_grid]])
+kernel void Arithmetic_Subtract(texture2d<float, access::read> SourceImage [[texture(0)]],
+                                texture2d<float, access::read_write> Storage [[texture(1)]],
+                                uint2 gid [[thread_position_in_grid]])
 {
     float4 Source = SourceImage.read(gid);
     float4 Target = Storage.read(gid);
