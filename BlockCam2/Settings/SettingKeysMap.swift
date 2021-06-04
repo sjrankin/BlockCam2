@@ -282,5 +282,17 @@ extension Settings
             
             // MARK: - Simple inversion.
             .SimpleInversionChannel: Int.self,
+            
+            // Mark: - Simple arithmetic.
+            .SimpleMathOperation: Int.self,
+            .SimpleMathClamp: Bool.self,
+            .SimpleMathRedConstant: Double.self,
+            .SimpleMathGreenConstant: Double.self,
+            .SimpleMathBlueConstant: Double.self,
+            .SimpleMathAlphaConstant: Double.self,
+            .SimpleMathEnableRed: Bool.self,
+            .SimpleMathEnableGreen: Bool.self,
+            .SimpleMathEnableBlue: Bool.self,
+            .SimpleMathEnableAlpha: Bool.self,
         ]
 }
