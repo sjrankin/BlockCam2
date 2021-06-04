@@ -70,5 +70,8 @@ let TestOptions =
                Picture: "clock.fill"),
     OptionItem(Title: "Circular Progress",
                Annotation: "Circular progress view testing.",
-               Picture: "circlebadge")
+               Picture: "circlebadge"),
+    OptionItem(Title: "Grid Control",
+               Annotation: "Test the simple grid control.",
+               Picture: "rectangle.split.3x3")
 ]
