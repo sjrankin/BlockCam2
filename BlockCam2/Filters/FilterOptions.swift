@@ -34,6 +34,22 @@ extension Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .SimpleArithmetic:
+                Options[.ArithmeticOperation] = Settings.GetInt(.SimpleMathOperation)
+                Options[.RedValue] = Settings.GetDouble(.SimpleMathRedConstant,
+                                                        Settings.SettingDefaults[.SimpleMathRedConstant] as! Double)
+                Options[.ArithmeticUseChannelR] = Settings.GetBool(.SimpleMathEnableRed)
+                Options[.GreenValue] = Settings.GetDouble(.SimpleMathGreenConstant,
+                                                        Settings.SettingDefaults[.SimpleMathGreenConstant] as! Double)
+                Options[.ArithmeticUseChannelG] = Settings.GetBool(.SimpleMathEnableGreen)
+                Options[.BlueValue] = Settings.GetDouble(.SimpleMathBlueConstant,
+                                                        Settings.SettingDefaults[.SimpleMathBlueConstant] as! Double)
+                Options[.ArithmeticUseChannelB] = Settings.GetBool(.SimpleMathEnableBlue)
+                Options[.AlphaValue] = Settings.GetDouble(.SimpleMathAlphaConstant,
+                                                        Settings.SettingDefaults[.SimpleMathAlphaConstant] as! Double)
+                Options[.ArithmeticUseChannelA] = Settings.GetBool(.SimpleMathEnableAlpha)
+                Options[.ArithmeticClamp] = Settings.GetBool(.SimpleMathClamp)
+            
             case .SimpleInversion:
                 Options[.Invert] = Settings.GetInt(.SimpleInversionChannel)
             
@@ -494,4 +510,15 @@ enum FilterOptions: String
     case Highlight = "Highlight"
     case ShowBorder = "ShowBorder"
     case BorderColor = "BorderColor"
+    case ArithmeticOperation = "ArithmeticOperation"
+    case ArithmeticUseChannelR = "ArithmeticUseChannelR"
+    case ArithmeticUseChannelG = "ArithmeticUseChannelG"
+    case ArithmeticUseChannelB = "ArithmeticUseChannelB"
+    case ArithmeticUseChannelA = "ArithmeticUseChannelA"
+    case ArithmeticClampResult = "ArithmeticClampResult"
+    case RedValue = "RedValue"
+    case GreenValue = "GreenValue"
+    case BlueValue = "BlueValue"
+    case AlphaValue = "AlphaValue"
+    case ArithmeticClamp = "ArithmeticClamp"
 }
