@@ -171,5 +171,40 @@ extension Double
             return self * self * self
         }
     }
+    
+    /// Returns the instance value clamped to a normalized range.
+    var Normalized: Double
+    {
+        get
+        {
+            if self < 0.0
+            {
+                return 0.0
+            }
+            if self > 1.0
+            {
+                return 1.0
+            }
+            return self
+        }
+    }
+    
+    /// Returns the instance value as a normalized value rounded to the
+    /// number of places specified.
+    /// - Parameter Rounded: The number of places to round the returned result to.
+    /// - Returns: Instance value clamped to the normalized range and rounded as specified.
+    func Normalized(_ Rounded: Int) -> Double
+    {
+        return self.Normalized.RoundedTo(Rounded)
+    }
+    
+    /// Returns the instance value as a normalized value rounded to the
+    /// number of places specified, converted to a string.
+    /// - Parameter Rounded: The number of places to round the returned result to.
+    /// - Returns: Instance value clamped to the normalized range and rounded as specified as a string.
+    func NormalizedString(_ Rounded: Int) -> String
+    {
+        return "\(self.Normalized(Rounded))"
+    }
 }
 
