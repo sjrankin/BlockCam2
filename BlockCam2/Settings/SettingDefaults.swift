@@ -290,9 +290,9 @@ extension Settings
             // Mark: - Simple arithmetic.
             .SimpleMathOperation: 0,
             .SimpleMathClamp: true,
-            .SimpleMathRedConstant: 0.5,
-            .SimpleMathGreenConstant: 0.5,
-            .SimpleMathBlueConstant: 0.5,
+            .SimpleMathRedConstant: 0.0,
+            .SimpleMathGreenConstant: 0.0,
+            .SimpleMathBlueConstant: 0.0,
             .SimpleMathAlphaConstant: 1.0,
             .SimpleMathEnableRed: true,
             .SimpleMathEnableGreen: true,
