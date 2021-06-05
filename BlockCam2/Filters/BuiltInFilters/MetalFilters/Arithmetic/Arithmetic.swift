@@ -149,6 +149,12 @@ class Arithmetic: MetalFilterParent, BuiltInFilterProtocol
                 
             case .SubtractFromAccumulator:
                 KernelName = "Arithmetic_Subtract"
+                
+            case .Greatest:
+                return Buffer.first!
+                
+            case .Least:
+                return Buffer.first!
         }
         
         return Buffer.first!
@@ -168,10 +174,7 @@ class Arithmetic: MetalFilterParent, BuiltInFilterProtocol
         {
             Debug.FatalError("Unable to create pipeline state in ConstantFilter[\(KernelName)]: \(error.localizedDescription)")
         }
-        
-        print("Red: \(Options[.RedValue] as! Double)")
-        print("Green: \(Options[.GreenValue] as! Double)")
-        print("Blue: \(Options[.BlueValue] as! Double)")
+
         let Parameter = ArithmeticConstantParameters(NormalClamp: simd_bool(Options[.ArithmeticClamp] as! Bool),
                                                      r: simd_float1(Options[.RedValue] as! Double),
                                                      g: simd_float1(Options[.GreenValue] as! Double),
@@ -181,6 +184,26 @@ class Arithmetic: MetalFilterParent, BuiltInFilterProtocol
                                                      UseGreen: simd_bool(Options[.ArithmeticUseChannelG] as! Bool),
                                                      UseBlue: simd_bool(Options[.ArithmeticUseChannelB] as! Bool),
                                                      UseAlpha: simd_bool(Options[.ArithmeticUseChannelA] as! Bool))
+        if Operation == .DivideByConstant
+        {
+            // If the user wants us to divide by zero, return the original buffer unchanged.
+            if Parameter.UseRed && Parameter.r == 0
+            {
+                return Buffer.first!
+            }
+            if Parameter.UseGreen && Parameter.g == 0
+            {
+                return Buffer.first!
+            }
+            if Parameter.UseBlue && Parameter.b == 0
+            {
+                return Buffer.first!
+            }
+            if Parameter.UseAlpha && Parameter.a == 0
+            {
+                return Buffer.first!
+            }
+        }
         let Parameters = [Parameter]
         ParameterBuffer = MetalDevice!.makeBuffer(length: MemoryLayout<ArithmeticConstantParameters>.stride,
                                                   options: [])
@@ -245,4 +268,6 @@ enum ArithmeticOperations: Int
     case MultiplyConstant = 5
     case DivideByConstant = 6
     case Mean = 7
+    case Greatest = 8
+    case Least = 9
 }
