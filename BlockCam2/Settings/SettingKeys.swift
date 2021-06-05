@@ -484,4 +484,16 @@ enum SettingKeys: String, CaseIterable
     case SimpleMathEnableBlue = "SimpleMathEnableBlue"
     /// Boolean: Enable alpha channel processing.
     case SimpleMathEnableAlpha = "SimpleMathEnableAlpha"
+    
+    // MARK: - Multi-frame arithmetic
+    /// Integer: The multi-frame arithmetic operation to perform.
+    case MFMathOperation = "MFMathOperation"
+    /// Boolean: Apply the operation to red channels.
+    case MFApplyToRed = "MFApplyToRed"
+    /// Boolean: Apply the operation to green channels.
+    case MFApplyToGreen = "MFApplyToGreen"
+    /// Boolean: Apply the operation to blue channels.
+    case MFApplyToBlue = "MFApplyToBlue"
+    /// Boolean: Apply the operation to alpha channels.
+    case MFApplyToAlpha = "MFApplyToAlpha"
 }
