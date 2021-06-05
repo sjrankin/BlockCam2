@@ -13,7 +13,7 @@
 		1708B7172668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7162668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal */; };
 		1708B7192668FB8C001FC0B6 /* Arithmetic_Subtract.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B7182668FB8C001FC0B6 /* Arithmetic_Subtract.metal */; };
 		1708B71B2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B71A2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal */; };
-		1708B71D2668FC74001FC0B6 /* Arithmetic_Mean.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B71C2668FC74001FC0B6 /* Arithmetic_Mean.metal */; };
+		1708B71D2668FC74001FC0B6 /* Arithmetic_MeanRGB.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1708B71C2668FC74001FC0B6 /* Arithmetic_MeanRGB.metal */; };
 		1708E066264CB6B60010F301 /* ColorSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1708E065264CB6B60010F301 /* ColorSetting.swift */; };
 		170E84272663581A009362A5 /* SingleSettingViewColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170E84262663581A009362A5 /* SingleSettingViewColor.swift */; };
 		170EFC2C26255754001227D0 /* BlockCam2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EFC2B26255754001227D0 /* BlockCam2App.swift */; };
@@ -312,6 +312,13 @@
 		17E14205264D18CB00CBC72D /* Threshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E14204264D18CB00CBC72D /* Threshold.swift */; };
 		17E18D43262D235900C77B2E /* LiveViewMetalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E18D42262D235900C77B2E /* LiveViewMetalExtensions.swift */; };
 		17E47F8B2643812D00421946 /* BumpDistortionFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E47F8A2643812D00421946 /* BumpDistortionFilter_View.swift */; };
+		17E7DA47266B149200F003B9 /* ArithmeticMultiframeFilter_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA46266B149200F003B9 /* ArithmeticMultiframeFilter_View.swift */; };
+		17E7DA4A266B478D00F003B9 /* Arithmetic_MeanRG.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA49266B478D00F003B9 /* Arithmetic_MeanRG.metal */; };
+		17E7DA4C266B482F00F003B9 /* Arithmetic_MeanRB.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA4B266B482F00F003B9 /* Arithmetic_MeanRB.metal */; };
+		17E7DA4E266B48BA00F003B9 /* Arithmetic_MeanGB.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA4D266B48BA00F003B9 /* Arithmetic_MeanGB.metal */; };
+		17E7DA50266B495200F003B9 /* Arithmetic_MeanR.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA4F266B495200F003B9 /* Arithmetic_MeanR.metal */; };
+		17E7DA52266B4A4400F003B9 /* Arithmetic_MeanG.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA51266B4A4400F003B9 /* Arithmetic_MeanG.metal */; };
+		17E7DA54266B4B2900F003B9 /* Arithmetic_MeanB.metal in Sources */ = {isa = PBXBuildFile; fileRef = 17E7DA53266B4B2900F003B9 /* Arithmetic_MeanB.metal */; };
 		17E927DD2634EE3E00708522 /* GroupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E927DC2634EE3E00708522 /* GroupButton.swift */; };
 		17E927DF2634EFAE00708522 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E927DE2634EFAE00708522 /* FilterButton.swift */; };
 		17EC997B262FA8F7007FCF00 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EC997A262FA8F7007FCF00 /* UIImage.swift */; };
@@ -381,7 +388,7 @@
 		1708B7162668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_SubtractConstant.metal; sourceTree = "<group>"; };
 		1708B7182668FB8C001FC0B6 /* Arithmetic_Subtract.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_Subtract.metal; sourceTree = "<group>"; };
 		1708B71A2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MultiplyConstant.metal; sourceTree = "<group>"; };
-		1708B71C2668FC74001FC0B6 /* Arithmetic_Mean.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_Mean.metal; sourceTree = "<group>"; };
+		1708B71C2668FC74001FC0B6 /* Arithmetic_MeanRGB.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanRGB.metal; sourceTree = "<group>"; };
 		1708E065264CB6B60010F301 /* ColorSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSetting.swift; sourceTree = "<group>"; };
 		170E84262663581A009362A5 /* SingleSettingViewColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSettingViewColor.swift; sourceTree = "<group>"; };
 		170EFC2826255754001227D0 /* BlockCam2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlockCam2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -684,6 +691,13 @@
 		17E14204264D18CB00CBC72D /* Threshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Threshold.swift; sourceTree = "<group>"; };
 		17E18D42262D235900C77B2E /* LiveViewMetalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewMetalExtensions.swift; sourceTree = "<group>"; };
 		17E47F8A2643812D00421946 /* BumpDistortionFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BumpDistortionFilter_View.swift; sourceTree = "<group>"; };
+		17E7DA46266B149200F003B9 /* ArithmeticMultiframeFilter_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArithmeticMultiframeFilter_View.swift; sourceTree = "<group>"; };
+		17E7DA49266B478D00F003B9 /* Arithmetic_MeanRG.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanRG.metal; sourceTree = "<group>"; };
+		17E7DA4B266B482F00F003B9 /* Arithmetic_MeanRB.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanRB.metal; sourceTree = "<group>"; };
+		17E7DA4D266B48BA00F003B9 /* Arithmetic_MeanGB.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanGB.metal; sourceTree = "<group>"; };
+		17E7DA4F266B495200F003B9 /* Arithmetic_MeanR.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanR.metal; sourceTree = "<group>"; };
+		17E7DA51266B4A4400F003B9 /* Arithmetic_MeanG.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanG.metal; sourceTree = "<group>"; };
+		17E7DA53266B4B2900F003B9 /* Arithmetic_MeanB.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Arithmetic_MeanB.metal; sourceTree = "<group>"; };
 		17E927DC2634EE3E00708522 /* GroupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupButton.swift; sourceTree = "<group>"; };
 		17E927DE2634EFAE00708522 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 		17EC997A262FA8F7007FCF00 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -770,11 +784,11 @@
 		1708B70B2668F842001FC0B6 /* Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				17E7DA48266B476800F003B9 /* Mean */,
 				179CC2C12669A6A20009880A /* ArithmeticConstantParameters.swift */,
 				1708B70C2668F87F001FC0B6 /* Arithmetic_Add.metal */,
 				1708B7122668FA2E001FC0B6 /* Arithmetic_AddConstant.metal */,
 				1708B70E2668F949001FC0B6 /* Arithmetic_DivideConstant.metal */,
-				1708B71C2668FC74001FC0B6 /* Arithmetic_Mean.metal */,
 				1708B71A2668FBD2001FC0B6 /* Arithmetic_MultiplyConstant.metal */,
 				1708B7182668FB8C001FC0B6 /* Arithmetic_Subtract.metal */,
 				1708B7162668FB5D001FC0B6 /* Arithmetic_SubtractConstant.metal */,
@@ -1887,6 +1901,7 @@
 			isa = PBXGroup;
 			children = (
 				179CC2C32669A9BD0009880A /* ArithmeticSimpleFilter_View.swift */,
+				17E7DA46266B149200F003B9 /* ArithmeticMultiframeFilter_View.swift */,
 				17E47F8A2643812D00421946 /* BumpDistortionFilter_View.swift */,
 				17416C0E2650A41400A1B2C0 /* ChannelMangerFilter_View.swift */,
 				17337822264FFA7400118A0D /* ChannelMixerFilter_View.swift */,
@@ -1975,6 +1990,20 @@
 				171DB75B264649A9007686B4 /* VibranceFilter_View.swift */,
 			);
 			path = VWXYZ;
+			sourceTree = "<group>";
+		};
+		17E7DA48266B476800F003B9 /* Mean */ = {
+			isa = PBXGroup;
+			children = (
+				1708B71C2668FC74001FC0B6 /* Arithmetic_MeanRGB.metal */,
+				17E7DA49266B478D00F003B9 /* Arithmetic_MeanRG.metal */,
+				17E7DA4B266B482F00F003B9 /* Arithmetic_MeanRB.metal */,
+				17E7DA4D266B48BA00F003B9 /* Arithmetic_MeanGB.metal */,
+				17E7DA4F266B495200F003B9 /* Arithmetic_MeanR.metal */,
+				17E7DA51266B4A4400F003B9 /* Arithmetic_MeanG.metal */,
+				17E7DA53266B4B2900F003B9 /* Arithmetic_MeanB.metal */,
+			);
+			path = Mean;
 			sourceTree = "<group>";
 		};
 		17EC9979262FA8E9007FCF00 /* Extensions */ = {
@@ -2146,16 +2175,19 @@
 				179CC2CA266A255F0009880A /* NumericTextField.swift in Sources */,
 				172ABCDD2636853D00AE53D1 /* Erode.swift in Sources */,
 				178EFECB265CF5440006E3BE /* AllFiltersByNameView.swift in Sources */,
+				17E7DA47266B149200F003B9 /* ArithmeticMultiframeFilter_View.swift in Sources */,
 				172ABCE726368D2A00AE53D1 /* Dither.swift in Sources */,
 				178EFEC0265C96FD0006E3BE /* LineScreenFilter_View.swift in Sources */,
 				17BF7C752633E4B200181FA1 /* FilterView.swift in Sources */,
 				17BAA8BF2655082C006A5055 /* BlockInfoParameters.swift in Sources */,
+				17E7DA4E266B48BA00F003B9 /* Arithmetic_MeanGB.metal in Sources */,
 				17602410263B9B3C006A3DE2 /* FilterViewServer.swift in Sources */,
 				172F5F6A2661C2680013EE0E /* TrailingFramesSaturate.metal in Sources */,
 				17A61263263E6C2800B9BB1F /* Reflect.swift in Sources */,
 				17F70A2326341C9600BCC3CF /* ThermalEffect.swift in Sources */,
 				179DD4E4263CE813007A12FA /* MirrorFilter_View.swift in Sources */,
 				172C8E3E263549740096C331 /* CircleAndLines.swift in Sources */,
+				17E7DA4A266B478D00F003B9 /* Arithmetic_MeanRG.metal in Sources */,
 				179CC2C22669A6A20009880A /* ArithmeticConstantParameters.swift in Sources */,
 				17DCDF7D26513A2300DAB1C6 /* Solarize.swift in Sources */,
 				17BAA8B526549C0D006A5055 /* SampleImages.swift in Sources */,
@@ -2223,7 +2255,7 @@
 				1796E6FE26522E0F00B130CF /* SlowSampleImage.swift in Sources */,
 				179721F7262E8EEB004B7134 /* +PhotoHandling.swift in Sources */,
 				17E927DD2634EE3E00708522 /* GroupButton.swift in Sources */,
-				1708B71D2668FC74001FC0B6 /* Arithmetic_Mean.metal in Sources */,
+				1708B71D2668FC74001FC0B6 /* Arithmetic_MeanRGB.metal in Sources */,
 				179CC2C026699F520009880A /* Arithmetic.swift in Sources */,
 				17B6AFA3264F6738009C5AF3 /* ConvolutionFilter_View.swift in Sources */,
 				17DCDF8126513A5400DAB1C6 /* Solarize.metal in Sources */,
@@ -2283,6 +2315,7 @@
 				176FE28E2637C51600650060 /* +String.swift in Sources */,
 				17F70A0B26340A5B00BCC3CF /* MedianOld.swift in Sources */,
 				17688E82262C08C200D1523A /* LiveViewController.swift in Sources */,
+				17E7DA54266B4B2900F003B9 /* Arithmetic_MeanB.metal in Sources */,
 				172F5F6C2661C27E0013EE0E /* TrailingFramesDesaturate.metal in Sources */,
 				172ABCD92636828F00AE53D1 /* Laplacian.swift in Sources */,
 				17279F562651FF7B00C51070 /* SolarizeHSB.swift in Sources */,
@@ -2295,6 +2328,7 @@
 				171DB76426467709007686B4 /* DrosteFilter_View.swift in Sources */,
 				17D629C726525A090013C3D9 /* OtherSampleImageOptions.swift in Sources */,
 				172ABCED26368FD200AE53D1 /* GammaAdjust.swift in Sources */,
+				17E7DA52266B4A4400F003B9 /* Arithmetic_MeanG.metal in Sources */,
 				17EC99B2262FF148007FCF00 /* XRay.swift in Sources */,
 				179721FC262E93E5004B7134 /* FileIO.swift in Sources */,
 				176FE2792637C2C200650060 /* SettingChangedProtocol.swift in Sources */,
@@ -2381,6 +2415,7 @@
 				17A3F037264FA71F002E234C /* ColorInverter.metal in Sources */,
 				172F5F812662220D0013EE0E /* ColorRangeFilter_View.swift in Sources */,
 				170FAB5126314EB6003DDA35 /* Gloom.swift in Sources */,
+				17E7DA50266B495200F003B9 /* Arithmetic_MeanR.metal in Sources */,
 				17EC9989262FE2F5007FCF00 /* Sepia.swift in Sources */,
 				179721FE262EC09F004B7134 /* +LiveViewInitialization.swift in Sources */,
 				17536E6F264DF8B50036E11C /* Convolution.swift in Sources */,
@@ -2412,6 +2447,7 @@
 				17688E86262C0DB300D1523A /* DepthToGrayscaleConverter.swift in Sources */,
 				17A3F03D264FA79F002E234C /* ConditionalSilhouette.swift in Sources */,
 				1708B70D2668F87F001FC0B6 /* Arithmetic_Add.metal in Sources */,
+				17E7DA4C266B482F00F003B9 /* Arithmetic_MeanRB.metal in Sources */,
 				171A5671266742AC00E77BC8 /* IndeterminantCircularProgressView.swift in Sources */,
 				17F9250E2655F7F100FC7A13 /* MetalPixellateFilterDetails_View.swift in Sources */,
 				172ABCEB26368EBA00AE53D1 /* GaborGradients.swift in Sources */,
