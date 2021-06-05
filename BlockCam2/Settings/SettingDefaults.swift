@@ -298,5 +298,12 @@ extension Settings
             .SimpleMathEnableGreen: true,
             .SimpleMathEnableBlue: true,
             .SimpleMathEnableAlpha: false,
+            
+            // MARK: - Multi-frame arithmetic.
+            .MFMathOperation: 0,
+            .MFApplyToRed: true,
+            .MFApplyToGreen: true,
+            .MFApplyToBlue: true,
+            .MFApplyToAlpha: false,
         ]
 }
