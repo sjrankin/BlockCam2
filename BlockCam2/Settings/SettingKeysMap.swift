@@ -294,5 +294,12 @@ extension Settings
             .SimpleMathEnableGreen: Bool.self,
             .SimpleMathEnableBlue: Bool.self,
             .SimpleMathEnableAlpha: Bool.self,
+            
+            // MARK: - Multi-frame arithmetic.
+            .MFMathOperation: Int.self,
+            .MFApplyToRed: Bool.self,
+            .MFApplyToGreen: Bool.self,
+            .MFApplyToBlue: Bool.self,
+            .MFApplyToAlpha: Bool.self,
         ]
 }
