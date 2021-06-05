@@ -34,6 +34,13 @@ extension Filters
         var Options = [FilterOptions: Any]()
         switch Filter
         {
+            case .MultiFrameArithmetic:
+                Options[.ArithmeticOperation] = Settings.GetInt(.MFMathOperation)
+                Options[.ArithmeticUseChannelR] = Settings.GetBool(.MFApplyToRed)
+                Options[.ArithmeticUseChannelG] = Settings.GetBool(.MFApplyToGreen)
+                Options[.ArithmeticUseChannelB] = Settings.GetBool(.MFApplyToBlue)
+                Options[.ArithmeticUseChannelA] = Settings.GetBool(.MFApplyToAlpha)
+            
             case .SimpleArithmetic:
                 Options[.ArithmeticOperation] = Settings.GetInt(.SimpleMathOperation)
                 Options[.RedValue] = Settings.GetDouble(.SimpleMathRedConstant,
