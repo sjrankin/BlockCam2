@@ -80,6 +80,13 @@ struct FilterViewServer: View
     {
         switch Settings.GetString(.CurrentFilter)
         {
+            case BuiltInFilters.MultiFrameArithmetic.rawValue:
+            SettingsContainer
+            {
+                ArithmeticMultiframeFilter_View(ButtonCommand: $UICommand)
+                    .environmentObject(Changed)
+            }.environmentObject(Changed)
+            
             case BuiltInFilters.SimpleArithmetic.rawValue:
                 SettingsContainer
                 {
