@@ -62,7 +62,7 @@ struct ArithmeticSimpleFilter_View: View
                             Text("NOP").tag(0)
                             Text("Add").tag(1)
                             Text("Subtract").tag(3)
-                            Text("Multiply").tag(5)
+                            Text("Mean").tag(5)
                             Text("Divide").tag(6)
                         }
                         .pickerStyle(SegmentedPickerStyle())
@@ -257,7 +257,17 @@ struct ArithmeticSimpleFilter_View: View
                         Value in
                         if Value == BuiltInFilters.SimpleArithmetic.rawValue
                         {
-                            
+                            AOp = Settings.GetInt(.SimpleMathOperation)
+                            ClampResults = Settings.GetBool(.SimpleMathClamp)
+                            EnabledChannels[0] = Settings.GetBool(.SimpleMathEnableRed)
+                            EnabledChannels[1] = Settings.GetBool(.SimpleMathEnableGreen)
+                            EnabledChannels[2] = Settings.GetBool(.SimpleMathEnableBlue)
+                            EnabledChannels[3] = Settings.GetBool(.SimpleMathEnableAlpha)
+                            ChannelStrings[0] = Settings.GetDouble(.SimpleMathRedConstant).NormalizedString(3)
+                            ChannelStrings[1] = Settings.GetDouble(.SimpleMathGreenConstant).NormalizedString(3)
+                            ChannelStrings[2] = Settings.GetDouble(.SimpleMathBlueConstant).NormalizedString(3)
+                            ChannelStrings[3] = Settings.GetDouble(.SimpleMathAlphaConstant).NormalizedString(3)
+                            Updated.toggle()
                         }
                     })
     }
