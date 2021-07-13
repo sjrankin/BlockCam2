@@ -54,7 +54,6 @@ class LiveViewController: UIViewController,
         }
         SampleImages.Initialize()
         SampleImages.GetRecentAlbumImage()
-        //Settings.Initialize()
         Settings.AddSubscriber(self)
         InitializeFileStructure()
         Filters.InitializeFilters()
@@ -108,11 +107,8 @@ class LiveViewController: UIViewController,
         #endif
     }
     
-    /// Initialize the file structure.
-    /// - Note: The following directories are required:
-    ///     1. A scratch directory for image processing.
-    ///     2. A sample directory for on-boarding.
-    ///     3. Directory for last image taken.
+    /// Initialize the file structure. If a given directory already exists, no action
+    /// will be taken.
     func InitializeFileStructure()
     {
         if !FileIO.CreateIfDoesNotExist(DirectoryName: FileIO.ScratchDirectory)
