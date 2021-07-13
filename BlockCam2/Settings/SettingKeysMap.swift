@@ -17,6 +17,7 @@ extension Settings
             // MARK: - Infrastructure/initialization-related settings.
             .InitializationFlag: Bool.self,
             .InstanceID: String.self,
+            .ClosedCleanly: Bool.self,
             
             // MARK: - Audio settings
             .ShowAudioWaveform: Bool.self,
