@@ -203,6 +203,18 @@ extension LiveViewController
             print("Error getting format description.")
             return
         }
+        
+        if !Settings.GetBool(.UseLiveView)
+        {
+            MetalView!.pixelBuffer = VideoPixelBuffer
+            PreviousFrame = VideoPixelBuffer
+            OperationQueue.main.addOperation
+            {
+                self.MetalView?.setNeedsDisplay()
+            }
+            return
+        }
+        
         Filters.Initialize(From: FormatDescription, Caller: "ProcessLiveViewFrame")
         let FinalPixelBuffer = VideoPixelBuffer
         if let LastFilter = Filters.LastBuiltInFilterUsed
@@ -212,6 +224,7 @@ extension LiveViewController
                 MetalView!.pixelBuffer = Filters.RunFilter(With: FinalPixelBuffer)
             }
         }
+        
         PreviousFrame = VideoPixelBuffer
         OperationQueue.main.addOperation
         {
