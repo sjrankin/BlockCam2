@@ -357,12 +357,14 @@ class LiveMetalView: MTKView
     func CreateTextureCache()
     {
         var newTextureCache: CVMetalTextureCache?
-        if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device!, nil, &newTextureCache) == kCVReturnSuccess
+        var Results = CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device!, nil, &newTextureCache)
+        if Results == kCVReturnSuccess
         {
             TextureCache = newTextureCache
         }
         else
         {
+            Debug.Print("CVMetalTextureCacheCreate Results=\(Results)")
             assertionFailure("Unable to allocate texture cache")
         }
     }
