@@ -202,4 +202,32 @@ extension Settings
         UserDefaults.standard.set(DefaultValue, forKey: For.rawValue)
         NotifySubscribers(Setting: For, OldValue: OldValue, NewValue: NewValue)
     }
+    
+    /// Determines whether the boolean value stored in `For` is true.
+    /// - Warning: Throws a fatal error if `For` points to a non-boolean setting.
+    /// - Parameter For: The setting (**must** be boolean) to check for true.
+    /// - Returns: True if the value stored at `For` is true, false if not.
+    public static func IsTrue(For: SettingKeys) -> Bool
+    {
+        guard TypeIsValid(For, Type: Bool.self) else
+        {
+            Debug.FatalError("\(For) is not a boolean")
+        }
+        
+        return UserDefaults.standard.bool(forKey: For.rawValue) == true
+    }
+    
+    /// Determines whether the boolean value stored in `For` is false.
+    /// - Warning: Throws a fatal error if `For` points to a non-boolean setting.
+    /// - Parameter For: The setting (**must** be boolean) to check for false.
+    /// - Returns: True if the value stored at `For` is false, false if not.
+    public static func IsFalse(For: SettingKeys) -> Bool
+    {
+        guard TypeIsValid(For, Type: Bool.self) else
+        {
+            Debug.FatalError("\(For) is not a boolean")
+        }
+        
+        return UserDefaults.standard.bool(forKey: For.rawValue) == false
+    }
 }
