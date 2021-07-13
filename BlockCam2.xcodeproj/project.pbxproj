@@ -2150,7 +2150,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/BlockCam2/VersionUpdater/VersionUpdater \"/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/BlockCam2/Versioning.swift\" \"/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/BlockCam2/Info.plist\" \n";
+			shellScript = "/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/VersionUpdater/VersionUpdater \"/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/Versioning.swift\" \"/Users/Stuart/Documents/GitHub/BlockCam2/BlockCam2/Info.plist\" \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
