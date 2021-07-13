@@ -23,6 +23,7 @@ extension Settings
             // MARK: - Camera and image general settings.
             .SaveOriginalImage: true,
             .InputSourceIndex: 0,
+            .UseLiveView: false,
             
             // MARK: - Sample images
             .SampleImageIndex: 0,
