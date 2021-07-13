@@ -169,7 +169,8 @@ struct ContentView: View
                     }
                     .frame(width: Geometry.size.width,
                            height: TopBarHeight)
-                    .background(Color.red)
+                    //.background(Color.red)
+                    .background(Color(UIColor(red: 79 / 255, green: 121 / 255, blue: 66 / 255, alpha: 1.0)))
                     .position(x: Geometry.size.width / 2.0,
                               y: (TopBarHeight) / 2.0)
                     
@@ -355,7 +356,8 @@ struct ContentView: View
                 }
                 .frame(width: Geometry.size.width,
                        height: BottomHeight)
-                .background(Color.red)
+                //.background(Color.red)
+                .background(Color(UIColor(red: 79 / 255, green: 121 / 255, blue: 66 / 255, alpha: 1.0)))
                 .position(x: Geometry.size.width / 2.0,
                           y: Geometry.size.height - (BottomHeight / 2.0))
             }
