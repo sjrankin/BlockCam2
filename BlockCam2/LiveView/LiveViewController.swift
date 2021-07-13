@@ -34,9 +34,27 @@ class LiveViewController: UIViewController,
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        if Settings.IsFalse(For: .ClosedCleanly)
+        {
+            let DirtyClose = UIAlertController(title: "Crash Detected",
+                                               message: "The previous instance of BlockCam did not close cleanly. The current filter and group have been reset.",
+                                               preferredStyle: .alert)
+            DirtyClose.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(DirtyClose, animated: true, completion: nil)
+        }
+        else
+        {
+            Debug.Print("Previous instance closed cleanly.")
+        }
+        NotificationCenter.default.addObserver(forName: UIApplication.willTerminateNotification, object: nil, queue: .main)
+        {
+            _ in
+            Settings.SetTrue(.ClosedCleanly)
+            Debug.Print("Closing instance.")
+        }
         SampleImages.Initialize()
         SampleImages.GetRecentAlbumImage()
-        Settings.Initialize()
+        //Settings.Initialize()
         Settings.AddSubscriber(self)
         InitializeFileStructure()
         Filters.InitializeFilters()
