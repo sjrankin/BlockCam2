@@ -60,6 +60,31 @@ class Debug
         #endif
     }
     
+    private static var PrintOnceStrings = Set<String>()
+    
+    /// Print a message to the debug console prefixed by the time this function was called. If called more than
+    /// once with the same text, only the first call is printed and all others result in no output.
+    /// - Note: If compiled with #DEBUG on, the message will be prefixed with a time stamp and saved in the
+    ///         cumulative log list. If #DEBUG is false, the message will be printed in the debug console.
+    /// - Parameter Message: The message to print.
+    public static func PrintOnce(_ Message: String)
+    {
+        objc_sync_enter(PrintGate)
+        defer{objc_sync_exit(PrintGate)}
+        if PrintOnceStrings.contains(Message)
+        {
+            return
+        }
+        PrintOnceStrings.insert(Message)
+        #if DEBUG
+        let Prefix = Utility.MakeTimeString(TheDate: Date())
+        print("\(Prefix): \(Message)")
+        Log.append((TimeStamp: Prefix, Payload: Message))
+        #else
+        print(Message)
+        #endif
+    }
+    
     /// Holds the log.
     private static var Log = [(TimeStamp: String, Payload: String)]()
     
