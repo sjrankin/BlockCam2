@@ -25,6 +25,7 @@ extension Settings
             // MARK: - Camera and image general settings
             .SaveOriginalImage: Bool.self,
             .InputSourceIndex: Int.self,
+            .UseLiveView: Bool.self,
             
             // MARK: - Sample image settings
             .SampleImageIndex: Int.self,
