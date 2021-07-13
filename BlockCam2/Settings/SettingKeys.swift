@@ -30,6 +30,9 @@ enum SettingKeys: String, CaseIterable
     case SaveOriginalImage = "SaveOriginalImage"
     /// Integer: Index of the input source (0 = camera, 1 = photo album).
     case InputSourceIndex = "InputSourceIndex"
+    /// Boolean: If true, the live view uses the selected filter. If false, the filter is not applied until
+    /// the user takes a picture.
+    case UseLiveView = "UseLiveView"
     
     // MARK: - Sample image settings
     /// Integer: Index of the sample image.
