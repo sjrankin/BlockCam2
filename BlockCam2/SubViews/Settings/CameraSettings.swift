@@ -11,6 +11,7 @@ struct CameraSettings: View
 {
     @Environment(\.presentationMode) var presentionMode: Binding<PresentationMode>
     @State var SaveOriginalImage: Bool = Settings.GetBool(.SaveOriginalImage)
+    @State var ShowLiveView: Bool = Settings.GetBool(.UseLiveView)
     
     var body: some View
     {
@@ -40,6 +41,33 @@ struct CameraSettings: View
                             NewValue in
                             Settings.SetBool(.SaveOriginalImage, NewValue)
                         }
+                }
+                .padding()
+                
+                Divider()
+                    .background(Color.black)
+                
+                HStack
+                {
+                    VStack
+                    {
+                        Text("Live view")
+                            .font(.headline)
+                            .frame(width: Geometry.size.width * 0.65,
+                                   alignment: .leading)
+                        Text("Live view uses the currently-selected filter. This will increase battery usage. Turn off to increase reduce battery usage.")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .frame(width: Geometry.size.width * 0.65,
+                                   alignment: .leading)
+                    }
+                    Toggle("", isOn: $ShowLiveView)
+                        .frame(width: Geometry.size.width * 0.2)
+                        .onChange(of: ShowLiveView)
+                    {
+                        NewValue in
+                        Settings.SetBool(.UseLiveView, NewValue)
+                    }
                 }
                 .padding()
                 
