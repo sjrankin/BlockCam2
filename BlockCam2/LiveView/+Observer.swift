@@ -175,35 +175,44 @@ extension LiveViewController
     }
     
     /// If necessary, notify the user of thermal state changes.
+    /// - Note: See [How to terminate an app programmatically](https://stackoverflow.com/questions/50799108/how-to-terminate-an-app-programmatically-in-ios-12)
     func ThermalStateUserNotification(_ State: ProcessInfo.ThermalState)
     {
-        var ShowAlert = false
-        var ThermalMessage = ""
         switch State
         {
             case .nominal:
-                ThermalMessage = "Thermal state is nominal."
+                Debug.Print("Thermal state is nominal.")
                 
             case .fair:
-                ThermalMessage = "Thermal state is fair."
+                Debug.Print("Thermal state is fair.")
                 
             case .serious:
-                ShowAlert = true
-                ThermalMessage = "Thermal state is serious."
+                let Alert = UIAlertController(title: "Serious BlockCam Thermal Alert",
+                                              message: "Device thermal status serious. Please close this program.",
+                                              preferredStyle: .alert)
+                Alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                present(Alert, animated: true)
+                Debug.Print("Thermal state is serious.")
                 
             case .critical:
-                ShowAlert = true
-                ThermalMessage = "Thermal state is critical."
+
+                Debug.Print("Thermal state is critical.")
+                let Alert = UIAlertController(title: "Critial BlockCam Thermal Alert",
+                                              message: "Device thermal status critical. Please close this program immediately.",
+                                              preferredStyle: .alert)
+                Alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                present(Alert, animated: true)
+                /*
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        exit(0)
+                    }
+                }
+        */
                 
             @unknown default:
                 fatalError("Unknown thermal state encountered: \(State)")
-        }
-        print(ThermalMessage)
-        if ShowAlert
-        {
-            let Alert = UIAlertController(title: "BlockCam Thermal Alert", message: ThermalMessage, preferredStyle: .alert)
-            Alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            present(Alert, animated: true)
         }
     }
 }
