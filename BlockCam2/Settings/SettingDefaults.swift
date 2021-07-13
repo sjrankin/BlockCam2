@@ -15,6 +15,7 @@ extension Settings
             // MARK: - Infrastructure/initialization-related settings
             .InitializationFlag: false,
             .InstanceID: "",
+            .ClosedCleanly: false,
             
             // MARK: - Audio settings
             .ShowAudioWaveform: false,
