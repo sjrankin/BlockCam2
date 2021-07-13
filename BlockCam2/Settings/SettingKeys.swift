@@ -17,6 +17,9 @@ enum SettingKeys: String, CaseIterable
     case InitializationFlag = "InitializationFlag"
     /// String: Instance ID.
     case InstanceID = "InstanceID"
+    /// Boolean: Set to true if the program closed cleanly, otherwise a false value will be assumed to
+    /// represent a crash.
+    case ClosedCleanly = "ClosedCleanly"
     
     // MARK: - Audio settings.
     /// Boolean: If true, audio waveforms are shown overlayed the image.
