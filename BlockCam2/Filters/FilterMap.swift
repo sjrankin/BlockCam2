@@ -291,10 +291,10 @@ extension Filters
                 case .Arithmetic:
                     FilterData = MakeArithmeticFilters()
                     
-                    #if DEBUG
+#if DEBUG
                 case .Test:
                     FilterData = MakeTestFilters()
-                    #endif
+#endif
             }
             if let Final = FilterData
             {
